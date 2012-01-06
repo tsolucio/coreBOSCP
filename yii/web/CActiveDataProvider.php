@@ -72,9 +72,9 @@ class CActiveDataProvider extends CDataProvider
 		if(is_string($modelClass))
 		{
 			$this->modelClass=$modelClass;
-			$this->model=CActiveRecord::model($this->modelClass);
+			$this->model=EActiveResource::model($this->modelClass);
 		}
-		else if($modelClass instanceof CActiveRecord)
+		else if($modelClass instanceof EActiveResource)
 		{
 			$this->modelClass=get_class($modelClass);
 			$this->model=$modelClass;
@@ -126,11 +126,11 @@ class CActiveDataProvider extends CDataProvider
 
 		if(($pagination=$this->getPagination())!==false)
 		{
-			$pagination->setItemCount($this->getTotalItemCount());
+			$pagination->setItemCount($this->model->getTotalItemCount());
 			$pagination->applyLimit($criteria);
 		}
 
-		$baseCriteria=$this->model->getDbCriteria(false);
+		$baseCriteria=$this->model->getCriteria(false);
 
 		if(($sort=$this->getSort())!==false)
 		{
@@ -139,16 +139,16 @@ class CActiveDataProvider extends CDataProvider
 			{
 				$c=clone $baseCriteria;
 				$c->mergeWith($criteria);
-				$this->model->setDbCriteria($c);
+				$this->model->setCriteria($c);
 			}
 			else
-				$this->model->setDbCriteria($criteria);
+				$this->model->setCriteria($criteria);
 			$sort->applyOrder($criteria);
 		}
 
-		$this->model->setDbCriteria($baseCriteria!==null ? clone $baseCriteria : null);
-		$data=$this->model->findAll($criteria);
-		$this->model->setDbCriteria($baseCriteria);  // restore original criteria
+		$this->model->setCriteria($baseCriteria!==null ? clone $baseCriteria : null);
+		$data=$this->model->findAll($criteria);              
+		$this->model->setCriteria($baseCriteria);  // restore original criteria
 		return $data;
 	}
 
@@ -158,13 +158,13 @@ class CActiveDataProvider extends CDataProvider
 	 */
 	protected function fetchKeys()
 	{
-		$keys=array();
-		foreach($this->getData() as $i=>$data)
-		{
-			$key=$this->keyAttribute===null ? $data->getPrimaryKey() : $data->{$this->keyAttribute};
-			$keys[$i]=is_array($key) ? implode(',',$key) : $key;
-		}
-		return $keys;
+//		$keys=array();
+//		foreach($this->getData() as $i=>$data)
+//		{
+//			$key=$this->keyAttribute===null ? $data->getPrimaryKey() : $data->{$this->keyAttribute};
+//			$keys[$i]=is_array($key) ? implode(',',$key) : $key;
+//		}
+		return $this->model->getKeys();
 	}
 
 	/**
@@ -173,11 +173,12 @@ class CActiveDataProvider extends CDataProvider
 	 */
 	protected function calculateTotalItemCount()
 	{
-		$baseCriteria=$this->model->getDbCriteria(false);
+		$baseCriteria=$this->model->getCriteria(false);
 		if($baseCriteria!==null)
 			$baseCriteria=clone $baseCriteria;
 		$count=$this->model->count($this->getCriteria());
-		$this->model->setDbCriteria($baseCriteria);
+		$this->model->setCriteria($baseCriteria);
+		$count=$this->model->getTotalItemCount();
 		return $count;
 	}
 }
