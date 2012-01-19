@@ -16,21 +16,25 @@
 * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 *
 */
-class vtyiiCPngApplication extends CWebApplication
+class vtyiicpngButtonColumn extends CButtonColumn
 {
-	public $site;
-	public $resource;
-	public $loginuser;
-	public $accesskey;
-	public $debug;
-	
 	/**
-	 * Sends json output headers, outputs $json and ends the application.
-	 * @param string $json
+	 * Registers the client scripts for the button column.
 	 */
-	public function endJson($json)
+	protected function registerClientScript()
 	{
-		header("Content-type: application/json");
-		self::end($json);
+		$js=array();
+		foreach($this->buttons as $id=>$button)
+		{
+			if(isset($button['click']))
+			{
+				$function=CJavaScript::encode($button['click']);
+				$class=preg_replace('/\s+/','.',$button['options']['class']);
+				$js[]="if(jQuery('body').attr('{$this->grid->id}deleteEventIsset') !== 'yes'){jQuery('body').attr('{$this->grid->id}deleteEventIsset', 'yes');jQuery('#{$this->grid->id} a.{$class}').live('click',$function);}";
+			}
+		}
+	
+		if($js!==array())
+			Yii::app()->getClientScript()->registerScript(__CLASS__.'#'.$this->id, implode("\n",$js));
 	}
 }

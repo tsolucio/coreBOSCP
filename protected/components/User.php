@@ -17,7 +17,7 @@
  *
  */
 
-class User extends EActiveResource
+class User extends CActiveRecord
 {
 	public $plainPassword;
         public $password_repeat;

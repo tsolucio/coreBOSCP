@@ -32,7 +32,7 @@ $app = Yii::createWebApplication('protected/config/main.php');
 
 // Yii debug mode
 defined('YII_DEBUG') or define('YII_DEBUG', Yii::app()->debug);
-$usg=$app->user;
+
 // Define constants
 define('BASEURL', Yii::app()->baseUrl);
 define('ICONPATH', BASEURL . '/images/icons/' . Yii::app()->params->iconPack);
@@ -41,8 +41,7 @@ $validPaths = array(
 	'site',
 	'index.php',
 );
-$rt=Yii::app()->urlManager->parseUrl($app->request);
-$isg=$app->user->isGuest;
+
 if($app->user->isGuest and !preg_match('/^(' . implode('|', $validPaths) . ')/i', Yii::app()->urlManager->parseUrl($app->request)))
 {
 	if($app->request->isAjaxRequest)

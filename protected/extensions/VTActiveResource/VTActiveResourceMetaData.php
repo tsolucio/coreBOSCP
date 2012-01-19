@@ -8,7 +8,7 @@
  * This is the ActiveResource version of the CActiveMetaData class. It is used by ActiveResources to define
  * vital parameters for a RESTful communication between Yii and the service.
  */
-class EActiveResourceMetaData
+class VTActiveResourceMetaData
 {
 
     public $properties;     //The properties of the resource according to the schema configuration
@@ -36,15 +36,14 @@ class EActiveResourceMetaData
 
     public function __construct($model)
     {
-        $this->_model=$model;
+    	$this->_model=$model;
 
-        $this->schema=null;
-        foreach($model->rest() as $option=>$value)
-                if(property_exists($this, $option))
-                        $this->$option=$value;
+    	$this->schema=null;
+    	foreach($model->rest() as $option=>$value)
+    	  if(property_exists($this, $option))
+    		$this->$option=$value;
 
-        $this->properties=$this->getProperties();
-
+    	$this->properties=$this->getProperties();
     }
 
     /**

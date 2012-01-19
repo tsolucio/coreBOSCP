@@ -46,7 +46,7 @@ $mainConfig=array(
 		//'application.components.export.*',
 		'application.controllers.*',
 		'application.extensions.*',
-		'application.extensions.EActiveResource.*',
+		'application.extensions.VTActiveResource.*',
 	),
 	
 	// application components
@@ -110,25 +110,14 @@ $mainConfig=array(
 				// Site
                 'site/changeLanguage/<id:(.*)>' => 'site/changeLanguage',
                 'site/changeTheme/<id:(.*)>' => 'site/changeTheme',
+
 				'entity/notranslate/browse'=>'site/notranslate',
-				//'site/sendmail' => 'site/sendmail',
 
-				'entity/<table:'.URL_MATCH.'>/browse'=>'entity/browse',
-				'entity/<table:'.URL_MATCH.'>/create'=>'entity/create',
-				'entity/<table:'.URL_MATCH.'>/search'=>'entity/search',
-				'entity/<table:'.URL_MATCH.'>/view/id/<id:'.URL_MATCH.'>'=>'entity/view',
-				'entity/<table:'.URL_MATCH.'>/view/<id:'.URL_MATCH.'>'=>'entity/view',
-				'entity/<table:'.URL_MATCH.'>/view/id/<id:'.URL_MATCH.'>/Entity_page/<Entity_page:'.URL_MATCH.'>'=>'entity/view',
-				'entity/<table:'.URL_MATCH.'>/view/'=>'entity/view',
-				'entity/<table:'.URL_MATCH.'>/goto/id/<id:'.URL_MATCH.'>'=>'entity/goto',
-				'entity/<table:'.URL_MATCH.'>/edit/id/<id:'.URL_MATCH.'>'=>'entity/edit',
-				'entity/<table:'.URL_MATCH.'>/edit/<id:'.URL_MATCH.'>'=>'entity/edit',
-				'entity/<table:'.URL_MATCH.'>/edit/id/<id:'.URL_MATCH.'>/Entity_page/<Entity_page:'.URL_MATCH.'>'=>'entity/edit',
-				'entity/<table:'.URL_MATCH.'>/edit/id/<id:'.URL_MATCH.'>/Entity_page/<Entity_page:'.URL_MATCH.'>/cv/<currentView:'.URL_MATCH.'>'=>'entity/edit',
-				'entity/<table:'.URL_MATCH.'>/deleteid/id/<id:'.URL_MATCH.'>'=>'entity/deleteid',
-				'entity/<table:'.URL_MATCH.'>/deleteid/<id:'.URL_MATCH.'>'=>'entity/deleteid',
-				'entity/<table:'.URL_MATCH.'>/AutoCompleteLookup/'=>'entity/AutoCompleteLookup',
-
+				'vtentity/<module:'.URL_MATCH.'>/AutoCompleteLookup/'=>'entity/AutoCompleteLookup',
+            	'vtentity/<module:'.URL_MATCH.'>'=>'vtentity/index',
+            	'vtentity/<module:'.URL_MATCH.'>/<action:'.URL_MATCH.'>'=>'vtentity/<action>',
+            	'vtentity/<module:'.URL_MATCH.'>/<action:'.URL_MATCH.'>/<id:'.URL_MATCH.'>'=>'vtentity/<action>',
+           		'vtentity/<module:'.URL_MATCH.'>/list/<id:'.URL_MATCH.'>/dvcpage/<dvcpage:'.URL_MATCH.'>'=>'vtentity/list',
             ),
         ),
 
@@ -143,7 +132,6 @@ $mainConfig=array(
 	'params' => array(
 		'iconPack' => 'fugue',
 		'version' => '5.3',
-		'defaultPageSize' => 20,
 	),
 
 );

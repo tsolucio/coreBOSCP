@@ -5,7 +5,6 @@
 	<sidebarState>open</sidebarState>
 	<sidebarWidth>250</sidebarWidth>
 	<profiling>0</profiling>
-	<pageSize scope="entity">50</pageSize>
-	<pageSize scope="entity.browse">20</pageSize>
-	<bookmarks scope="entity"></bookmarks>
+	<pageSize>50</pageSize>
+	<bookmarks></bookmarks>
 </settings>

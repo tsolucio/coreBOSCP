@@ -38,5 +38,6 @@ Files and directories
   this directory contains the complete yii framework as it can be downloaded from the project's site
   inside the directory the file VERSION is a text file with the exact version used, the file LICENSE
   is the yii framework license and the files vtyiiCPng.* detail the modifications that have been made
-  to the base code framework files in case an upgrade is needed.
+  to the base code framework files in case an upgrade is needed. If no vtyiiCPng.* file exist it is
+  beacuse no change was required (which should be the normal case)
 

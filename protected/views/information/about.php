@@ -228,7 +228,6 @@
 </table>
 
 <script type="text/javascript">
-	informationGeneral.setup();
 	breadCrumb.add({ icon: 'info', href: 'javascript:chive.goto(\'information/about\')', text: '<?php echo Yii::t('core', 'about'); ?>'});
 	breadCrumb.show();
 </script>

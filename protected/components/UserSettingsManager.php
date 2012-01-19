@@ -146,9 +146,9 @@ class UserSettingsManager
 	{
 		// Load settings
 		$this->defaultSettings = $this->loadSettingsFile($this->configPath . 'default.xml');
-		if(is_file($this->configPath . '.' . $this->user . '.xml'))
+		if(is_file($this->configPath . $this->user . '.xml'))
 		{
-			$this->userSettings = $this->loadSettingsFile($this->configPath . '.' . $this->user . '.xml');
+			$this->userSettings = $this->loadSettingsFile($this->configPath . $this->user . '.xml');
 		}
 	}
 
@@ -212,11 +212,11 @@ class UserSettingsManager
 				}
 			}
 		}
-		elseif(is_file($this->configPath . '.' . $this->user . '.xml'))
+		elseif(is_file($this->configPath . $this->user . '.xml'))
 		{
-			unlink($this->configPath . '.' . $this->user . '.xml');
+			unlink($this->configPath . $this->user . '.xml');
 		}
-		$xml->asXML($this->configPath . '.' . $this->user . '.xml');
+		$xml->asXML($this->configPath . $this->user . '.xml');
 	}
 
 	private function getSettingId($name, $scope)

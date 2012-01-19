@@ -113,7 +113,6 @@
 	<entry id="enterOneValuePerLine">Enter one value per line.</entry>
 	<entry id="enterSchemaOrTable">Enter schema or table...</entry>
 	<entry id="entriesPerPage">Entries per page</entry>
-	<entry id="error">Error</entry>
 	<entry id="errorAlterIndex">Altering index &#xBB;{index}&#xAB; failed</entry>
 	<entry id="errorBookmarkWithThisNameAlreadyExists">There is already a bookmark named &#xBB;{name}&#xAB;</entry>
 	<entry id="errorCreateIndex">Creating index &#xBB;{index}&#xAB; failed</entry>
@@ -235,7 +234,6 @@
 	<entry id="storageEngine">Storage engine</entry>
 	<entry id="storageEngines">Storage engines</entry>
 	<entry id="structure">Structure</entry>
-	<entry id="success">Success</entry>
 	<entry id="successAddBookmark">Saved bookmark &#xBB;{name}&#xAB;</entry>
 	<entry id="successAddColumn">Added column &#xBB;{col}&#xAB;</entry>
 	<entry id="successAddFunction">Added function</entry>
@@ -357,7 +355,14 @@
 	<entry id="opIsNull">Is Null</entry>
 	<entry id="opIsNotNull">Is Not Null</entry>
 	<entry id="okDeleteRow">Deleted entity correctly</entry>
+	<entry id="success">Success</entry>
+	<entry id="successDeleteRow">Success deleting entity</entry>
+	<entry id="successUpdateRow">Success updating entity</entry>
+	<entry id="successCreateRow">Success creating entity</entry>
+	<entry id="error">Error</entry>
 	<entry id="errorDeleteRow">Error deleting entity</entry>
+	<entry id="errorUpdateRow">Error updating entity</entry>
+	<entry id="errorCreateRow">Error creating entity</entry>
 	<entry id="errorIdNotExist">The requested entity does not exist.</entry>
 	<entry id="doYouReallyWantToDropEntity">Do you really want to drop the selected entity?</entry>
 	<entry id="dropEntity">Delete Entity</entry>
@@ -365,4 +370,5 @@
 	<entry id="errNoTranslateFunction">No Translate Function</entry>
 	<entry id="errmissingFunctions">The vtiger CRM installation to which the Portal is connected doesn't have all the necessary functionality, it is missing certain code enhancementes to work correctly. Please contact whomever did the install to execute the missing steps.</entry>
 	<entry id="msgUpdate">Update</entry>
+	<entry id="invalidRequest">Invalid request. Please do not repeat this request again.</entry>
 </category>

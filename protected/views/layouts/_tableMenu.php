@@ -5,10 +5,11 @@
 				'label' => Yii::t('core','edit'),
 				'icon' => 'edit',
 				'link' => array(
-					'url' => $this->schema.'/' . $this->table . '/edit/id/'.
-							(isset($data) ? $data['id'] : $this->entityidValue).'/Entity_page/'.Yii::app()->getRequest()->getParam('Entity_page',1).
-							'/cv/ListView',
-					'htmlOptions' => array('class'=>'icon'),
+					'url' => '',
+					'htmlOptions' => array(
+							'class'=>'icon',
+							'onclick'=>"chive.goto('".$this->modelLinkName."/".$this->entity."/update/'+$('#entityidValue').val()+'?dvcpage='+$('#dvcpage').val());return false;",
+							),
 				),
 				'visible' => $this->viewButtonActive,
 			),
@@ -16,8 +17,11 @@
 				'label' => Yii::t('core','delete'),
 				'icon' => 'delete',
 				'link' => array(
-					'url' => 'javascript: tableBrowse.deleteRecord();',
-					'htmlOptions' => array('class'=>'icon'),
+					'url' => '',
+					'htmlOptions' => array(
+							'class'=>'icon',
+							'onclick' => "return deleteRecord($('#entityidValue').val(),".CJavaScript::encode(Yii::t('zii','Are you sure you want to delete this item?')).",'".$this->entity."','".$this->modelLinkName."');",
+							),
 				),
 				'visible' => $this->viewButtonActive,
 			),
@@ -25,7 +29,7 @@
 				'label' => Yii::t('core','insert'),
 				'icon' => 'add',
 				'link' => array(
-					'url' => $this->schema.'/' . $this->table . '/create',
+					'url' => $this->modelLinkName."/".$this->entity.'/create',
 					'htmlOptions' => array('class'=>'icon'),
 				),
 				'visible' => true,
@@ -34,10 +38,10 @@
 				'label' => Yii::t('core','search'),
 				'icon' => 'search',
 				'link' => array(
-					'url' => $this->schema.'/' . $this->table . '/search',
-					'htmlOptions' => array('class'=>'icon'),
+					//'url' => $this->modelLinkName.'/' . $this->entity . '/search',
+					'htmlOptions' => array('class'=>'icon','id'=>'search-button'),
 				),
-				'visible' => true,
+				'visible' => $this->viewButtonSearch,
 			),
 			/*
 			array(
@@ -47,14 +51,14 @@
 					'url' => 'javascript:void(0)',
 					'htmlOptions' => array('class'=>'icon', 'onclick'=>'tableGeneral.drop()'),
 				),
-				'visible' => Yii::app()->user->privileges->hasPermission($this->schema, $this->module, 'DROP'),
+				'visible' => Yii::app()->user->privileges->hasPermission($this->modelLinkName, $this->module, 'DROP'),
 			),
 			*/
 			array(
 				'label' => Yii::t('core','export'),
 				'icon' => 'export',
 				'link' => array(
-					'url' => $this->schema.'/' . $this->table . '/export',
+					'url' => $this->modelLinkName.'/' . $this->entity . '/export',
 					'htmlOptions' => array('class'=>'icon'),
 				),
 				'visible' => false,
@@ -63,7 +67,7 @@
 				'label' => Yii::t('core','import'),
 				'icon' => 'import',
 				'link' => array(
-					'url' => $this->schema.'/' . $this->table . '/import',
+					'url' => $this->modelLinkName.'/' . $this->entity . '/import',
 					'htmlOptions' => array('class'=>'icon'),
 				),
 				'visible' => false,

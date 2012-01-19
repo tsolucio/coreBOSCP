@@ -18,7 +18,6 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-var editing = false;
 var globalPost = {};
 
 function init() 
@@ -44,23 +43,14 @@ function init()
 		}
 	});
 	
-	// Add checkboxes to respective tables
-	try 
-	{
-		$('table.addCheckboxes').addCheckboxes().removeClass('addCheckboxes');
-		$('table.editable').editableTable().removeClass('editable');
-	}
-	catch(ex)
-	{
-	}
-	
-	// Reset favicon
-	/*
-	$('link[rel="shortcut icon"]').attr('href', baseUrl + '/images/favicon2.ico');
-	window.setTimeout(function() { $('link[rel="shortcut icon"]').attr('href', baseUrl + '/images/favicon.ico'); }, 3000);
-	*/
-	// Unset editing
-	editing = false;
+}
+
+function deleteRecord(recID,msg,module,controller) {
+	if(!confirm(msg+"\n"+recID)) return false;
+	if (controller==undefined || controller == '')
+		controller='vtentity';
+	$.post(baseUrl + '/' + controller + '/' + module + '/delete/' + recID, {}, AjaxResponse.handle);
+	return false;
 }
 
 function navigateTo(_url, _post)

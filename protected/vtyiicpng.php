@@ -24,6 +24,9 @@ class Yii extends YiiBase
 {
 	public static function createWebApplication($config=null)
 	{
-		return self::createApplication('vtyiiCPngApplication',$config);
+		$return=self::createApplication('vtyiiCPngApplication',$config);
+		Yii::$classMap['CActiveRecord']=dirname(__FILE__).'/extensions/VTActiveResource/CActiveRecord.php';
+		Yii::$classMap['CActiveRecordMetaData']=dirname(__FILE__).'/extensions/VTActiveResource/CActiveRecord.php';
+		return $return;
 	}
 }

@@ -42,18 +42,27 @@ var chive = {
 		
 		// Set keyboard shortcuts for Yii pager
 		$(document)
-		.bind('keydown', {combi: 'right', disableInInput: true }, function() {
-			var li = $('ul.yiiPager li.selected').next('li');
-			if(li.length > 0)
-			{
-				location.href = li.children('a').attr('href');
-			}
-		})
-		.bind('keydown', {combi: 'left', disableInInput: true }, function() {
-			var li = $('ul.yiiPager li.selected').prev('li');
-			if(li.length > 0)
-			{
-				location.href = li.children('a').attr('href');
+		.bind('keydown', {disableInInput: true }, function(e) {
+			if (e.which==35 || e.which==36 || e.which==37 || e.which==39) {
+				switch (e.which) {
+					case 35: // end 
+						var li = $('ul.yiiPager li').last('li');
+						break;
+					case 36: // start 
+						var li = $('ul.yiiPager li').first('li');
+						break;
+					case 37: // left 
+						var li = $('ul.yiiPager li.selected').prev('li.page');
+						break;
+					case 39: // right 
+						var li = $('ul.yiiPager li.selected').next('li.page');
+						break;
+				}
+				if(li.length > 0)
+				{
+					//location.href = li.children('a').attr('href');
+					li.children('a').click();
+				}
 			}
 		});
 	
@@ -134,7 +143,7 @@ var chive = {
 			if(!AjaxResponse.handle(response))
 			{
 				var content = document.getElementById('content');
-				response = '<div style="display: none">Thank\'s to InternetExplorer 8 which requires this dirty hack ...</div>' + response;
+				response = '<div style="display: none">IE8 requires this dirty hack</div>' + response;
 				content.innerHTML = response;
 				var scripts = content.getElementsByTagName('script');
 				for(var i = 0; i < scripts.length; i++)

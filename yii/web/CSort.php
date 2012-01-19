@@ -223,7 +223,7 @@ class CSort extends CComponent
 		else
 		{
 			if($this->modelClass!==null)
-				$schema='Entity';
+				$schema=CActiveRecord::model($this->modelClass)->getDbConnection()->getSchema();
 			$orders=array();
 			foreach($directions as $attribute=>$descending)
 			{
@@ -241,9 +241,9 @@ class CSort extends CComponent
 					if(isset($schema))
 					{
 						if(($pos=strpos($attribute,'.'))!==false)
-							$attribute='"'.substr($attribute,0,$pos).'"."'.substr($attribute,$pos+1).'"';
+							$attribute=$schema->quoteTableName(substr($attribute,0,$pos)).'.'.$schema->quoteColumnName(substr($attribute,$pos+1));
 						else
-							$attribute=' "'.$attribute.'"';
+							$attribute=CActiveRecord::model($this->modelClass)->getTableAlias(true).'.'.$schema->quoteColumnName($attribute);
 					}
 					$orders[]=$descending?$attribute.' DESC':$attribute;
 				}
@@ -313,7 +313,7 @@ class CSort extends CComponent
 		else if(is_string($definition))
 			$attribute=$definition;
 		if($this->modelClass!==null)
-			return EActiveResource::model($this->modelClass)->getAttributeLabel($attribute);
+			return CActiveRecord::model($this->modelClass)->getAttributeLabel($attribute);
 		else
 			return $attribute;
 	}
@@ -407,7 +407,7 @@ class CSort extends CComponent
 		if($this->attributes!==array())
 			$attributes=$this->attributes;
 		else if($this->modelClass!==null)
-			$attributes=EActiveResource::model($this->modelClass)->attributeNames();
+			$attributes=CActiveRecord::model($this->modelClass)->attributeNames();
 		else
 			return false;
 		foreach($attributes as $name=>$definition)
@@ -419,7 +419,7 @@ class CSort extends CComponent
 			}
 			else if($definition==='*')
 			{
-				if($this->modelClass!==null && EActiveResource::model($this->modelClass)->hasAttribute($attribute))
+				if($this->modelClass!==null && CActiveRecord::model($this->modelClass)->hasAttribute($attribute))
 					return $attribute;
 			}
 			else if($definition===$attribute)
