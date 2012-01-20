@@ -1,7 +1,7 @@
 <div id="yiiFormEntity" class="yiiForm">
 
 <?php
-$form=$this->beginWidget('cpngActiveForm', array(
+$form=$this->beginWidget('vtyiicpngActiveForm', array(
 	'id'=>'changepass-form',
 	'enableAjaxValidation'=>false,
 ));

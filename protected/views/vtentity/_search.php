@@ -1,6 +1,6 @@
 <div class="wide form">
 
-<?php $form=$this->beginWidget('cpngActiveForm', array(
+<?php $form=$this->beginWidget('vtyiicpngActiveForm', array(
 	'action'=>Yii::app()->createUrl($this->route),
 	'method'=>'get',
 )); ?>

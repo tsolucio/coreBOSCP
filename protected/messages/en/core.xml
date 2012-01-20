@@ -329,6 +329,7 @@
 	<entry id="errSendEmail">Recover password email could not be sent...</entry>
 	<entry id="errEmailIdNotFound">Given email could not be found.</entry>
 	<entry id="errEmailSent">Recover password email has been sent.</entry>
+	<entry id="yourNewPassword">Your new Password is:</entry>
 	<entry id="newPassword">New Password</entry>
 	<entry id="repeatPassword">Repeat Password</entry>
 	<entry id="infoRepeatPassword">This must be the same as the password field.</entry>
@@ -371,4 +372,5 @@
 	<entry id="errmissingFunctions">The vtiger CRM installation to which the Portal is connected doesn't have all the necessary functionality, it is missing certain code enhancementes to work correctly. Please contact whomever did the install to execute the missing steps.</entry>
 	<entry id="msgUpdate">Update</entry>
 	<entry id="invalidRequest">Invalid request. Please do not repeat this request again.</entry>
+	<entry id="invalidEntity">The requested module does not exist in vtiger CRM.</entry>
 </category>

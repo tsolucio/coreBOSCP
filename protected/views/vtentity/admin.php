@@ -18,6 +18,8 @@ $('.search-form form').submit(function(){
 <div class="search-form" style="display:none">
 <?php $this->renderPartial('_search',array(
 	'model'=>$model,
+	'fields'=>$fields,
+	'uitypes'=>$uitypes,
 )); ?>
 </div><!-- search-form -->
 

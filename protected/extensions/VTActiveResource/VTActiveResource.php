@@ -19,7 +19,7 @@
 /**
  * VTActiveResource is ment to be used similar to an ActiveRecord model in Yii. In difference to ActiveRecord
  * the persistent storage of the model isn't a database but a vtiger CRM RESTful service. The code is influenced by
- * the EActiveResource extension for YII 0.1 developed by Johannes "Haensel" Bauer (thank you)
+ * the EActiveResource extension for YII, version 0.1 developed by Johannes "Haensel" Bauer (thank you)
  * found at @link http://www.yiiframework.com/extension/activeresource
  */
 abstract class VTActiveResource extends CModel
@@ -35,6 +35,7 @@ abstract class VTActiveResource extends CModel
     private $_criteria;
     private $_new;
     private $_attributes=array();
+    private $_fieldinfo=array();
     private $_related=array();
     private $_embedded=array();
     private $_lasterror;
@@ -56,9 +57,12 @@ abstract class VTActiveResource extends CModel
     	$this->setScenario($scenario);
     	$this->setIsNewResource(true);
     	$this->_criteria=new CDbCriteria();
-    	$this->setModule(Yii::app()->getRequest()->getParam('module'));
+    	$module=Yii::app()->getRequest()->getParam('module');
+    	$this->setModule($module);
     	$this->setClientVtiger($this->loginREST());
-    	$this->init($this->getModule());
+    	if (!$this->validModule())
+    		Yii::app()->endJson(Yii::t('core','invalidEntity'));
+    	$this->init($module);
     	$this->attachBehaviors($this->behaviors());
     	$this->afterConstruct();
     }
@@ -1949,13 +1953,12 @@ abstract class VTActiveResource extends CModel
      */
     public function getAttributesArray()
     {
-    	//if (count($this->_attributes)==0) $this->_attributes=$this->getFields();
-    	return (is_array($this->_attributes) ? $this->_attributes : $this->getFields());
+    	return (is_array($this->_attributes) ? $this->_attributes : array());
     }
 
     public function getWritableFieldsArray()
     {
-    	$fields=$this->getAttributesArray();
+    	$fields=$this->getFieldsInfo();
     	$result=array();
     	foreach($fields as $field)
     	{
@@ -2116,7 +2119,7 @@ abstract class VTActiveResource extends CModel
 
     public function getMandatoryFields($module)
     {
-            $fields=$this->getFields();
+            $fields=$this->getFieldsInfo();
             $arr=array();
             foreach($fields as $field)
             {
@@ -2129,7 +2132,7 @@ abstract class VTActiveResource extends CModel
 
     public function getNumericalFields($module)
     {
-            $fields=$this->getFields();
+            $fields=$this->getFieldsInfo();
             $arr=array();
             foreach($fields as $field) {
             	if (!is_array($field) or empty($field['type'])) continue;
@@ -2141,7 +2144,7 @@ abstract class VTActiveResource extends CModel
 
     public function getEmailFields($module)
     {
-            $fields=$this->getFields();
+            $fields=$this->getFieldsInfo();
             $arr=array();
             foreach($fields as $field)
             {
@@ -2180,38 +2183,35 @@ abstract class VTActiveResource extends CModel
 		return $this->findAll($this->getCriteria(),$cols);
     }
        
-	public function getFields()
-	{          
+	public function getFieldsInfo()
+	{
+		if (empty($this->_fieldinfo) or count($this->_fieldinfo)==0)
+			$this->setFieldsInfo();
+		return $this->_fieldinfo;
+	}
+
+	public function setFieldsInfo()
+	{
 		$clientvtiger=$this->getClientVtiger();
 		$module=$this->getModule();
 
-		$api_cache_id='getFields'.$module;
+		$api_cache_id='getFieldsInfo'.$module;
 		$Fields = Yii::app()->cache->get( $api_cache_id  );
 
-		// If the results were false, then we have no valid data,
-		// so load it
+		// If the results were false, then we have no valid data, so load it
 		if($Fields===false){
-			if(!$clientvtiger) Yii::log('login failed',CLogger::LEVEL_ERROR);
-			else {
+			if(!$clientvtiger) {
+				Yii::log('login failed',CLogger::LEVEL_ERROR);
+				$Fields=array();
+			} else {
 				$Fieldsdata = $clientvtiger->doDescribe($module);
 				$Fields=$Fieldsdata['fields'];
-				if (empty($this->_attributes)) {
-					$this->_attributes=$Fields;
-				} else {
-					CMap::mergeArray($this->_attributes,$Fields);
-					unset($Fields);
-				}
 			}
-			$Fields=$this->_attributes;
 		}
-		$this->_attributes=$Fields;
+		$this->_fieldinfo=$Fields;
 		$this->translateAttributeLabels();
 
-
 		Yii::app()->cache->set( $api_cache_id , $Fields, 3600 );
-		 
-		//Yii::log('det'.var_dump($Fields));
-		return $Fields; //$recordInfo['fields'];
 	}
 
 	public function getListViewFields()
@@ -2507,18 +2507,38 @@ abstract class VTActiveResource extends CModel
 
     public function translateAttributeLabels() {
     	$al=array();
-    	$ga=$this->_attributes;
+    	$ga=$this->_fieldinfo;
     	if (empty($ga) or count($ga)==0) return $ga;
     	foreach ($ga as $finfo) {
     		if (is_array($finfo) and !empty($finfo['label'])) // this is to send just labels
     			$al[$finfo['name']]=$finfo['label'];
     	}
     	$al=$this->vtGetTranslation($al,$this->getModule());
-    	foreach ($this->_attributes as &$finfo) {
+    	foreach ($this->_fieldinfo as &$finfo) {
     		if (is_array($finfo) and !empty($finfo['label'])) // this is to not overwrite values, just labels
     			$finfo['label']=$al[$finfo['name']];
     	}
     	return $al;
+    }
+
+    public function validModule() {
+    	$valid=false;
+    	$clientvtiger=$this->getClientVtiger();
+    	$module=$this->getModule();
+    	
+    	if(!$clientvtiger)
+    		Yii::log('login failed',CLogger::LEVEL_ERROR);
+    	else {
+    		$api_cache_id='validModule'.$module;
+    		$valid = Yii::app()->cache->get( $api_cache_id  );
+    		
+    		// If the results were false, then we have no valid data, so load it
+    		if($valid===false){
+    			$valid = $clientvtiger->doQuery("select count(*) from $module");
+    			Yii::app()->cache->set( $api_cache_id , $valid, 3600 );
+    		}
+    	}
+    	return $valid;
     }
 
     public function setLastError($msg) {

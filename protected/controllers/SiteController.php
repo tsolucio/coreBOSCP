@@ -1,5 +1,4 @@
 <?php
-
 /*
  * Chive - web based MySQL database management
  * Copyright (C) 2010 Fusonic GmbH
@@ -19,7 +18,6 @@
  * You should have received a copy of the GNU General Public
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
-
 
 class SiteController extends Controller
 {
@@ -63,91 +61,81 @@ class SiteController extends Controller
 		);
 	}
 
-        public function actionChangepassword()
+	public function actionChangepassword()
 	{
-  
-            $response = new AjaxResponse();
-            $username=Yii::app()->user->name;
-	    $model=new User();
+
+		$response = new AjaxResponse();
+		$username=Yii::app()->user->name;
+		$model=new User();
 		// Uncomment the following line if AJAX validation is needed
-		  $this->performAjaxValidation($model);
- 
+		$this->performAjaxValidation($model);
+
 		if(isset($_POST['User']))
 		{
 			$model->attributes=$_POST['User'];
-                        $pass=$_POST['User']['password'];
+			$pass=$_POST['User']['password'];
 			if($model->savePassword($pass)) {
 				echo 'success';
 			}
 		}
-                 $this->render('changepass');
+		$this->render('changepass');
 	}
 
-        public function actionSendmail()
+	public function actionSendmail()
 	{
-
-            Yii::log('sending mail');
-                  //forgotpassword = new ForgetPasswordForm();
-            $requestforgot = Yii::app()->getRequest();
-            //$username = $_REQUEST["usernamemail"];
+		//forgotpassword = new ForgetPasswordForm();
+		$requestforgot = Yii::app()->getRequest();
+		//$username = $_REQUEST["usernamemail"];
 		if($requestforgot->isPostRequest ||  $requestforgot->getQuery("usernamemail") !== null)
 		{
-			if($requestforgot->isPostRequest)	{				
-
-					$username = $requestforgot->getPost("usernamemail");
+			if($requestforgot->isPostRequest)	{
+				$username = $requestforgot->getPost("usernamemail");
 			}
 			else
-			{		
-
-					$username = $requestforgot->getQuery("usernamemail");
-
-				
+			{
+				$username = $requestforgot->getQuery("usernamemail");
 			}
 			// validate user input and redirect to previous page if valid
-//			if($forgotpassword->validate())
-//			{
-//				$this->redirect(Yii::app()->homeUrl);
-//			}
+			//	if($forgotpassword->validate())
+			//	{
+			//		$this->redirect(Yii::app()->homeUrl);
+			//	}
 		}
-                $model=User::model()->findByAttributes(array('username'=>$username));
-                $found=User::model()->findByEmail($username);                
-                if($found==0)
-                    {
-                     echo 'wrongmail';
-                     Yii::log('MAIL SENDING FAILED TO '.$username);
-                    }
-                else
-                   {
-                    $headers="From: {$username}\r\nReply-To: {$username}";
-                    $newpass=$this->createPassword(8);
-                    if($model->savePassword($newpass)) {
-                    if(mail($username,"Forgot Password","Your new Password is:".$newpass,$headers))
-                    {
-                        echo 'success';
-                        
-                        Yii::log('MAIL SENT TO '.$username);
-                    }
-                    else
-                    {
-                        echo 'fail';
-                        Yii::log('MAIL SENDING FAILED TO '.$username);
-                    }
-                    }
-                   }
-               
+		$model=User::model()->findByAttributes(array('username'=>$username));
+		$found=User::model()->findByEmail($username);
+		if($found==0)
+		{
+			echo 'wrongmail';
+		}
+		else
+		{
+			$headers="From: {$username}\r\nReply-To: {$username}";
+			$newpass=$this->createPassword(8);
+			if($model->savePassword($newpass)) {
+				if(mail($username,Yii::t('core', 'Change Password'),Yii::t('core', 'yourNewPassword').$newpass,$headers))
+				{
+					echo 'success';
+				}
+				else
+				{
+					echo 'fail';
+				}
+			}
+		}
 	}
 
-        protected function createPassword($length) {
-	$chars = "234567890abcdefghijkmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-	$i = 0;
-	$password = "";
-	while ($i <= $length) {
-		$password .= $chars{mt_rand(0,strlen($chars)-1)};
-		$i++;
+	protected function createPassword($length) {
+		$chars = "234567890abcdefghijkmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		$i = 0;
+		$password = "";
+		while ($i <= $length) {
+			$password .= $chars{mt_rand(0,strlen($chars)-1)};
+			$i++;
+		}
+		return $password;
 	}
-	return $password;
-        }
-        protected function performAjaxValidation($model)
+
+	protected function performAjaxValidation($model)
 	{
 		if(isset($_POST['ajax']) &&  $_POST['ajax']==='changepass-form')
 		{
@@ -155,6 +143,7 @@ class SiteController extends Controller
 			Yii::app()->end();
 		}
 	}
+
 	/**
 	 * This is the default 'index' action that is invoked
 	 * when an action is not explicitly requested by users.
@@ -165,6 +154,7 @@ class SiteController extends Controller
 			'formatter' => Yii::app()->getDateFormatter()
 		));
 	}
+
 	public function actionNoTranslate()
 	{
 		$this->render('index', array(
@@ -245,33 +235,8 @@ class SiteController extends Controller
 			}
 		}
 
-                $forgotpassword = new ForgetPasswordForm();
-		// collect user input data
-//		$requestforgot = Yii::app()->getRequest();
-//		if($requestforgot->isPostRequest ||  $requestforgot->getQuery("usernamemail") !== null)
-//		{
-//			if($requestforgot->isPostRequest)
-//			{
-//				$forgotpassword->attributes = array(
-//
-//					"username" => $requestforgot->getPost("usernamemail"),
-//
-//				);
-//			}
-//			else
-//			{
-//				$forgotpassword->attributes = array(
-//
-//					"username" => $requestforgot->getQuery("usernamemail"),
-//
-//				);
-//			}
-//			// validate user input and redirect to previous page if valid
-//			if($forgotpassword->validate())
-//			{
-//				$this->redirect(Yii::app()->homeUrl);
-//			}
-//		}
+		$forgotpassword = new ForgetPasswordForm();
+
 		$validBrowser = true;
 		if($_SERVER['HTTP_USER_AGENT'])
 		{
@@ -284,7 +249,7 @@ class SiteController extends Controller
 
 		$this->render('login',array(
 			'form'=>$form,
-                        'forgotpassword'=>$forgotpassword,
+			'forgotpassword'=>$forgotpassword,
 			'languages'=>$languages,
 			'themes'=>$themes,
 			'validBrowser' => $validBrowser,
@@ -304,6 +269,7 @@ class SiteController extends Controller
 		Yii::app()->session->add('language', Yii::app()->getRequest()->getParam('id'));
 		$this->redirect(Yii::app()->createUrl('site/login'));
 	}
+
 	/**
 	 * Change the theme
 	 */

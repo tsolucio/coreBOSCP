@@ -113,7 +113,7 @@ $mainConfig=array(
 
 				'entity/notranslate/browse'=>'site/notranslate',
 
-				'vtentity/<module:'.URL_MATCH.'>/AutoCompleteLookup/'=>'entity/AutoCompleteLookup',
+				'vtentity/<module:'.URL_MATCH.'>/AutoCompleteLookup'=>'vtentity/AutoCompleteLookup',
             	'vtentity/<module:'.URL_MATCH.'>'=>'vtentity/index',
             	'vtentity/<module:'.URL_MATCH.'>/<action:'.URL_MATCH.'>'=>'vtentity/<action>',
             	'vtentity/<module:'.URL_MATCH.'>/<action:'.URL_MATCH.'>/<id:'.URL_MATCH.'>'=>'vtentity/<action>',

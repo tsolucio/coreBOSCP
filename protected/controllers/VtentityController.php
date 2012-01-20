@@ -70,7 +70,7 @@ class VtentityController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view','list'),
+				'actions'=>array('index','view','list','AutoCompleteLookup'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -85,11 +85,6 @@ class VtentityController extends Controller
 				'users'=>array('*'),
 			),
 		);
-	}
-
-	public function actionChangepassword()
-	{
-		$this->render('changepass');
 	}
 
 	/**
@@ -218,6 +213,7 @@ class VtentityController extends Controller
 		$dataProvider=$model->search($pos);
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
+			'model'=>$model,
 		));
 	}
 
@@ -235,6 +231,8 @@ class VtentityController extends Controller
 		}
 
 		$model=new $this->modelName('search');
+		$fields=$model->getWritableFieldsArray();
+		$uitypes=$model->getUItype($this->entity);
 		if(isset($_GET[$this->modelName])) {
 			$model->setAttributes($_GET[$this->modelName]);
 			$_SESSION[$this->modelName]=$_GET[$this->modelName];
@@ -245,6 +243,8 @@ class VtentityController extends Controller
 		$this->viewButtonSearch=true;
 		$this->render('admin',array(
 			'model'=>$model,
+			'fields'=>$fields,
+			'uitypes'=>$uitypes,
 		));
 	}
 

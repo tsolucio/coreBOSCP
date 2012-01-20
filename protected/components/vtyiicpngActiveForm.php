@@ -17,7 +17,7 @@
 *
 */
 
-class cpngActiveForm extends CActiveForm
+class vtyiicpngActiveForm extends CActiveForm
 {
 	/**
 	 * Depending on the uitype parameter coming from vtiger CRM, decides what kind of widget to show
@@ -127,7 +127,7 @@ class cpngActiveForm extends CActiveForm
 					'name'=>$cname.$fieldname."_display",
 					'value'=>Yii::t('core', 'search'),
 					'source'=>'js:function(request, response){ // el truco es reescribir source
-						     $.getJSON("'.Yii::app()->createUrl('entity').'"+"/"+$("#'.$cname.$fieldname."_type".'").val()+"/AutoCompleteLookup",
+						     $.getJSON("'.Yii::app()->createUrl($model->modelLinkName).'"+"/"+$("#'.$cname.$fieldname."_type".'").val()+"/AutoCompleteLookup",
 						     {
 						       term: request.term,
 						     }, 
@@ -149,13 +149,14 @@ class cpngActiveForm extends CActiveForm
 			case 111:
 			case 115:
 			case 255:
-				$values=array_values((is_array(Entity::getPicklistValues($fieldname))?Entity::getPicklistValues($fieldname):array()));
-                                $plvalues=count($values)>0?array_combine($values,$values):array();
+				$plvals=$model->getPicklistValues($fieldname);
+				$values=array_values((is_array($plvals)?$plvals:array()));
+				$plvalues=count($values)>0?array_combine($values,$values):array();
 				$widget=$this->dropDownList($model,$fieldname,$plvalues,$htmlopts);
 				break;
 			case 33:
 			case 34:				
-                                $plvalues=array_values(Entity::getPicklistValues($fieldname));
+				$plvalues=array_values($model->getPicklistValues($fieldname));
 				$htmlopts['multiple']='true';
 				$widget=$this->listBox($model,$fieldname,$plvalues,$htmlopts);
 				break;
@@ -182,9 +183,9 @@ class cpngActiveForm extends CActiveForm
 			case 'file':
 				$widget=CHtml::activeFileField($model, $fieldname, $htmlopts);
 				break;
-                        case 53:
-                                $values=Entity::getUsersInSameGroup();
-                                $plvalues=$values;
+			case 53:
+				$values=$model->getUsersInSameGroup();
+				$plvalues=$values;
 				$widget=$this->dropDownList($model,$fieldname,$plvalues,$htmlopts);
 				break;
 

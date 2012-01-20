@@ -25,9 +25,9 @@ class Vtentity extends CActiveRecord
 
 	public function __construct()
 	{
+		parent::__construct();
 		$this->tablename=$this->getModule();
 		$this->entityidField=$this->primaryKey();
-		parent::__construct();
 	}
 
 	/**
@@ -133,7 +133,7 @@ class Vtentity extends CActiveRecord
 		if (!empty($this->_attributes))
 			$fields=$this->_attributes;
 		else
-			$fields=$this->getFields();
+			$fields=$this->getFieldsInfo();
 		foreach ($fields as $field) {
 			if (!is_array($field)) continue;
 			$key=$field['name'];
@@ -154,7 +154,7 @@ class Vtentity extends CActiveRecord
 		if (!empty($this->_attributes))
 			$fields=$this->_attributes;
 		else
-			$fields=$this->getFields();
+			$fields=$this->getFieldsInfo();
 		foreach ($fields as $field) {
 			if (!is_array($field)) continue;
 			$key=$field['name'];

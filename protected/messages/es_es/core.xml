@@ -329,6 +329,7 @@
   <entry id="errSendEmail">No se ha podido enviar el correo...</entry>
   <entry id="errEmailIdNotFound">No se ha podido encontrar el email dado.</entry>
   <entry id="errEmailSent">Se ha enviado el correo de recuperación de contraseña.</entry>
+  <entry id="yourNewPassword">Tu nueva contraseña es:</entry>
   <entry id="newPassword">Nueva Contraseña</entry>
   <entry id="repeatPassword">Repite Contraseña</entry>
   <entry id="infoRepeatPassword">Ha de coincidir con el campo de contraseña.</entry>
@@ -371,4 +372,5 @@
   <entry id="errmissingFunctions">La instalación de vtiger CRM al que está conectado el portal no tiene la funcionalidad requerida. Falta instalar modificaciones en el mismo. Por favor, contacta con la persona que ha realizado la instalación para que ejecute los pasos que faltan.</entry>
   <entry id="msgUpdate">Editar</entry>
   <entry id="invalidRequest">Servicio inválido. Por favor, no solicites este servicio de nuevo.</entry>
+  <entry id="invalidEntity">El módulo solicitado no existe en vtiger CRM.</entry>
 </category>

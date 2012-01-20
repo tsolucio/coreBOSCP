@@ -1,6 +1,6 @@
 <div class="yiiForm">
 
-<?php $form=$this->beginWidget('cpngActiveForm', array(
+<?php $form=$this->beginWidget('vtyiicpngActiveForm', array(
 	'id'=>$this->modelName.'-form',
 	'enableAjaxValidation'=>false,
 	'enableClientValidation'=>true,

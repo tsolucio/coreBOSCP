@@ -105,7 +105,7 @@ $(document).ready(function() {
 
 	<ul id="schemaList" class="list icon">
 		<li class="nowrap template">
-			    <?php echo Html::ajaxLink('entity/#moduleName#/browse', array('class' => 'icon')); ?>
+			    <?php echo Html::ajaxLink('vtentity/#moduleName#/index', array('class' => 'icon')); ?>
 				<?php echo Html::icon('browse'); ?>
 				<span>#schemaName#</span>
 			</a>
