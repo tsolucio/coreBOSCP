@@ -1572,6 +1572,18 @@ abstract class VTActiveResource extends CModel
     	return $this->populateRecords($findall,false);
     }
 
+    public function findAllSearch($query)
+    {
+    	$module=$this->getModule();
+    	$clientvtiger=$this->getClientVtiger();
+    	if(!$clientvtiger) Yii::log('login failed',CLogger::LEVEL_ERROR);
+    	else {
+    		$findall =unserialize($clientvtiger->doInvoke('getSearchResults',array('query'=>$query)));
+    	}
+    	Yii::log('findall: '.count($findall),CLogger::LEVEL_INFO);
+    	return $findall;
+    }
+
     /**
      * Finds a single active record with the specified primary key.
      * See {@link find()} for detailed explanation about $condition and $params.

@@ -289,43 +289,40 @@ class SiteController extends Controller
 	}
 
 	public function actionSearch()
-	{
-
-		$cmdBuilder = new CDbCommandBuilder(Yii::app()->db->getSchema());
-
-		$criteria = new CDbCriteria;
-		$criteria->condition = "TABLE_NAME LIKE :table OR TABLE_SCHEMA LIKE :schema";
-		$criteria->params = array(
-			":table"=>"%" . Yii::app()->getRequest()->getParam('q') . "%",
-			":schema"=>"%" . Yii::app()->getRequest()->getParam('q') . "%"
-		);
-		$criteria->order = 'TABLE_SCHEMA, TABLE_NAME';
-
+	{             
+		$query=Yii::app()->getRequest()->getParam('q');
 		$items = array();
-
+		$module='Accounts';
+		$m=Yii::app()->getRequest()->getParam('module');
+		if (empty($m)) $_GET['module']=$module;
 		$lastSchemaName = '';
-		foreach(Table::model()->findAll($criteria) AS $table)
+		$model=new Vtentity();
+		$res=$model->findAllSearch($query);
+		foreach($res AS $table)
 		{
-			if($table->TABLE_SCHEMA != $lastSchemaName)
+			$number=count($table);
+			$module=$table[$number-1];
+			$id=$table[$number-2];
+			if($module =='Project') $name=$table[0];
+			else  $name=$table[1];
+			 
+			if($module != $lastSchemaName)
 			{
 				$items[] = CJSON::encode(array(
-					'text' => '<span class="icon schema">' . Html::icon('database') . '<span>' . StringUtil::cutText($table->TABLE_SCHEMA, 30) . '</span></span>',
-					'target' => Yii::app()->createUrl('schema/' . $table->TABLE_SCHEMA),
-					'plain' => $table->TABLE_SCHEMA,
+						'text' => '<span class="icon schema">' . Html::icon('database') . '<span>' . StringUtil::cutText($module, 30) . '</span></span>',
+						'target' => Yii::app()->createUrl('#vtentity/' . $module) . '/index',
+						'plain' => $module,
 				));
 			}
-
-			$lastSchemaName = $table->TABLE_SCHEMA;
-
+			 
+			$lastSchemaName=$module;
 			$items[] = CJSON::encode(array(
-				'text' => '<span class="icon table">' . Html::icon('table') . '<span>' . StringUtil::cutText($table->TABLE_NAME, 30) . '</span></span>',
-				'target' => Yii::app()->createUrl('schema/' . $table->TABLE_SCHEMA) . '#tables/' . $table->TABLE_NAME . '/browse',
-				'plain' => $table->TABLE_NAME
+					'text' => '<span class="icon table">' . Html::icon('table') . '<span>' . StringUtil::cutText($name, 30) . '</span></span>',
+					'target' => Yii::app()->createUrl("#vtentity/$module/view/" . $id),
+					'plain' => $name
 			));
 		}
-
 		Yii::app()->end(implode("\n", $items));
-
 	}
 
 	/**
