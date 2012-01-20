@@ -49,7 +49,7 @@ abstract class VTActiveResource extends CModel
      * Constructor.
      * @param string $scenario scenario name. See {@link CModel::scenario} for more details about this parameter.
      */
-    public function __construct($scenario='insert')
+    public function __construct($scenario='insert',$moduleParam='')
     {
     	if($scenario===null) // internally used by populateRecord() and model()
     		return;
@@ -57,7 +57,10 @@ abstract class VTActiveResource extends CModel
     	$this->setScenario($scenario);
     	$this->setIsNewResource(true);
     	$this->_criteria=new CDbCriteria();
+    	if (empty($moduleParam))
     	$module=Yii::app()->getRequest()->getParam('module');
+    	else
+    	$module=$moduleParam;
     	$this->setModule($module);
     	$this->setClientVtiger($this->loginREST());
     	if (!$this->validModule())
@@ -370,7 +373,7 @@ abstract class VTActiveResource extends CModel
     		$model=self::$_models[$className]=new $className($module);
     		$model->init($module);
     		$model->_md=new VTActiveResourceMetaData($model);
-    		$model->setAttributes($_REQUEST[$className]);
+    		$model->setAttributes((empty($_REQUEST[$className]) ? null : $_REQUEST[$className]));
     		$model->attachBehaviors($model->behaviors());
     		return $model;
     	}
@@ -1635,7 +1638,6 @@ abstract class VTActiveResource extends CModel
      * Finds a single active record that has the specified attribute values.
      * See {@link find()} for detailed explanation about $condition and $params.
      * @param array $attributes list of attribute values (indexed by attribute names) that the active records should match.
-     * An attribute value can be an array which will be used to generate an IN condition.
      * @param mixed $condition query condition or criteria.
      * @param array $params parameters to be bound to an SQL statement.
      * @return CActiveRecord the record found. Null if none is found.

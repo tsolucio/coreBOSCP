@@ -41,7 +41,8 @@ class UserIdentity extends CUserIdentity
 	 */
 	public function authenticate()
 	{   
-            $user=User::model()->findByAttributes(array('username'=>$this->username,'password'=>$this->password));
+            $user=new User('search','Users');
+            $user->findByAttributes(array('username'=>$this->username,'password'=>$this->password));
 
             if($user===null)
             {
