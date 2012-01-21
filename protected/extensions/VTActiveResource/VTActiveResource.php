@@ -1288,7 +1288,7 @@ abstract class VTActiveResource extends CModel
     	else {
     		$done=$clientvtiger->doInvoke('delete',array('id'=>$id));
     		if(!$clientvtiger->lastError())
-    			$result=array(0=>'OK',1=>Yii::t('core', 'okDeleteRow'));
+    			$result=array(0=>'OK',1=>Yii::t('core', 'successDeleteRow'));
     		else $result=array(0=>'NOK',1=>Yii::t('core', 'errorDeleteRow').': '.$clientvtiger->lastError());
     	}
     	return $result;

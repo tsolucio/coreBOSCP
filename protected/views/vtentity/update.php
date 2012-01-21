@@ -1,4 +1,4 @@
-<h1><?php echo Yii::t('core', 'msgUpdate').' '.$model->__get($this->entityLookupField); ?></h1>
+<h1><?php echo Yii::t('core', 'edit').' '.$model->__get($this->entityLookupField); ?></h1>
 
 <?php echo $this->renderPartial('_form', array('model'=>$model,'fields'=>$fields,'uitypes'=>$uitypes)); ?>
 

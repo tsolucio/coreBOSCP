@@ -38,7 +38,7 @@
 				<b><?php echo Yii::app()->name . ' ' . Yii::app()->params->version; ?></b><br/>
 				<i>Webservice Customer Portal for vtiger CRM</i><br/><br/><br/>
 				Released under the <a href="http://www.gnu.org/copyleft/gpl.html">GPL License</a><br/>
-				<a href="http://www.yiicpng.com">http://www.yiicpng.com</a><br/><br/>
+				<a href="http://www.vtyiicpng.com">http://www.vtyiicpng.com</a><br/><br/>
 			</td>
 		</tr>
 	</tbody>

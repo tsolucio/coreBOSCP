@@ -111,6 +111,7 @@ $mainConfig=array(
                 'site/changeLanguage/<id:(.*)>' => 'site/changeLanguage',
                 'site/changeTheme/<id:(.*)>' => 'site/changeTheme',
 
+            	// Base entity model
 				'vtentity/notranslate/index'=>'site/notranslate',
 				'vtentity/<module:'.URL_MATCH.'>/AutoCompleteLookup'=>'vtentity/AutoCompleteLookup',
             	'vtentity/<module:'.URL_MATCH.'>'=>'vtentity/index',
