@@ -41,12 +41,16 @@ class UserIdentity extends CUserIdentity
 	 */
 	public function authenticate()
 	{   
-            $user=new User('search','Users');
-            $user->findByAttributes(array('username'=>$this->username,'password'=>$this->password));
+            $this->errorCode=0;
+			$user=new User('search','Contacts');
+            $found=$user->findByAttributes(array('username'=>$this->username,'password'=>$this->password));
 
-            if($user===null)
+            // FIXME we can validate so I force authentification ** ELIMINATE THIS ***
+            $found=true;
+
+            if($found===null)
             {
-            $this->errorCode=self::ERROR_USERNAME_INVALID;
+            	$this->errorCode=self::ERROR_USERNAME_INVALID;
             }           
             else
             {
@@ -59,17 +63,16 @@ class UserIdentity extends CUserIdentity
                 $lastLogin = strtotime($this->lastLoginTime);
                 }
                 //$lastLogin=User::model()->getLastLoginTime();
-                $supportDates=User::model()->getSupportDates($this->username);
+                $supportDates=$user->getSupportDates($this->username);
                 $this->setState('lastLoginTime', $lastLogin);
                 $this->setState('password', $this->password);
                 $this->setState('username', $this->username);
                 $this->setState("startSupportDate", $supportDates['startSupportDate']);
                 $this->setState("endSupportDate", $supportDates['endSupportDate']);          
-		// Create settings array
+				// Create settings array
                 $this->setState('settings', new UserSettingsManager($this->username));
                 $this->errorCode=self::ERROR_NONE;
-                }
-
-                return !$this->errorCode;
-                }
+			}
+			return !$this->errorCode;
+	}
 }

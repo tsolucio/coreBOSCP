@@ -64,19 +64,22 @@ class User extends CActiveRecord
 		);
 	}
         
-        public function findByAttributes($attributes,$condition='',$params=array())
+	public function findByAttributes($attributes,$condition='',$params=array())
 	{
-	$clientvtiger=$this->getClientVtiger();
-        $email=$attributes['username'];
-        $password=$attributes['password'];   
-       
-        if(!$clientvtiger) Yii::log('login failed');
-        else{
-           $recordInfo = $clientvtiger->doInvoke('authenticateContact',array('email'=>$email,'password'=>$password));
-        }	
-        if(!empty($recordInfo))
-        return $this->populateRecord($attributes);
-        else return null;
+		$clientvtiger=$this->getClientVtiger();
+		$email=$attributes['username'];
+		$password=$attributes['password'];
+		 
+		if(!$clientvtiger) {
+			Yii::log('login failed');
+			$recordInfo=0;
+		} else {
+			$recordInfo = $clientvtiger->doInvoke('authenticateContact',array('email'=>$email,'password'=>$password));
+		}
+		if(empty($recordInfo))
+		return null;
+		else
+		return $this->populateRecord($recordInfo);
 	}
 
         public function findByEmail($email)
