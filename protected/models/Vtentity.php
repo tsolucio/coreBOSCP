@@ -148,8 +148,7 @@ class Vtentity extends CActiveRecord
 	}
 	public function getDetailViewFieldsID($id,$htmloptionsAllFields=array())
 	{
-		$model=Vtentity::model($this->getModule());
-		$model->findById($id);
+		$this->findById($id);
 		$dvfields=array();
 		if (!empty($this->_attributes))
 			$fields=$this->_attributes;
@@ -159,7 +158,7 @@ class Vtentity extends CActiveRecord
 			if (!is_array($field)) continue;
 			$key=$field['name'];
 			if($key!=='id') {
-				$value=$model->getAttribute($key);
+				$value=$this->getAttribute($key);
 				$uitype=intval($field['uitype']);
 				$label=$field['label'];
 				$dvfields[$key]=$this->getVtigerViewField($uitype,$key,$value,$label,$htmloptionsAllFields);

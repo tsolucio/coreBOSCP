@@ -253,6 +253,7 @@ class VtentityController extends Controller
 	 */
 	public function actionView()
 	{
+		$this->viewButtonActive=true;
 		$this->render('view',array(
 			'model'=>$this->loadModel(),
 		));
