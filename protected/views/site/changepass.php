@@ -5,7 +5,6 @@ $form=$this->beginWidget('vtyiicpngActiveForm', array(
 	'id'=>'changepass-form',
 	'enableAjaxValidation'=>false,
 ));
-$model=User::model();
 ?>
 	<fieldset>
 	<legend><?php echo Yii::t('core', 'Change Password'); ?></legend>
@@ -15,14 +14,14 @@ $model=User::model();
         <p class="note"><div class="row" id="ChangePassMessage"></div>
         </p>
 	<div class="row">
-		<?php echo $form->labelEx($model,Yii::t('core', 'newPassword')); ?>
+		<?php echo CHtml::label(Yii::t('core', 'newPassword'),'User_password',array('required'=>true)); ?>
 		<?php echo $form->passwordField($model,'password',array('onfocus'=>"this.className='fieldOnFocus'",'onblur'=>"this.className=''")); ?>
 		<?php echo $form->error($model,'password'); ?>
 	</div>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,Yii::t('core', 'repeatPassword')); ?>
-		<?php echo $form->passwordField($model,'password_repeat',array('original-title'=>Yii::t('core', 'infoRepeatPassword'))); ?>
+		<?php echo CHtml::label(Yii::t('core', 'repeatPassword'),'User_password_repeat',array('required'=>true)); ?>
+		<?php echo $form->passwordField($model,'password_repeat',array('onfocus'=>"this.className='fieldOnFocus'",'onblur'=>"this.className=''",'original-title'=>Yii::t('core', 'infoRepeatPassword'))); ?>
 		<?php echo $form->error($model,'password_repeat'); ?>
 	</div>
 

@@ -66,7 +66,7 @@ class SiteController extends Controller
 
 		$response = new AjaxResponse();
 		$username=Yii::app()->user->name;
-		$model=new User();
+		$model=new User('search','Contacts');
 		// Uncomment the following line if AJAX validation is needed
 		$this->performAjaxValidation($model);
 
@@ -78,7 +78,7 @@ class SiteController extends Controller
 				echo 'success';
 			}
 		}
-		$this->render('changepass');
+		$this->render('changepass',array('model'=>$model));
 	}
 
 	public function actionSendmail()
@@ -101,8 +101,8 @@ class SiteController extends Controller
 			//		$this->redirect(Yii::app()->homeUrl);
 			//	}
 		}
-		$model=User::model()->findByAttributes(array('username'=>$username));
-		$found=User::model()->findByEmail($username);
+		$model=new User('search','Contacts');
+		$found=$model->findByEmail($username);
 		if($found==0)
 		{
 			echo 'wrongmail';
