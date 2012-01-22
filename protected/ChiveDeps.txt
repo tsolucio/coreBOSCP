@@ -1,0 +1,38 @@
+Chive Code Dependencies
+--------------------------------------
+
+js/jquery/jquery.editableTable.js
+js/jquery/jquery.listFilter.js
+js/views/site/login.js
+js/ajaxresponse.js
+js/bookmark.js
+js/breadCrumb.js
+js/chive.js
+js/main.js
+js/notification.js
+js/sideBar.js
+protected/components/helpers
+protected/components/messages
+protected/components/ChiveHttpRequest.php
+protected/components/ChiveHttpSession.php
+protected/components/UserSettings.php
+protected/controllers/AjaxSettingsController.php
+protected/controllers/Controller.php
+protected/controllers/InformationController.php
+protected/controllers/SiteController.php
+protected/models/ForgetPasswordForm.php
+protected/models/LoginForm.php
+
+Import/Export:
+js/views/global/export.js
+js/views/global/import.js
+protected/views/global/export.php
+protected/views/global/import.php
+
+Translation commands:
+We aren't actively using this to generate .po files, but we have left it in, in case we find it useful going forward
+
+Theme:
+themes/standard/*
+
+Design

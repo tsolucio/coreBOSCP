@@ -36,7 +36,7 @@
 	<entry id="id">ID</entry>
 	<entry id="import">Importa</entry>
 	<entry id="importFile">Importa file</entry>
-	<entry id="incompatibleBrowserWarning">&lt;strong&gt;Stai usando una versione vecchia di Microsoft Internet Explorer che non è supportata da Chive.&lt;/strong&gt;&lt;br /&gt;&lt;br /&gt;Aggiorna ad una nuova versione o scegli un browser alternativo:</entry>
+	<entry id="incompatibleBrowserWarning">&lt;strong&gt;Stai usando una versione vecchia di Microsoft Internet Explorer che non è supportata da questo progetto.&lt;/strong&gt;&lt;br /&gt;&lt;br /&gt;Aggiorna ad una nuova versione o scegli un browser alternativo:</entry>
 	<entry id="information">Informazioni</entry>
 	<entry id="insert">Inserisci</entry>
 	<entry id="insertAndReturnToThisPage">Inserisci e ritorna in questa pagina</entry>

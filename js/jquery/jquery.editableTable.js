@@ -22,8 +22,6 @@
 	
 	$.fn.editableTable = function(options) {
 		
-		//var options = $.extend($.fn.addCheckboxes.defaultSettings, options);
-		
 		return this.each(function() {
 			
 			var tableObj = $(this);
