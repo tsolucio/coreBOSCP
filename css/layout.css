@@ -292,7 +292,7 @@
   }
   
   div.errorMessage {
-  	background: url(../images/icons/del_10.png) no-repeat 5px 5px;
+  	background: url(../images/icons/fugue/10/delete.png) no-repeat 5px 5px;
 	padding: 3px 0px 0px 20px;
 	color: #f85454;
 	font-weight: bold;

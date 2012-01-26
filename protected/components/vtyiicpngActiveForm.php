@@ -133,6 +133,7 @@ class vtyiicpngActiveForm extends CActiveForm
 						     }, 
 						     response);
 						  }',
+                                        'cssFile'=>'jquery.ui.autocomplete.css',
 					'options'=>array(
 						'minLength'=>2,
 						'showAnim' => 'fold',
