@@ -89,7 +89,9 @@ class User extends CActiveRecord
         else{
            $recordInfo = $clientvtiger->doQuery("Select * from Contacts where portal=1 and email='".$email."'");
         }
-		return count($recordInfo);
+        $count=count($recordInfo);
+        if($count==1) $this->User=$email;
+	return $count;
 	}
 
         public function getSupportDates($email)	
@@ -113,7 +115,9 @@ class User extends CActiveRecord
         public function savePassword($pass)
         {
         $clientvtiger=$this->getClientVtiger();        
-        $email=Yii::app()->user->name;        
+        //$email=Yii::app()->user->name;
+        $email=$this->User;
+        Yii::log('diannn '.$email);
         if(!$clientvtiger) Yii::log('login failed');
         else{
             $recordInfo = $clientvtiger->doInvoke('changePassword',array('email'=>$email,'password'=>$pass));
