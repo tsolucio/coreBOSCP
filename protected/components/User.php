@@ -114,9 +114,8 @@ class User extends CActiveRecord
 
         public function savePassword($pass)
         {
-        $clientvtiger=$this->getClientVtiger();        
-        //$email=Yii::app()->user->name;
-        $email=$this->User;
+        $clientvtiger=$this->getClientVtiger();
+        $email=isset(Yii::app()->user->name)?Yii::app()->user->name:$this->User;
         Yii::log('diannn '.$email);
         if(!$clientvtiger) Yii::log('login failed');
         else{
