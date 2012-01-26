@@ -50,7 +50,7 @@ class Controller extends CController
 	 */
 	public function createUrl($route, $params = array(), $ampersand = '&')
 	{
-		if($route{0} == '#')
+		if(!empty($route) and $route{0} == '#')
 		{
 			if(($query = Yii::app()->getUrlManager()->createPathInfo($params, '=', $ampersand)) !== '')
 			{

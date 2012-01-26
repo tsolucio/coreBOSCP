@@ -299,7 +299,7 @@ class VtentityController extends Controller
 			// the autocomplete widget to pass in user input
 			$name = $_GET['term'];
 			// this was set with the "max" attribute of the CAutoComplete widget
-			$limit = min($_GET['limit'], 40);
+			$limit = min((isset($_GET['limit']) ? $_GET['limit'] : 100), 40);
 			$criteria = new CDbCriteria;
 			// lookupfield can contain list of fields
 			$lookup_fields=explode(',', $this->entityLookupField);
