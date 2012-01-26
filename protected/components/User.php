@@ -76,10 +76,10 @@ class User extends CActiveRecord
 		} else {
 			$recordInfo = $clientvtiger->doInvoke('authenticateContact',array('email'=>$email,'password'=>$password));
 		}
-		if(empty($recordInfo))
+                yii::log(var_dump($recordInfo));
+		if(empty($recordInfo) || !$recordInfo)
 		return null;
-		else
-		return $this->populateRecord($recordInfo);
+		else return true;
 	}
 
         public function findByEmail($email)

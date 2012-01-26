@@ -45,10 +45,7 @@ class UserIdentity extends CUserIdentity
 			$user=new User('search','Contacts');
             $found=$user->findByAttributes(array('username'=>$this->username,'password'=>$this->password));
 
-            // FIXME we can validate so I force authentification ** ELIMINATE THIS ***
-            $found=true;
-
-            if($found===null)
+            if($found===null||$found==false)
             {
             	$this->errorCode=self::ERROR_USERNAME_INVALID;
             }           
