@@ -99,7 +99,7 @@ class User extends CActiveRecord
         if(!$clientvtiger) Yii::log('login failed');
         else{
            $recordInfo = $clientvtiger->doQuery("Select * from Contacts where portal=1 and email='".$email."'");
-           if (is_array($recordInfo) {
+           if (is_array($recordInfo)) {
            $res['startSupportDate']=$recordInfo[0]['support_start_date'];
            $res['endSupportDate']=$recordInfo[0]['support_end_date'];
            } else {
