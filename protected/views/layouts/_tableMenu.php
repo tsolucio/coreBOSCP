@@ -38,7 +38,7 @@
 				'label' => Yii::t('core','search'),
 				'icon' => 'search',
 				'link' => array(
-					//'url' => $this->modelLinkName.'/' . $this->entity . '/search',
+					'url' => '',
 					'htmlOptions' => array('class'=>'icon','id'=>'search-button'),
 				),
 				'visible' => $this->viewButtonSearch,
