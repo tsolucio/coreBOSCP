@@ -1,10 +1,10 @@
-<div class="wide form">
+<div class="yiiForm">
 
 <?php $form=$this->beginWidget('vtyiicpngActiveForm', array(
 	'action'=>Yii::app()->createUrl($this->route),
 	'method'=>'get',
-)); ?>
-
+)); ?><fieldset>
+    <legend><?php echo Yii::t('core','search') ?></legend>
 	<?php
 	foreach($fields as $field) {
 		if (!is_array($field) || empty($field['name'])) continue;  // jump values, process only fields
@@ -26,7 +26,7 @@
 	<div class="row buttons">
 		<?php echo CHtml::submitButton('Search'); ?>
 	</div>
-
+</fieldset>
 <?php $this->endWidget(); ?>
 
 </div><!-- search-form -->

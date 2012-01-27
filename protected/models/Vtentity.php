@@ -36,7 +36,7 @@ class Vtentity extends CActiveRecord
 	 */
 	public static function model($className=__CLASS__)
 	{
-		return parent::model($className);
+		return parent::model($className);                
 	}
 
 	/**
@@ -67,10 +67,13 @@ class Vtentity extends CActiveRecord
 		$mandatory=$this->getMandatoryFields($module);
 		$numerical=$this->getNumericalFields($module);
 		$email=$this->getEmailFields($module);
+                $safeFields=implode(',',$this->attributeNames());
+                Yii::log('safefields'.$safeFields);
 		return array(
 				array($mandatory, 'required'),
 				array($numerical, 'numerical', 'integerOnly'=>true),
 				array($email, 'email'),
+                                array($safeFields,'safe'),
 		);
 	}
 
@@ -105,11 +108,12 @@ class Vtentity extends CActiveRecord
 		// should not be searched.
 
 		$criteria=new CDbCriteria;
-		$attrs=$this->getAttributesArray();
+		$attrs=$this->getAttributesArray();                
 		foreach ($attrs as $key=>$attr) {
-			if (!is_array($attr)) continue;  // we can only search simple values, not IN
-			// FIXME: remove attributes that should not be searched.
-			$criteria->compare($attr['name'],$this->getAttribute($attr['name']),true);
+			//if (!is_array($attr)) continue;  // we can only search simple values, not IN
+			// FIXME: remove attributes that should not be searched.                
+//			$criteria->compare($attr['name'],$this->getAttribute($attr['name']),true);               
+ 		$criteria->compare($key,$attr,true);
 		}
 
 		if (is_null($pagectrl))

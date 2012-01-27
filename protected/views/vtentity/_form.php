@@ -6,6 +6,7 @@
 	'enableClientValidation'=>true,
 )); ?>
 <fieldset>
+        <legend><?php echo $legend; ?></legend>
 	<p class="note"><?php echo Yii::t('core', 'fieldsRequired'); ?></p>
     <div id="othermsg"></div>
 
@@ -31,7 +32,7 @@
 
 	<div class="row">
 		<!-- administrative fields -->
-		<?php echo CHtml::hiddenField('dvcpage',$_REQUEST['dvcpage']); ?>
+		<?php if(isset($_REQUEST['dvcpage'])) echo CHtml::hiddenField('dvcpage',$_REQUEST['dvcpage']); ?>
 	</div>
 
 	<div class="row buttons">
@@ -40,7 +41,7 @@
 </fieldset>
 <?php $this->endWidget(); ?>
 <script type="text/javascript">
-	$('form').ajaxForm({
+	$('form').ajaxForm({           
 		success: function(response) {
 			if (response.data != undefined && response.data != '') 
 				$('#content').html(response.data);

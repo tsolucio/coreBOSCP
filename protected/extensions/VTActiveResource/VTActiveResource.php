@@ -599,8 +599,8 @@ abstract class VTActiveResource extends CModel
     {
     	// this is what yii CAR does  FIXME??
     	//return array_keys($this->getMetaData()->columns);
-    	$attributes=array();
-    	$all_attributes=$this->_attributes;
+    	$attributes=array(); 
+        $all_attributes=is_array($this->_attributes)?$this->_attributes:$this->getFieldsInfo();
     	foreach($all_attributes as $attribute)
     	{
     		if (!is_array($attribute)) continue;
@@ -1566,12 +1566,12 @@ abstract class VTActiveResource extends CModel
     	if($findall===false){
     		if(!$clientvtiger) Yii::log('login failed',CLogger::LEVEL_ERROR);
     		else {
-    			$q=$this->createVtigerSQLCommand($module,$criteria,$cols);
+    			$q=$this->createVtigerSQLCommand($module,$criteria,$cols);                       
     			$findall = $clientvtiger->doQuery($q);
     		}
     		Yii::app()->cache->set( $api_cache_id , $findall, 3600 );
     	}
-    	Yii::log('findall: '.count($findall),CLogger::LEVEL_INFO);
+    	Yii::log('findallFromSearch: '.count($findall),CLogger::LEVEL_INFO);
     	return $this->populateRecords($findall,false);
     }
 
@@ -1967,7 +1967,7 @@ abstract class VTActiveResource extends CModel
      */
     public function getAttributesArray()
     {
-    	return (is_array($this->_attributes) ? $this->_attributes : array());
+    	return (is_array($this->_attributes) ? $this->_attributes : $this->attributeNames());
     }
 
     public function getWritableFieldsArray()
