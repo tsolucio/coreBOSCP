@@ -26,7 +26,7 @@ class vtyiicpngActiveForm extends CActiveForm
 	 * @param string $fieldname
 	 * @param array $htmlopts
 	 */
-	public function getVtigerEditField($uitype,$model,$fieldname,$htmlopts=array(),$capturerefersto)
+	public function getVtigerEditField($uitype,$model,$fieldname,$htmlopts=array(),$capturerefersto,$action='edit')
 	{
 		$widget='';
 		switch ($uitype) {
@@ -152,12 +152,14 @@ class vtyiicpngActiveForm extends CActiveForm
 			case 255:
 				$plvals=$model->getPicklistValues($fieldname);
 				$values=array_values((is_array($plvals)?$plvals:array()));
+                                if($action=='search') array_unshift($values,' ');
 				$plvalues=count($values)>0?array_combine($values,$values):array();
 				$widget=$this->dropDownList($model,$fieldname,$plvalues,$htmlopts);
 				break;
 			case 33:
 			case 34:				
 				$plvalues=array_values($model->getPicklistValues($fieldname));
+                                if($action=='search') array_unshift($plvalues,' ');
 				$htmlopts['multiple']='true';
 				$widget=$this->listBox($model,$fieldname,$plvalues,$htmlopts);
 				break;
@@ -187,6 +189,7 @@ class vtyiicpngActiveForm extends CActiveForm
 			case 53:
 				$values=$model->getUsersInSameGroup();
 				$plvalues=$values;
+                                if($action=='search') array_unshift($plvalues,' ');
 				$widget=$this->dropDownList($model,$fieldname,$plvalues,$htmlopts);
 				break;
 

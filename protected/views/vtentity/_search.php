@@ -17,7 +17,7 @@
 			else $refersTo='';
 			echo '<div class="row">';
 			echo $form->labelEx($model,$fieldname);
-			echo $form->getVtigerEditField($uitype,$model,$fieldname,array('maxlength'=>100),$refersTo);
+			echo $form->getVtigerEditField($uitype,$model,$fieldname,array('maxlength'=>100),$refersTo,'search');
 			echo '</div>';
 		}
 	}

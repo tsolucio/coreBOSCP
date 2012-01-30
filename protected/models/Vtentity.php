@@ -67,7 +67,13 @@ class Vtentity extends CActiveRecord
 		$mandatory=$this->getMandatoryFields($module);
 		$numerical=$this->getNumericalFields($module);
 		$email=$this->getEmailFields($module);
-                $safeFields=implode(',',$this->attributeNames());
+                $writable=$this->getWritableFieldsArray();
+                $attributes=array();
+                foreach($writable as $write){
+                    if (!is_array($write)) continue;
+                    array_push($attributes,$write['name']);
+                }
+                $safeFields=implode(',',$attributes);
                 Yii::log('safefields'.$safeFields);
 		return array(
 				array($mandatory, 'required'),
@@ -108,11 +114,12 @@ class Vtentity extends CActiveRecord
 		// should not be searched.
 
 		$criteria=new CDbCriteria;
-		$attrs=$this->getAttributesArray();                
+		$attrs=$this->getAttributes();
 		foreach ($attrs as $key=>$attr) {
 			//if (!is_array($attr)) continue;  // we can only search simple values, not IN
 			// FIXME: remove attributes that should not be searched.                
-//			$criteria->compare($attr['name'],$this->getAttribute($attr['name']),true);               
+//			$criteria->compare($attr['name'],$this->getAttribute($attr['name']),true);
+                if($attr!=" ")
  		$criteria->compare($key,$attr,true);
 		}
 
