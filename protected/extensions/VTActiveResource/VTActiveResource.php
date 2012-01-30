@@ -1143,6 +1143,7 @@ abstract class VTActiveResource extends CModel
 	    		$done=$clientvtiger->doCreate($module,$attributes);
 	    		if($done) {
 	    			$newId=$done['id'];
+                                $this->__set('id',$newId);
 		    		$this->afterSave();
 		    		$this->setIsNewRecord(false);
 		    		$this->setScenario('update');

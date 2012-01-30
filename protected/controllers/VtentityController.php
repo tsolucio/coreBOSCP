@@ -99,7 +99,7 @@ class VtentityController extends Controller
 		$model=new $this->modelName;
 		$fields=$model->getWritableFieldsArray();
 		$uitypes=$model->getUItype($this->entity);
-
+                $model->setIsNewRecord(true);
 		// Uncomment the following line if AJAX validation is needed
 		//$this->performAjaxValidation($model);
 
@@ -107,7 +107,7 @@ class VtentityController extends Controller
 		if(isset($_POST[$this->modelName]))
 		{
 			$response = new AjaxResponse();
-			$model->setAttributes($_POST[$this->modelName]);
+			$model->setAttributes($_POST[$this->modelName]);                      
 			if($model->save()) {
 				$response->addNotification('success', Yii::t('core', 'success'), Yii::t('core', 'successCreateRow'));
 				$response->redirectUrl = '#'.$this->modelLinkName.'/'.$this->entity.'/view/' . $model->__get($this->entityidField);
@@ -135,7 +135,7 @@ class VtentityController extends Controller
 		$model=$this->loadModel();
 		$fields=$model->getWritableFieldsArray();
 		$uitypes=$model->getUItype($this->entity);
-
+                $model->setIsNewRecord(false);
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
@@ -238,12 +238,12 @@ class VtentityController extends Controller
 			$_SESSION[$this->modelName]=$_GET[$this->modelName];
 		} elseif (isset($_SESSION[$this->entity])) {
 			$model->setAttributes($_SESSION[$this->modelName]);
-		}
-
+		}                
+                        
 		$this->viewButtonSearch=true;
 		$this->render('admin',array(
-			'model'=>$model,
-			'fields'=>$fields,
+			'model'=>$model,                    
+			'fields'=>$fields,                
 			'uitypes'=>$uitypes,
 		));
 	}
@@ -254,6 +254,7 @@ class VtentityController extends Controller
 	public function actionView()
 	{
 		$this->viewButtonActive=true;
+                $_GET[$this->modelName.'_page']=Yii::app()->getRequest()->getParam($this->modelName.'_page',1);                
 		$this->render('view',array(
 			'model'=>$this->loadModel(),
 		));
