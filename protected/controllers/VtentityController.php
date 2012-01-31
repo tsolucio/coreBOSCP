@@ -98,7 +98,7 @@ class VtentityController extends Controller
 
 		$model=new $this->modelName;
 		$fields=$model->getWritableFieldsArray();
-		$uitypes=$model->getUItype($this->entity);
+		$uitypes=$model->getUItype();
                 $model->setIsNewRecord(true);
 		// Uncomment the following line if AJAX validation is needed
 		//$this->performAjaxValidation($model);
@@ -134,7 +134,7 @@ class VtentityController extends Controller
 	{
 		$model=$this->loadModel();
 		$fields=$model->getWritableFieldsArray();
-		$uitypes=$model->getUItype($this->entity);               
+		$uitypes=$model->getUItype();               
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
@@ -231,7 +231,7 @@ class VtentityController extends Controller
 
 		$model=new $this->modelName('search');
 		$fields=$model->getWritableFieldsArray();
-		$uitypes=$model->getUItype($this->entity);
+		$uitypes=$model->getUItype();
 		if(isset($_GET[$this->modelName])) {
 			$model->setAttributes($_GET[$this->modelName]);
 			$_SESSION[$this->modelName]=$_GET[$this->modelName];

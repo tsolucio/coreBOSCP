@@ -78,10 +78,10 @@ var chive = {
 				});
 			}, 300000);
 		}
-		
+                
 		if($('#globalSearch').length)
 		{
-			$('#globalSearch').autocomplete(baseUrl + '/site/search', {
+			jQuery('#globalSearch').legacyautocomplete(baseUrl + '/site/search', {
 				width:		400,
 				formatItem: function(item, position, total, item2) {
 					item = JSON.parse(item2);

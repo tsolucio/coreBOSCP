@@ -1571,7 +1571,7 @@ abstract class VTActiveResource extends CModel
     			$findall = $clientvtiger->doQuery($q);
     		}
     		Yii::app()->cache->set( $api_cache_id , $findall, 3600 );
-    	}
+    	}       
     	Yii::log('findallFromSearch: '.count($findall),CLogger::LEVEL_INFO);
     	return $this->populateRecords($findall,false);
     }
@@ -1582,7 +1582,7 @@ abstract class VTActiveResource extends CModel
     	$clientvtiger=$this->getClientVtiger();
     	if(!$clientvtiger) Yii::log('login failed',CLogger::LEVEL_ERROR);
     	else {
-    		$findall =unserialize($clientvtiger->doInvoke('getSearchResults',array('query'=>$query)));
+    		$findall =unserialize($clientvtiger->doInvoke('getSearchResults',array('query'=>$query)));            
     	}
     	Yii::log('findall: '.count($findall),CLogger::LEVEL_INFO);
     	return $findall;
@@ -2252,22 +2252,16 @@ abstract class VTActiveResource extends CModel
 		return $ListViewFields;
 	}
  
-	public function getUItype($module)
+	public function getUItype()
 	{
-		$module = $this->getModule();
-		$clientvtiger=$this->getClientVtiger();
-		$api_cache_id='getUItype'.$module;
-		$uitypeFields = Yii::app()->cache->get( $api_cache_id  );
-
-		// If the results were false, then we have no valid data,
-		// so load it
-		if($uitypeFields===false){
-			if(!$clientvtiger) Yii::log('login failed',CLogger::LEVEL_ERROR);
-			else {
-				$uitypeFields = $clientvtiger->doInvoke('getUItype',array('module'=>$module));
-			}
-			Yii::app()->cache->set( $api_cache_id , $uitypeFields, 3600 );
-		}
+                $uitypeFields=array();
+                $fields=$this->getFieldsInfo();
+                foreach($fields as $field){
+                    if(!is_array($field) || $field['name'] == 'id') continue;
+                    $name=$field["name"];
+                    $uitype=$field["uitype"];
+                    $uitypeFields[$name]=$uitype;
+                }
 		Yii::log('uitypes'.count($uitypeFields),CLogger::LEVEL_INFO);
 		return $uitypeFields;
 	}
