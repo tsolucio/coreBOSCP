@@ -21,9 +21,10 @@
 			$uitype=intval($uitypes[$fieldname]);
 			if(isset($field['type']['refersTo']) && !empty($field['type']['refersTo'])) $refersTo=$field['type']['refersTo'];
 			else $refersTo='';
+                        $action=$model->getIsNewRecord()?'create':'edit';
 			echo '<div class="row">';
 			echo $form->labelEx($model,$fieldname);
-			echo $form->getVtigerEditField($uitype,$model,$fieldname,array('maxlength'=>100),$refersTo);
+			echo $form->getVtigerEditField($uitype,$model,$fieldname,array('maxlength'=>100),$refersTo,$action);
 			echo $form->error($model,$fieldname);
 			echo '</div>';
 		}

@@ -134,8 +134,7 @@ class VtentityController extends Controller
 	{
 		$model=$this->loadModel();
 		$fields=$model->getWritableFieldsArray();
-		$uitypes=$model->getUItype($this->entity);
-                $model->setIsNewRecord(false);
+		$uitypes=$model->getUItype($this->entity);               
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 

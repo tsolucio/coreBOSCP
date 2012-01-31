@@ -26,7 +26,7 @@ class vtyiicpngActiveForm extends CActiveForm
 	 * @param string $fieldname
 	 * @param array $htmlopts
 	 */
-	public function getVtigerEditField($uitype,$model,$fieldname,$htmlopts=array(),$capturerefersto,$action='edit')
+	public function getVtigerEditField($uitype,$model,$fieldname,$htmlopts=array(),$capturerefersto,$action)
 	{
 		$widget='';
 		switch ($uitype) {
@@ -100,7 +100,10 @@ class vtyiicpngActiveForm extends CActiveForm
 			case 101:
 				$widget='';
 				$cname=get_class($model);
-				echo CHtml::hiddenField($cname."[$fieldname]");
+                                if($action=='edit')
+				echo CHtml::hiddenField($cname."[$fieldname]",$model->$fieldname);
+                                else
+                                echo CHtml::hiddenField($cname."[$fieldname]");
 				if (!empty($capturerefersto) and is_array($capturerefersto)) {
 					echo CHtml::hiddenField($cname.$fieldname."_type",$capturerefersto[0]);
 					if (count($capturerefersto)>1) {
@@ -124,8 +127,8 @@ class vtyiicpngActiveForm extends CActiveForm
 				$htmlopts['onClick']="if (jQuery('#".$cname.$fieldname."_display').val()=='".Yii::t('core', 'search')."') jQuery('#".$cname.$fieldname."_display').val('');";
 				$this->widget('zii.widgets.jui.CJuiAutoComplete', array(
 					'model'=>$model,
-					'name'=>$cname.$fieldname."_display",
-					'value'=>Yii::t('core', 'search'),
+					'name'=>$cname.$fieldname."_display",                                       
+					'value'=>$action=='edit'?$model->getComplexAttributeValue($fieldname,$model->$fieldname):Yii::t('core', 'search'),                                  
 					'source'=>'js:function(request, response){ // el truco es reescribir source
 						     $.getJSON("'.Yii::app()->createUrl($model->modelLinkName).'"+"/"+$("#'.$cname.$fieldname."_type".'").val()+"/AutoCompleteLookup",
 						     {
