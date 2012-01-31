@@ -273,7 +273,8 @@ class VtentityController extends Controller
 				$this->_model=$entity::model()->findbyPk($_GET[$this->entityidField]);
 			if($this->_model===null)
 				throw new CHttpException(404,Yii::t('core', 'errorIdNotExist'));
-		}
+		}                
+                if($this->_model) $this->_model->setIsNewRecord(false);                
 		$this->entityidValue=$this->_model->__get($this->entityidField);
 		return $this->_model;
 	}
