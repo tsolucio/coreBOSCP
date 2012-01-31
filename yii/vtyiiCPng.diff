@@ -1,0 +1,19 @@
+Index: yii/db/schema/CDbCriteria.php
+===================================================================
+--- yii/db/schema/CDbCriteria.php	(revisión: 236)
++++ yii/db/schema/CDbCriteria.php	(revisión: 242)
+@@ -189,12 +189,12 @@
+ 		{
+ 			if($condition===array())
+ 				return $this;
+-			$condition='('.implode(') '.$operator.' (',$condition).')';
++			$condition=''.implode(' '.$operator.' ',$condition).'';
+ 		}
+ 		if($this->condition==='')
+ 			$this->condition=$condition;
+ 		else
+-			$this->condition='('.$this->condition.') '.$operator.' ('.$condition.')';
++			$this->condition=''.$this->condition.' '.$operator.' '.$condition.'';
+ 		return $this;
+ 	}
+ 

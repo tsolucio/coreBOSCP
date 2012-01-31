@@ -82,6 +82,7 @@
   <entry id="time">Hora</entry>
   <entry id="total">Total</entry>
   <entry id="type">Tipo</entry>
+  <entry id="usedLibraries">Librerías utilizadas</entry>
   <entry id="user">Usuario</entry>
   <entry id="username">Nombre de usuario</entry>
   <entry id="value">Valor</entry>

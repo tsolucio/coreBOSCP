@@ -82,6 +82,7 @@
 	<entry id="time">Time</entry>
 	<entry id="total">Total</entry>
 	<entry id="type">Type</entry>
+	<entry id="usedLibraries">Used libraries</entry>
 	<entry id="user">User</entry>
 	<entry id="username">Username</entry>
 	<entry id="value">Value</entry>
