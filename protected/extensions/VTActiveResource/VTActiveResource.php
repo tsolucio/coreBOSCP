@@ -44,7 +44,7 @@ abstract class VTActiveResource extends CModel
     // vtyiicpng
     private $module;
     private $clientvtiger;
-
+    private $count;
     /**
      * Constructor.
      * @param string $scenario scenario name. See {@link CModel::scenario} for more details about this parameter.
@@ -62,8 +62,6 @@ abstract class VTActiveResource extends CModel
     	else
     	$module=$moduleParam;
     	$this->setModule($module);
-    	//if($this->getClientVtiger()==null)
-        //$this->getClientVtiger($client);
     	if (!$this->validModule())
     		Yii::app()->endJson(Yii::t('core','invalidEntity'));
     	$this->init($module);
@@ -1537,6 +1535,12 @@ abstract class VTActiveResource extends CModel
     	//$this->_alias=$alias;
     }
 
+    public function setCount($count){
+        $this->count=$count;
+    }
+    public function getCount(){
+        return $this->count;
+    }
     /**
      * Finds a single active record with the specified condition.
      * @param mixed $condition query condition or criteria.
@@ -1574,7 +1578,8 @@ abstract class VTActiveResource extends CModel
     			$findall = $clientvtiger->doQuery($q);
     		}
     		Yii::app()->cache->set( $api_cache_id , $findall, 3600 );
-    	}       
+    	}
+        $this->setCount(count($findall));
     	Yii::log('findallFromSearch: '.count($findall),CLogger::LEVEL_INFO);
     	return $this->populateRecords($findall,false);
     }
@@ -1705,17 +1710,7 @@ abstract class VTActiveResource extends CModel
 
     public function count($criteria)
     {
-    	$module = $this->getModule();
-    	$clientvtiger=$this->getClientVtiger();
-    
-    	// If the results were false, then we have no valid data, so load it
-    	if(!$clientvtiger) Yii::log('login failed',CLogger::LEVEL_ERROR);
-    	else {
-    		$q=$this->createVtigerSQLCommand($module,$criteria,'count(*)');
-    		$countquery = $clientvtiger->doQuery($q);
-    		$count=$countquery[0]['count'];
-    	}
-    	return  $count;
+    	return  $this->getCount();
     }
 
     /**

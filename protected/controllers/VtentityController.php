@@ -133,7 +133,8 @@ class VtentityController extends Controller
 	 */
 	public function actionUpdate()
 	{
-		$model=$this->loadModel();
+		$this->_model=null;
+                $model=$this->loadModel();
 		$fields=$model->getWritableFieldsArray();
 		$uitypes=$model->getUItype();               
 		// Uncomment the following line if AJAX validation is needed
@@ -201,9 +202,8 @@ class VtentityController extends Controller
 		if(isset($_GET['dvcpage'])) {
 			$pos['currentPage']=$_GET['dvcpage'];
 			unset($_GET['dvcpage']);
-		}
-		$model=$this->_model;
-                $model->setScenario('search');
+		}		
+                $model=new $this->modelName('search');
 		if(isset($_GET[$this->modelName])) {
 			$model->setAttributes($_GET[$this->modelName]);
 			$_SESSION[$this->modelName]=$_GET[$this->modelName];
@@ -232,8 +232,9 @@ class VtentityController extends Controller
 		}
 		
                 $model=$this->_model;
+                $model->unsetAttributes();
                 $model->setScenario('search');
-		$fields=$model->getWritableFieldsArray();
+                $fields=$model->getWritableFieldsArray();
 		$uitypes=$model->getUItype();
 		if(isset($_GET[$this->modelName])) {
 			$model->setAttributes($_GET[$this->modelName]);
