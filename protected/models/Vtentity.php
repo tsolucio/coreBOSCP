@@ -26,7 +26,7 @@ class Vtentity extends CActiveRecord
 	public function __construct()
 	{
 		parent::__construct();
-		$this->tablename=$this->getModule();
+		$this->tablename=$this->getModule();               
 		$this->entityidField=$this->primaryKey();
 	}
 
@@ -101,7 +101,14 @@ class Vtentity extends CActiveRecord
 	 */
 	public function attributeLabels()
 	{
-		return $this->translateAttributeLabels();
+            $fields=$this->getFieldsInfo();
+            $labels=array();
+            foreach($fields as $field)
+            {
+                if (!is_array($field)) continue;
+    		array_push($labels,$field['label']);
+            }
+            return $labels;
 	}
 
 	/**

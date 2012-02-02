@@ -62,7 +62,8 @@ abstract class VTActiveResource extends CModel
     	else
     	$module=$moduleParam;
     	$this->setModule($module);
-    	$this->setClientVtiger($this->loginREST());
+    	//if($this->getClientVtiger()==null)
+        //$this->getClientVtiger($client);
     	if (!$this->validModule())
     		Yii::app()->endJson(Yii::t('core','invalidEntity'));
     	$this->init($module);
@@ -645,9 +646,11 @@ abstract class VTActiveResource extends CModel
 
     public function setClientVtiger($clientvtiger)
     {
-        if($clientvtiger==null)
-        	$clientvtiger=$this->loginREST();
-        $this->clientvtiger=$clientvtiger;
+        if($this->clientvtiger==null && $clientvtiger==null)
+        {
+            $clientvtiger=$this->loginREST();
+            $this->clientvtiger=$clientvtiger;
+        }
         self::$db=$this->clientvtiger;
     }
 
@@ -1553,8 +1556,7 @@ abstract class VTActiveResource extends CModel
 
     public function findAll($criteria='',$cols='')
     {
-    	$module=$this->getModule();
-    	$clientvtiger=$this->getClientVtiger();
+    	$module=$this->getModule();    	
     
     	$criteriaArray=$criteria->toArray();
     	$id1=isset($criteriaArray['condition'])?$criteriaArray['condition']:'';
@@ -1565,6 +1567,7 @@ abstract class VTActiveResource extends CModel
     
     	// If the results were false, then we have no valid data, so load it
     	if($findall===false){
+                $clientvtiger=$this->getClientVtiger();
     		if(!$clientvtiger) Yii::log('login failed',CLogger::LEVEL_ERROR);
     		else {
     			$q=$this->createVtigerSQLCommand($module,$criteria,$cols);                       
@@ -1608,8 +1611,7 @@ abstract class VTActiveResource extends CModel
      */
     public function findById($record)
     {
-    	$module = $this->getModule();
-    	if(!isset($module)) $module=$this->getModule();
+    	$module = $this->getModule();    	
     	$clientvtiger=$this->getClientVtiger();
     	if(!$clientvtiger) Yii::log('login failed',CLogger::LEVEL_ERROR);
     	else {
@@ -1846,7 +1848,13 @@ abstract class VTActiveResource extends CModel
     		}
     		if ($attributes!==false && is_array($attributes))
     		{
-    			//$resource=$this;
+    			//$resource=new $this->module ();
+                        //$resource->setModule($module)
+                        //$resource->unsetAttributes();
+                       // $resource->setAttributes($attributes);
+//                        $resource=$this;
+//                        $this->unsetAttributes();
+                        //$client=$this->getClientVtiger();
     			$resource=$this->instantiate($attributes);
     			$resource->setScenario('update');
     			$resource->init();
@@ -2113,8 +2121,7 @@ abstract class VTActiveResource extends CModel
 	} 
 
 	public function getLookupField()
-	{
-		$clientvtiger=$this->getClientVtiger();
+	{		
 		$module=$this->getModule();
 	
 		$api_cache_id='getLookupField'.$module;
@@ -2122,6 +2129,7 @@ abstract class VTActiveResource extends CModel
 	
 		// If the results were false, then we have no valid data, so load it
 		if($labelFields===false){
+                        $clientvtiger=$this->getClientVtiger();
 			if(!$clientvtiger) Yii::log('login failed',CLogger::LEVEL_ERROR);
 			else {
 				$moduledata = $clientvtiger->doDescribe($module);
@@ -2206,8 +2214,7 @@ abstract class VTActiveResource extends CModel
 	}
 
 	public function setFieldsInfo()
-	{
-		$clientvtiger=$this->getClientVtiger();
+	{		
 		$module=$this->getModule();
 
 		$api_cache_id='getFieldsInfo'.$module;
@@ -2215,6 +2222,7 @@ abstract class VTActiveResource extends CModel
 
 		// If the results were false, then we have no valid data, so load it
 		if($Fields===false){
+                        $clientvtiger=$this->getClientVtiger();
 			if(!$clientvtiger) {
 				Yii::log('login failed',CLogger::LEVEL_ERROR);
 				$Fields=array();
@@ -2231,15 +2239,15 @@ abstract class VTActiveResource extends CModel
 
 	public function getListViewFields()
 	{
-		$module = $this->getModule();
-		$clientvtiger=$this->getClientVtiger();
+		$module = $this->getModule();		
 		$api_cache_id='getListViewFields'.$module;
 		$ListViewFields = Yii::app()->cache->get( $api_cache_id  );
 
 		// If the results were false, then we have no valid data, so load it
 		if($ListViewFields===false)
 		{ // No valid cached data was found, so we will generate it.
-			if(!$clientvtiger) Yii::log('login failed',CLogger::LEVEL_ERROR);
+			$clientvtiger=$this->getClientVtiger();
+                        if(!$clientvtiger) Yii::log('login failed',CLogger::LEVEL_ERROR);
 			else {
 				$ListViewFields = $clientvtiger->doGetFilterFields($module);
 			}
@@ -2268,14 +2276,14 @@ abstract class VTActiveResource extends CModel
 
 	public  function getComplexAttributeValue($fieldname,$id)
 	{
-		$module = $this->getModule();
-		$clientvtiger=$this->getClientVtiger();
+		$module = $this->getModule();		
 		$api_cache_id='getComplexAttributeValue'.$fieldname.$id;
 		$complexattributevalue = Yii::app()->cache->get( $api_cache_id  );
 
 		// If the results were false, then we have no valid data,
 		// so load it
 		if($complexattributevalue===false){
+                        $clientvtiger=$this->getClientVtiger();
 			if(!$clientvtiger) Yii::log('login failed',CLogger::LEVEL_ERROR);
 			else {
 				$complexattributevalue = $clientvtiger->doInvoke('getReferenceValue',array('field'=>$fieldname,'id'=>$id));
@@ -2288,7 +2296,7 @@ abstract class VTActiveResource extends CModel
 	public function getUsersInSameGroup()
 	{
 		$module = $this->getModule();
-		$clientvtiger=$this->getClientVtiger();
+		
 
 		$api_cache_id='getUsersInSameGroup';
 		$usersinsamegroup = Yii::app()->cache->get( $api_cache_id  );
@@ -2296,6 +2304,7 @@ abstract class VTActiveResource extends CModel
 		// If the results were false, then we have no valid data,
 		// so load it
 		if($usersinsamegroup===false){
+                        $clientvtiger=$this->getClientVtiger();
 			if(!$clientvtiger) Yii::log('login failed',CLogger::LEVEL_ERROR);
 			else {
 				$id='1';
@@ -2330,14 +2339,21 @@ abstract class VTActiveResource extends CModel
     public function vtGetTranslation($strs,$module='',$language='')
     {
 		$tr=$strs;
+		
+		$api_cache_id='getTranslation'.$module;
+		$tr = Yii::app()->cache->get( $api_cache_id  );
+		// If the results were false, then we have no valid data,
+		// so load it
+		if($tr===false){		
 		$clientvtiger=$this->getClientVtiger();
-                
-		if(!$clientvtiger)
+                if(!$clientvtiger)
 			Yii::log('login failed',CLogger::LEVEL_ERROR);
 		else {
 			if (empty($language)) $language = Yii::app()->getLanguage();
 			$tr = $clientvtiger->doTranslate($strs, $language, $module);
+                        Yii::app()->cache->set( $api_cache_id , $tr, 3600 );
 		}
+                }                
 		return $tr;
     }
 
@@ -2483,18 +2499,23 @@ abstract class VTActiveResource extends CModel
     }
 
     public function getPicklistValues($fieldname)
-    {
-    	$module = $this->getModule();
-    	$clientvtiger=$this->getClientVtiger();
+    {    	
+    	$allpicklists=$this->getAllPicklistsValuesModule();
+        return $allpicklists[$fieldname];
+    }
+    public function getAllPicklistsValuesModule(){
+        $module = $this->getModule();
+    	
 
-    	$api_cache_id='getPicklistValues'.$fieldname;
+    	$api_cache_id='getPicklistValues'.$module;
     	$PickListValues = Yii::app()->cache->get( $api_cache_id  );
 
     	// If the results were false, then we have no valid data, so load it
     	if($PickListValues===false){
-    		if(!$clientvtiger) Yii::log('login failed',CLogger::LEVEL_ERROR);
+    		$clientvtiger=$this->getClientVtiger();
+                if(!$clientvtiger) Yii::log('login failed',CLogger::LEVEL_ERROR);
     		else{
-    			$PickListValues =$clientvtiger->doInvoke('getPicklistValues',array('fieldname'=>$fieldname));
+    			$PickListValues =unserialize($clientvtiger->doInvoke('getPicklistValues',array('module'=>$module)));
     			$wasError = $clientvtiger->lastError();
     			if($wasError) {
     				Yii::log(CVarDumper::dumpAsString($clientvtiger->lastError()),CLogger::LEVEL_ERROR);
@@ -2505,7 +2526,6 @@ abstract class VTActiveResource extends CModel
     	}
     	return $PickListValues;
     }
-
     public function getModule() {
     	return $this->module;
     }
@@ -2531,20 +2551,23 @@ abstract class VTActiveResource extends CModel
     }
 
     public function validModule() {
-    	$valid=false;
-    	$clientvtiger=$this->getClientVtiger();
-    	$module=$this->getModule();
     	
-    	if(!$clientvtiger)
+    	
+    	$module=$this->getModule();
+    	$api_cache_id='validModule'.$module;
+    	$valid = Yii::app()->cache->get( $api_cache_id  );
+
+        if($valid===false){
+    	$clientvtiger=$this->getClientVtiger();
+        if(!$clientvtiger)
     		Yii::log('login failed',CLogger::LEVEL_ERROR);
     	else {
-    		$api_cache_id='validModule'.$module;
-    		$valid = Yii::app()->cache->get( $api_cache_id  );
+    		
     		
     		// If the results were false, then we have no valid data, so load it
-    		if($valid===false){
+    		
     			$valid = $clientvtiger->doQuery("select count(*) from $module");
-    			Yii::app()->cache->set( $api_cache_id , $valid, 3600 );
+    			Yii::app()->cache->set( $api_cache_id , $valid>0, 3600 );
     		}
     	}
     	return $valid;

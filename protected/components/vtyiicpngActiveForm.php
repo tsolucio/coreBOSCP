@@ -153,11 +153,17 @@ class vtyiicpngActiveForm extends CActiveForm
 			case 111:
 			case 115:
 			case 255:
-				$plvals=$model->getPicklistValues($fieldname);
-				$values=array_values((is_array($plvals)?$plvals:array()));
+				if($fieldname !='firstname' && $fieldname !='lastname')
+                                {
+                                $plvals=$model->getPicklistValues($fieldname);
+                                $values=array_values((is_array($plvals)?$plvals:array()));
                                 if($action=='search') array_unshift($values,' ');
 				$plvalues=count($values)>0?array_combine($values,$values):array();
 				$widget=$this->dropDownList($model,$fieldname,$plvalues,$htmlopts);
+                                }
+                                else{                                    
+                                    $widget=$this->textField($model,$fieldname,$htmlopts);
+                                }
 				break;
 			case 33:
 			case 34:				

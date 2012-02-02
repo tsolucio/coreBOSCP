@@ -45,6 +45,7 @@ class VtentityController extends Controller
 	{
 		$modelclass=$this->modelName;
 		$model=$modelclass::model();
+                $this->_model=$model;
 		$this->entityLookupField=$model->getLookupField();
 		$this->entityidField=$model->primaryKey();
 		$this->entity=$model->getModule();
@@ -201,7 +202,8 @@ class VtentityController extends Controller
 			$pos['currentPage']=$_GET['dvcpage'];
 			unset($_GET['dvcpage']);
 		}
-		$model=new $this->modelName('search');
+		$model=$this->_model;
+                $model->setScenario('search');
 		if(isset($_GET[$this->modelName])) {
 			$model->setAttributes($_GET[$this->modelName]);
 			$_SESSION[$this->modelName]=$_GET[$this->modelName];
@@ -228,8 +230,9 @@ class VtentityController extends Controller
 			// unset the parameter as it would interfere with pager and repetitive page size change
 			unset($_GET['pageSize']);
 		}
-
-		$model=new $this->modelName('search');
+		
+                $model=$this->_model;
+                $model->setScenario('search');
 		$fields=$model->getWritableFieldsArray();
 		$uitypes=$model->getUItype();
 		if(isset($_GET[$this->modelName])) {
