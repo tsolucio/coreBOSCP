@@ -602,9 +602,9 @@ abstract class VTActiveResource extends CModel
         $all_attributes=is_array($this->_attributes)?$this->_attributes:$this->getFieldsInfo();
     	foreach($all_attributes as $attribute)
     	{
-    		if (!is_array($attribute)) continue;
+    		if (!is_array($attribute) || count($attribute)<1) continue;
     		array_push($attributes,$attribute['name']);
-    	}
+    	}       
     	return $attributes;
     }
 
@@ -1140,8 +1140,8 @@ abstract class VTActiveResource extends CModel
 	    	if(!$clientvtiger) Yii::log('login failed',CLogger::LEVEL_ERROR);
 	    	else {
 	    		if (empty($attributes)) $attributes=$this->getAttributesArray();
-	    		$attributes['id']='';
-	    		$done=$clientvtiger->doCreate($module,$attributes);
+	    		$attributes['id']='';                      
+	    		$done=$clientvtiger->doCreate($module,$attributes);                        
 	    		if($done) {
 	    			$newId=$done['id'];
                                 $this->__set('id',$newId);
@@ -1266,7 +1266,7 @@ abstract class VTActiveResource extends CModel
     		Yii::trace(get_class($this).'.delete()','ext.VTActiveResource');
     		if($this->beforeDelete())
     		{
-    			$result=$this->deleteById($this->getPrimaryKey());
+    			$result=$this->deleteById($this->getId());
     			$this->afterDelete();
     			return $result;
     		}
@@ -1283,7 +1283,7 @@ abstract class VTActiveResource extends CModel
      */
     public function deleteById($id)
     {
-    	Yii::trace(get_class($this).'.deleteById()','ccc');
+    	Yii::trace(get_class($this).'.deleteById()','ccc');       
     	$clientvtiger=$this->getClientVtiger();
     
     	if(!$clientvtiger) Yii::log('login failed',CLogger::LEVEL_ERROR);
@@ -1540,6 +1540,20 @@ abstract class VTActiveResource extends CModel
     }
     public function getCount(){
         return $this->count;
+     
+//    	$module = $this->getModule();
+//    	$clientvtiger=$this->getClientVtiger();
+//
+//    	// If the results were false, then we have no valid data, so load it
+//    	if(!$clientvtiger) Yii::log('login failed',CLogger::LEVEL_ERROR);
+//    	else {
+//    		$q=$this>createVtigerSQLCommand($module,$this->getCriteria(),'count(*)');
+//    		$countquery = $clientvtiger->doQuery($q);
+//    		$count=$countquery[0]['count'];
+//    	}
+//    	return  $count;
+ 
+      
     }
     /**
      * Finds a single active record with the specified condition.
@@ -1574,16 +1588,44 @@ abstract class VTActiveResource extends CModel
                 $clientvtiger=$this->getClientVtiger();
     		if(!$clientvtiger) Yii::log('login failed',CLogger::LEVEL_ERROR);
     		else {
-    			$q=$this->createVtigerSQLCommand($module,$criteria,$cols);                       
+    			$q=$this->createVtigerSQLCommand($module,$criteria,$cols);
     			$findall = $clientvtiger->doQuery($q);
     		}
     		Yii::app()->cache->set( $api_cache_id , $findall, 3600 );
     	}
         $this->setCount(count($findall));
+        $tobelook=array();
+        $tobelookfields=array();
+        foreach($findall as $rec){
+           foreach($rec as $key=>$val){
+               if($key=='id') continue;
+               Yii::log('neser '.$key.'=>'.$val);
+
+           $ls=explode('x',$val);
+           if(is_array($ls) && count($ls)>1) {
+              list($void,$field)=$ls;      
+          
+           if(is_numeric($void) && is_numeric($field)){
+               if(!in_array($val, $tobelook) && $val!=='') {
+                   array_push($tobelook,$val);
+                 if(!in_array($key,$tobelookfields))  array_push($tobelookfields,$key);
+               }
+           }
+          
+        }}}
+        if(count($tobelook)>0){
+        $respvalues=unserialize($this->getComplexAttributeValues($tobelook));
+        $nr=count($findall);
+        for( $i=0;$i<$nr;$i++){
+            foreach($tobelookfields as $fld){
+               $tm=$findall[$i][$fld];Yii::log('pasneser '.$tm);
+               if($tm!=='')
+               $findall[$i][$fld]=$respvalues[$tm];   
+        }}}
     	Yii::log('findallFromSearch: '.count($findall),CLogger::LEVEL_INFO);
     	return $this->populateRecords($findall,false);
     }
-
+ 
     public function findAllSearch($query)
     {
     	$module=$this->getModule();
@@ -1850,7 +1892,7 @@ abstract class VTActiveResource extends CModel
 //                        $resource=$this;
 //                        $this->unsetAttributes();
                         //$client=$this->getClientVtiger();
-    			$resource=$this->instantiate($attributes);
+    			$resource=$this->instantiate($attributes);                        
     			$resource->setScenario('update');
     			$resource->init();
     			foreach($attributes as $name=>$value)
@@ -1907,7 +1949,11 @@ abstract class VTActiveResource extends CModel
     					}
     				}
     
-    			}
+    			}  
+                        if($resource->getModule()== 'Documents'){
+                           $att=$resource->getDocumentAttachment();
+                           $resource->setAttribute('filename',$att['filename']);                           
+                        }                     
     			$resource->attachBehaviors($resource->behaviors());
     			if($callAfterFind)
     				$resource->afterFind();
@@ -2093,7 +2139,7 @@ abstract class VTActiveResource extends CModel
         if(!is_array($values))
             return;
 		$attributes=array_flip($safeOnly ? $this->getSafeAttributeNames() : $this->attributeNames());
-		foreach($values as $name=>$value) {
+		foreach($values as $name=>$value) {        
 			if(isset($attributes[$name]))
 				$this->setAttribute($name,$value);
 			else if($safeOnly)
@@ -2130,7 +2176,7 @@ abstract class VTActiveResource extends CModel
 				$moduledata = $clientvtiger->doDescribe($module);
 				$labelFields=$moduledata["labelFields"];
 			}
-			Yii::app()->cache->set( $api_cache_id , $labelFields, 3600 );
+			Yii::app()->cache->set( $api_cache_id , $labelFields);
 		}
 		return $labelFields;
 	}
@@ -2269,10 +2315,9 @@ abstract class VTActiveResource extends CModel
 		return $uitypeFields;
 	}
 
-	public  function getComplexAttributeValue($fieldname,$id)
-	{
-		$module = $this->getModule();		
-		$api_cache_id='getComplexAttributeValue'.$fieldname.$id;
+	public function getComplexAttributeValues($arrayofids){
+                $module = $this->getModule();
+		$api_cache_id='getComplexAttributeValues'.implode(',',$arrayofids);
 		$complexattributevalue = Yii::app()->cache->get( $api_cache_id  );
 
 		// If the results were false, then we have no valid data,
@@ -2281,13 +2326,47 @@ abstract class VTActiveResource extends CModel
                         $clientvtiger=$this->getClientVtiger();
 			if(!$clientvtiger) Yii::log('login failed',CLogger::LEVEL_ERROR);
 			else {
-				$complexattributevalue = $clientvtiger->doInvoke('getReferenceValue',array('field'=>$fieldname,'id'=>$id));
+				$complexattributevalue = $clientvtiger->doInvoke('getReferenceValue',array('id'=>serialize($arrayofids)));
 			}
 			Yii::app()->cache->set( $api_cache_id , $complexattributevalue, 3600 );
 		}
 		return $complexattributevalue;
-	}
+    }
 
+        public function getDocumentAttachment(){
+                $module = $this->getModule();
+                $id=$this->getId();
+		$api_cache_id='getDocumentAttachment'.$id;
+		$documentAttachment = Yii::app()->cache->get( $api_cache_id  );
+
+		// If the results were false, then we have no valid data,
+		// so load it
+		if($documentAttachment===false){
+                        $clientvtiger=$this->getClientVtiger();
+			if(!$clientvtiger) Yii::log('login failed',CLogger::LEVEL_ERROR);
+			else {
+				$documentAttachment = $clientvtiger->doInvoke('retrievedocattachment',array('id'=>$id));
+			}
+			Yii::app()->cache->set( $api_cache_id , $documentAttachment, 3600 );
+		}
+		return $documentAttachment[0];
+        }
+
+        public function downloadAttachment($id,$fileType,$filecontent){
+                $saveasfile = "storage/" . "_$id";
+		if(!file_exists($saveasfile)) {
+			Yii::log("Saved attachement as $saveasfile\n");
+			$fh = fopen($saveasfile, 'wb');
+			fwrite($fh, base64_decode($filecontent));
+			fclose($fh);
+		}
+                header("Content-type: $fileType");
+		header("Pragma: public");
+		header("Cache-Control: private");
+		header("Content-Disposition: attachment; filename=$id");
+		header("Content-Description: PHP Generated Data");
+                return $saveasfile;
+        }
 	public function getUsersInSameGroup()
 	{
 		$module = $this->getModule();

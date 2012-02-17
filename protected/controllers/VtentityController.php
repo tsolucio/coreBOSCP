@@ -108,8 +108,14 @@ class VtentityController extends Controller
 		if(isset($_POST[$this->modelName]))
 		{
 			$response = new AjaxResponse();
-			$model->setAttributes($_POST[$this->modelName]);                      
-			if($model->save()) {
+			$model->setAttributes($_POST[$this->modelName]);
+                        if($model->getModule()=='Documents' && $model->getAttribute('filelocationtype')=='I')
+                        {
+                        $tmp_file=CUploadedFile::getInstance($model,'filename')->getTempName();
+                        $cont=base64_encode(file_get_contents($tmp_file));
+                        $model->filename=array("name"=>CUploadedFile::getInstance($model,'filename')->getName(),"size"=>CUploadedFile::getInstance($model,'filename')->getSize(),"type"=>CUploadedFile::getInstance($model,'filename')->getType(),'content'=>$cont);//array("attachment_name"=>"ta.pdf",'attachment'=>"ta.pdf");
+                        }
+                        if($model->save()) {
 				$response->addNotification('success', Yii::t('core', 'success'), Yii::t('core', 'successCreateRow'));
 				$response->redirectUrl = '#'.$this->modelLinkName.'/'.$this->entity.'/view/' . $model->__get($this->entityidField);
 			} else {
@@ -145,6 +151,12 @@ class VtentityController extends Controller
 			$response = new AjaxResponse();
 			$model->unsetAttributes();
 			$model->setAttributes($_POST[$this->modelName]);
+                        if($model->getModule()=='Documents' && $model->getAttribute('filelocationtype')=='I')
+                        {
+                        $tmp_file=CUploadedFile::getInstance($model,'filename')->getTempName();
+                        $cont=base64_encode(file_get_contents($tmp_file));
+                        $model->filename=array("name"=>CUploadedFile::getInstance($model,'filename')->getName(),"size"=>CUploadedFile::getInstance($model,'filename')->getSize(),"type"=>CUploadedFile::getInstance($model,'filename')->getType(),'content'=>$cont);//array("attachment_name"=>"ta.pdf",'attachment'=>"ta.pdf");
+                        }
 			if($model->save()) {
 				$response->addNotification('success', Yii::t('core', 'success'), Yii::t('core', 'successUpdateRow'));
 				$response->redirectUrl = '#'.$this->modelLinkName.'/'.$this->entity.'/list/' . $model->__get($this->entityidField).'/dvcpage/'.$_POST['dvcpage'];
@@ -175,6 +187,7 @@ class VtentityController extends Controller
 		if(Yii::app()->request->isPostRequest)
 		{
 			// we only allow deletion via POST request
+                        $this->_model=null;
 			$result=$this->loadModel()->delete();
 
 			$response = new AjaxResponse();
@@ -200,17 +213,19 @@ class VtentityController extends Controller
 		$this->viewButtonActive=true;
 		$pos=array('pageSize'=>1);
 		if(isset($_GET['dvcpage'])) {
-			$pos['currentPage']=$_GET['dvcpage'];
+			$pos['currentPage']=$_GET['dvcpage'];                        
 			unset($_GET['dvcpage']);
-		}		
-                $model=new $this->modelName('search');
-		if(isset($_GET[$this->modelName])) {
+		}	
+                $model=$this->_model;
+                $model->unsetAttributes();
+                $model->setScenario('search');
+		if(isset($_GET[$this->modelName])) {                  
 			$model->setAttributes($_GET[$this->modelName]);
 			$_SESSION[$this->modelName]=$_GET[$this->modelName];
-		} elseif (isset($_SESSION[$this->modelName])) {
+		} elseif (isset($_SESSION[$this->modelName])) {                  
 			$model->setAttributes($_SESSION[$this->modelName]);
-		}
-
+		}                                   
+               
 		$dataProvider=$model->search($pos);
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
@@ -255,8 +270,8 @@ class VtentityController extends Controller
 	 * Displays a particular model.
 	 */
 	public function actionView()
-	{
-		$this->viewButtonActive=true;
+	{		
+                $this->viewButtonActive=true;
                 $_GET[$this->modelName.'_page']=Yii::app()->getRequest()->getParam($this->modelName.'_page',1);                
 		$this->render('view',array(
 			'model'=>$this->loadModel(),
@@ -272,10 +287,10 @@ class VtentityController extends Controller
 		if($this->_model===null)
 		{
 			$entity=$this->modelName;
-			if(isset($_GET[$this->entityidField]))
-				$this->_model=$entity::model()->findbyPk($_GET[$this->entityidField]);
+			if(isset($_GET[$this->entityidField]))                        
+                            $this->_model=$entity::model()->findbyPk($_GET[$this->entityidField]);                        
 			if($this->_model===null)
-				throw new CHttpException(404,Yii::t('core', 'errorIdNotExist'));
+			  throw new CHttpException(404,Yii::t('core', 'errorIdNotExist'));                        
 		}                
                 if($this->_model) $this->_model->setIsNewRecord(false);                
 		$this->entityidValue=$this->_model->__get($this->entityidField);

@@ -335,13 +335,18 @@ class SiteController extends Controller
 		$notSupported=array(
 				'Calendar','Events','Quotes','SalesOrder','PurchaseOrder','Invoice','Currency',
 				'PriceBooks','Emails','Users','Groups','PBXManager','SMSNotifier','ModComments',
-				'Documents','DocumentFolders'
+				'DocumentFolders'
 		);
-		$schemata = array();
+                $api_cache_id='yiicpng.sidebar.availablemodules';
+                $schemata = Yii::app()->cache->get( $api_cache_id  );
+               
+                // If the results were false, then we have no valid data, so load it
+                if($schemata===false){
+                $schemata = array();
 		$url = Yii::app()->site;
 		$clientvtiger = new WSClient($url);
 		$login = $clientvtiger->doLogin(Yii::app()->loginuser, Yii::app()->accesskey);
-		if(!$login)
+                if(!$login)
 			Yii::log('login failed');
 		else {
 			// get available modules from vtiger CRM
@@ -361,10 +366,11 @@ class SiteController extends Controller
 				}
 				if(($cache=Yii::app()->cache)!==null)
 					$cache->set('yiicpng.sidebar.listmodules',$listModules);  // cache until next execution
+                                        $cache->set('yiicpng.sidebar.availablemodules',$schemata);
 			} else {
 				$schemata=array(array('module'=>'notranslate','name'=>Yii::t('core','errNoTranslateFunction')));
 			}
-		}
+		}}            
 		Yii::app()->endJson(CJSON::encode($schemata));
 	}
 

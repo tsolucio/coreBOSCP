@@ -51,7 +51,7 @@ class Vtentity extends CActiveRecord
 	 * return array of fields to appear in grid view
 	 */
 	public function gridViewColumns() {
-		$lvf=$this->getListViewFields();
+		$lvf=$this->getListViewFields();               
 		//'lvfields'=>$lvf['fields'],
 		//'lvlinkfields'=>$lvf['linkfields'],
 		return $lvf['fields'];
@@ -119,17 +119,18 @@ class Vtentity extends CActiveRecord
 	{
 		// Warning: Please modify the following code to remove attributes that
 		// should not be searched.
-
+Yii::log('searching');
 		$criteria=new CDbCriteria;
 		$attrs=$this->getAttributes();
 		foreach ($attrs as $key=>$attr) {
 			//if (!is_array($attr)) continue;  // we can only search simple values, not IN
 			// FIXME: remove attributes that should not be searched.                
 //			$criteria->compare($attr['name'],$this->getAttribute($attr['name']),true);
+               yii::log('diana '.$key.' '.$attr);
                 if($attr!=" ")
  		$criteria->compare($key,$attr,true);
 		}
-
+               // Yii::log(implode(',',$pagectrl));
 		if (is_null($pagectrl))
 		$pagectrl=array(
 			'pageSize'=>Yii::app()->user->settings->get('pageSize'),
@@ -154,8 +155,10 @@ class Vtentity extends CActiveRecord
 			$fields=$this->getFieldsInfo();
 		foreach ($fields as $field) {
 			if (!is_array($field)) continue;
-			$key=$field['name'];
+                       $key=$field['name'];
 			if($key!=='id') {
+                            Yii::log('sot '.$field['name'].' label: '.$field['label'].' value: '.$this->getAttribute($field['name']).' uitype: '.$field['uitype']);
+			
 				$value=$this->getAttribute($key);
 				$uitype=intval($field['uitype']);
 				$label=$field['label'];
@@ -307,7 +310,7 @@ class Vtentity extends CActiveRecord
 			case 78:
 			case 79:
 			case 80:
-			case 81:
+			case 81:                       
 			case 101:
 				$widget=array(
 				'label'=>$label,
@@ -332,14 +335,26 @@ class Vtentity extends CActiveRecord
 				'value'=>$fieldvalue,
 				);
 				break;
-			case 26:
-			case 27:
-			case 28:
-			case 29:
-			case 61:
+
+                        case 27:
+                               $widget=array(
+				'label'=>$label,
+				'value'=>($fieldvalue=='I'?'Internal':'External'),
+				);
+                               break;
+ 			case 28:
+//			case 29:
+//			case 61:
 			case 69:
-				// Document fields, don't know how to treat these yet
+                                $attachmentsdata=$this->getDocumentAttachment();
+                                $widget=array(
+				'label'=>$label,
+				'type'=>'raw',
+				'value'=>CHtml::link(CHtml::encode($attachmentsdata['filename']),$this->downloadAttachment($attachmentsdata['recordid'],$attachmentsdata['filetype'],$attachmentsdata['attachment'])),
+                            
+				);			
 				break;
+                        case 26:
 			case 52:
 			case 53:
 			case 54:

@@ -152,7 +152,7 @@ class vtyiicpngActiveForm extends CActiveForm
 			case 55:
 			case 111:
 			case 115:
-			case 255:
+			case 255:                         
 				if($fieldname !='firstname' && $fieldname !='lastname')
                                 {
                                 $plvals=$model->getPicklistValues($fieldname);
@@ -180,15 +180,48 @@ class vtyiicpngActiveForm extends CActiveForm
 				unset($htmlopts['size']);
 				unset($htmlopts['maxlength']);
 				$widget=$this->textArea($model,$fieldname,$htmlopts);
-				break;
-			case 26:
-			case 27:
+				break;						
 			case 28:
 			case 29:
 			case 61:
 			case 69:
-				// Document fields, don't know how to treat these yet
+//				// Document fields, don't know how to treat these yet
+                                if($model->getAttribute('filelocationtype')=='I' || $model->getIsNewResource()){
+				echo $this->textField($model,$fieldname.'_E__',array('style'=>'display:none'));
+                                echo $this->fileField($model,$fieldname,$htmlopts);
+                                }
+                                else{
+                                echo $this->fileField($model,$fieldname.'_E__',array('style'=>'display:none'));
+                                echo $this->textField($model,$fieldname,$htmlopts);
+                                }
 				break;
+                             case 27:                               
+                                $values=array("Internal","External");
+                                $trp=array("I","E");
+                                if($action=='search') {
+                                    array_unshift($values,' ');
+                                    array_unshift($trp,'');
+                                }
+				$plvalues=count($values)>0?array_combine($trp,$values):array();
+                                $htmlopts['onchange']= 'if(this.value=="E") {
+                                                                            document.getElementById(\'Vtentity_filename_E__\').style.display="block";
+                                                                            document.getElementById(\'Vtentity_filename\').style.display="none";
+                                                                            document.getElementById(\'Vtentity_filename\').name="Vtentity[filename]_E__";
+                                                                            document.getElementById(\'Vtentity_filename_E__\').name="Vtentity[filename]";
+                                                                            }
+                                                         else if(this.value=="I") {
+                                                                            document.getElementById(\'Vtentity_filename\').style.display="block";
+                                                                            document.getElementById(\'Vtentity_filename_E__\').style.display="none";
+                                                                            document.getElementById(\'Vtentity_filename_E__\').name="Vtentity[filename]_E__";
+                                                                            document.getElementById(\'Vtentity_filename\').name="Vtentity[filename]";
+                                                                            }';
+				$widget=$this->dropDownList($model,$fieldname,$plvalues,$htmlopts);
+                                break;
+                            case 26:
+                                $values=$model->getPicklistValues($fieldname);                               
+                                if($action=='search') array_unshift($values,' ');
+				$widget=$this->dropDownList($model,$fieldname,$values,$htmlopts);
+                                break;
 			case 56:
 				$widget=$this->checkBox($model,$fieldname,$htmlopts);
 				break;

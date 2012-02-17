@@ -51,6 +51,7 @@ $('.search-form form').submit(function(){
 			'updateButtonImageUrl'=>ICONPATH . '/16/edit.png',
 			'updateButtonUrl'=>'"#'.$model->modelLinkName.'/'.$model->getModule().'/update/".$data["'.$model->entityidField.'"]."?dvcpage=".('.$gridOffset.'+$row)',
 			'deleteButtonImageUrl'=>ICONPATH . '/16/delete.png',
+			'deleteButtonUrl'=>'"index.php/'.$model->modelLinkName.'/'.$model->getModule().'/delete/".$data["'.$model->entityidField.'"]',
 			//'deleteConfirmation'=>CJavaScript::encode(Yii::t("zii","Are you sure you want to delete this item?")),
 			'afterDelete'=>'function (link, success, data) {AjaxResponse.handle(data);}',
 		/*

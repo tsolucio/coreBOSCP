@@ -2,7 +2,7 @@
 <?php
 	$this->widget('zii.widgets.CDetailView', array(
 		'data'=>$data,
-		'attributes'=>$data->getDetailViewFieldsID($data->id),
+		'attributes'=>$data->getDetailViewFields(),
 		'cssFile'=>BASEURL.'/themes/'.Yii::app()->getTheme()->getName().'/css/list.css',
 	));
 	echo CHTML::hiddenField('entityidValue',$data->__get($this->entityidField), array('id'=>'entityidValue'));
