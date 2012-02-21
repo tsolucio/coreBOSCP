@@ -128,7 +128,7 @@ class vtyiicpngActiveForm extends CActiveForm
 				$this->widget('zii.widgets.jui.CJuiAutoComplete', array(
 					'model'=>$model,
 					'name'=>$cname.$fieldname."_display",                                       
-					'value'=>$action=='edit'?$model->getComplexAttributeValue($fieldname,$model->$fieldname):Yii::t('core', 'search'),                                  
+					'value'=>$action=='edit'?$model->getComplexAttributeValue($model->$fieldname):Yii::t('core', 'search'),                                  
 					'source'=>'js:function(request, response){ // el truco es reescribir source
 						     $.getJSON("'.Yii::app()->createUrl($model->modelLinkName).'"+"/"+$("#'.$cname.$fieldname."_type".'").val()+"/AutoCompleteLookup",
 						     {
@@ -192,6 +192,9 @@ class vtyiicpngActiveForm extends CActiveForm
                                 }
                                 else{
                                 echo $this->fileField($model,$fieldname.'_E__',array('style'=>'display:none'));
+                                $id=$model->getId();
+                                $fl=$model->getDocumentAttachment($id);
+                                $model->setAttribute($fieldname,$fl[$id]['filename']);
                                 echo $this->textField($model,$fieldname,$htmlopts);
                                 }
 				break;

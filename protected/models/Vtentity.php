@@ -156,9 +156,7 @@ Yii::log('searching');
 		foreach ($fields as $field) {
 			if (!is_array($field)) continue;
                        $key=$field['name'];
-			if($key!=='id') {
-                            Yii::log('sot '.$field['name'].' label: '.$field['label'].' value: '.$this->getAttribute($field['name']).' uitype: '.$field['uitype']);
-			
+			if($key!=='id') {                            
 				$value=$this->getAttribute($key);
 				$uitype=intval($field['uitype']);
 				$label=$field['label'];
@@ -314,7 +312,7 @@ Yii::log('searching');
 			case 101:
 				$widget=array(
 				'label'=>$label,
-				'value'=>$this->getComplexAttributeValue($fieldname,$fieldvalue),
+				'value'=>$fieldvalue,
 				);
 				break;
 			case 15:
@@ -346,11 +344,12 @@ Yii::log('searching');
 //			case 29:
 //			case 61:
 			case 69:
-                                $attachmentsdata=$this->getDocumentAttachment();
+                                $id=$this->getId();
+                                $attachmentsdata=$this->getDocumentAttachment($id);
                                 $widget=array(
 				'label'=>$label,
 				'type'=>'raw',
-				'value'=>CHtml::link(CHtml::encode($attachmentsdata['filename']),$this->downloadAttachment($attachmentsdata['recordid'],$attachmentsdata['filetype'],$attachmentsdata['attachment'])),
+				'value'=>$attachmentsdata[$id]['filetype']!=''?CHtml::link(CHtml::encode($attachmentsdata[$id]['filename']),$this->downloadAttachment($attachmentsdata[$id]['recordid'],$attachmentsdata[$id]['filetype'],$attachmentsdata[$id]['attachment'])):CHtml::link(CHtml::encode($attachmentsdata[$id]['filename']),$attachmentsdata[$id]['filename']),
                             
 				);			
 				break;
@@ -360,7 +359,7 @@ Yii::log('searching');
 			case 54:
 				$widget=array(
 				'label'=>$label,
-				'value'=>$this->getComplexAttributeValue($fieldname,$fieldvalue),
+				'value'=>$fieldvalue,
 				);
 				break;
 			case 56:
@@ -472,7 +471,7 @@ Yii::log('searching');
 			case 101:
 				$widget=array(
 				'name'=>$fieldname,
-				'value'=>'Vtentity::getComplexAttributeValue("'.$fieldname.'",$data["'.$fieldname.'"])',
+				'value'=>'Vtentity::getComplexAttributeValue($data["'.$fieldname.'"])',
 				);
 				break;
 			case 15:
@@ -506,7 +505,7 @@ Yii::log('searching');
 			case 54:
 				$widget=array(
 				'name'=>$fieldname,
-				'value'=>'Vtentity::getComplexAttributeValue("'.$fieldname.'",$data["'.$fieldname.'"])',
+				'value'=>'Vtentity::getComplexAttributeValue($data["'.$fieldname.'"])',
 				);
 				break;
 			case 56:

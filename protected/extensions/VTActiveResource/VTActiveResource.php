@@ -602,7 +602,7 @@ abstract class VTActiveResource extends CModel
         $all_attributes=is_array($this->_attributes)?$this->_attributes:$this->getFieldsInfo();
     	foreach($all_attributes as $attribute)
     	{
-    		if (!is_array($attribute) || count($attribute)<1) continue;
+    		if (!is_array($attribute) || count($attribute)<1 || !isset($attribute['name'])) continue;         
     		array_push($attributes,$attribute['name']);
     	}       
     	return $attributes;
@@ -1596,11 +1596,17 @@ abstract class VTActiveResource extends CModel
         $this->setCount(count($findall));
         $tobelook=array();
         $tobelookfields=array();
+        $ids=array();
         foreach($findall as $rec){
            foreach($rec as $key=>$val){
-               if($key=='id') continue;
-               Yii::log('neser '.$key.'=>'.$val);
-
+               if($key=='id')
+               {
+                   if($module == 'Documents') {
+                       array_push($ids,$val);
+                       break;
+                   }
+                   else continue;
+               } 
            $ls=explode('x',$val);
            if(is_array($ls) && count($ls)>1) {
               list($void,$field)=$ls;      
@@ -1613,15 +1619,27 @@ abstract class VTActiveResource extends CModel
            }
           
         }}}
+        if(count($ids)>0) {
+            $all_attachments=$this->getDocumentAttachment (implode(',',$ids));            
+        }
         if(count($tobelook)>0){
         $respvalues=unserialize($this->getComplexAttributeValues($tobelook));
         $nr=count($findall);
         for( $i=0;$i<$nr;$i++){
             foreach($tobelookfields as $fld){
-               $tm=$findall[$i][$fld];Yii::log('pasneser '.$tm);
+               $tm=$findall[$i][$fld];
                if($tm!=='')
-               $findall[$i][$fld]=$respvalues[$tm];   
-        }}}
+               $findall[$i][$fld]=$respvalues[$tm];
+               
+        }
+        
+        if($module == 'Documents') {
+                   $idatt=$findall[$i]['id'];                  
+                   if(in_array($idatt,array_keys($all_attachments))) {
+                       $findall[$i]['filename']=$all_attachments[$idatt]['filename'];                       
+                   }
+               }
+        }}
     	Yii::log('findallFromSearch: '.count($findall),CLogger::LEVEL_INFO);
     	return $this->populateRecords($findall,false);
     }
@@ -1950,10 +1968,11 @@ abstract class VTActiveResource extends CModel
     				}
     
     			}  
-                        if($resource->getModule()== 'Documents'){
-                           $att=$resource->getDocumentAttachment();
-                           $resource->setAttribute('filename',$att['filename']);                           
-                        }                     
+//                        if($resource->getModule()== 'Documents'){
+//                           $att=$resource->getDocumentAttachment();
+//                           Yii::log('dianatest '.$att['filename']);
+//                           $resource->setAttribute('filename',$att['filename']);
+//                        }
     			$resource->attachBehaviors($resource->behaviors());
     			if($callAfterFind)
     				$resource->afterFind();
@@ -2332,11 +2351,14 @@ abstract class VTActiveResource extends CModel
 		}
 		return $complexattributevalue;
     }
+        public function getComplexAttributeValue($fieldvalue){                   
+                    $tr=unserialize($this->getComplexAttributeValues(array($fieldvalue)));
+                    return $tr[$fieldvalue];
+        }
 
-        public function getDocumentAttachment(){
-                $module = $this->getModule();
-                $id=$this->getId();
-		$api_cache_id='getDocumentAttachment'.$id;
+        public function getDocumentAttachment($ids){
+                $module = $this->getModule();               
+		$api_cache_id='getDocumentAttachment'.$ids;
 		$documentAttachment = Yii::app()->cache->get( $api_cache_id  );
 
 		// If the results were false, then we have no valid data,
@@ -2345,11 +2367,11 @@ abstract class VTActiveResource extends CModel
                         $clientvtiger=$this->getClientVtiger();
 			if(!$clientvtiger) Yii::log('login failed',CLogger::LEVEL_ERROR);
 			else {
-				$documentAttachment = $clientvtiger->doInvoke('retrievedocattachment',array('id'=>$id));
+				$documentAttachment = $clientvtiger->doInvoke('retrievedocattachment',array('id'=>$ids));
 			}
 			Yii::app()->cache->set( $api_cache_id , $documentAttachment, 3600 );
-		}
-		return $documentAttachment[0];
+		} 
+		return $documentAttachment;
         }
 
         public function downloadAttachment($id,$fileType,$filecontent){
@@ -2627,8 +2649,8 @@ abstract class VTActiveResource extends CModel
     public function validModule() {
     	
     	
-    	$module=$this->getModule();
-    	$api_cache_id='validModule'.$module;
+    	$module=$this->getModule();    
+        $api_cache_id='yiicpng.sidebar.availablemodules';
     	$valid = Yii::app()->cache->get( $api_cache_id  );
 
         if($valid===false){
@@ -2637,14 +2659,39 @@ abstract class VTActiveResource extends CModel
     		Yii::log('login failed',CLogger::LEVEL_ERROR);
     	else {
     		
-    		
+    		$notSupported=array(
+				'Calendar','Events','Quotes','SalesOrder','PurchaseOrder','Invoice','Currency',
+				'PriceBooks','Emails','Users','Groups','PBXManager','SMSNotifier','ModComments',
+				'DocumentFolders'
+		);
     		// If the results were false, then we have no valid data, so load it
     		
-    			$valid = $clientvtiger->doQuery("select count(*) from $module");
-    			Yii::app()->cache->set( $api_cache_id , $valid>0, 3600 );
+    			$listModules = $clientvtiger->doListTypes();
+			// flatten array
+			$flatlm=array();
+			foreach($listModules AS $key=>$schema) {
+				$flatlm[$key]=$schema['name'];
+			}
+			$listModules = $clientvtiger->doTranslate($flatlm, Yii::app()->getLanguage(), '');
+			if (is_array($listModules)) {
+				reset($flatlm);
+				foreach($listModules AS $moduleName) {
+					if (!in_array(current($flatlm), $notSupported))
+						$valid[] = array('module'=>current($flatlm),'name'=>$moduleName);
+					next(($flatlm));
+				}
+				if(($cache=Yii::app()->cache)!==null)
+					$cache->set('yiicpng.sidebar.listmodules',$listModules);  // cache until next execution
+                                        $cache->set('yiicpng.sidebar.availablemodules',$moduleValid);
+			} else {
+				$valid=array(array('module'=>'notranslate','name'=>Yii::t('core','errNoTranslateFunction')));
+			}
     		}
     	}
-    	return $valid;
+        foreach($valid as $moduleValid){
+            if($moduleValid['module']==$module) return true;
+        }
+    	return false;
     }
 
     public function setLastError($msg) {
