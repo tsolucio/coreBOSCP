@@ -2682,7 +2682,7 @@ abstract class VTActiveResource extends CModel
 				}
 				if(($cache=Yii::app()->cache)!==null)
 					$cache->set('yiicpng.sidebar.listmodules',$listModules);  // cache until next execution
-                                        $cache->set('yiicpng.sidebar.availablemodules',$moduleValid);
+                                        $cache->set('yiicpng.sidebar.availablemodules',$valid);
 			} else {
 				$valid=array(array('module'=>'notranslate','name'=>Yii::t('core','errNoTranslateFunction')));
 			}
