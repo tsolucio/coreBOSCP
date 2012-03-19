@@ -1580,7 +1580,8 @@ abstract class VTActiveResource extends CModel
     	$id1=isset($criteriaArray['condition'])?$criteriaArray['condition']:'';
     	//$id2=isset($cols)?$cols:'';
     	//$Id=$id1.$id2;
-    	$api_cache_id='findall'.$module.$id1;
+    	$pageSize=Yii::app()->user->settings->get('pageSize');
+    	$api_cache_id=md5('findall'.$module.$id1.$pageSize.$criteriaArray['limit'].$criteriaArray['offset'].serialize($criteriaArray['condition']));
     	$findall = Yii::app()->cache->get( $api_cache_id  );
     
     	// If the results were false, then we have no valid data, so load it
@@ -1770,7 +1771,19 @@ abstract class VTActiveResource extends CModel
 
     public function count($criteria)
     {
-    	return  $this->getCount();
+    	$module = $this->getModule();
+    	$clientvtiger = $this->getClientVtiger();
+    	
+    	// If the results were false, then we have no valid data, so load it
+    	if (!$clientvtiger)
+    		Yii::log('login failed', CLogger::LEVEL_ERROR);
+    	else {
+    		$q = $this->createVtigerSQLCommand($module, $criteria, 'count(*)');
+    		$countquery = $clientvtiger->doQuery($q);
+    		$count = $countquery[0]['count'];
+    	}
+    	return $count;
+    	//return  $this->getCount();
     }
 
     /**
@@ -2330,7 +2343,6 @@ abstract class VTActiveResource extends CModel
                     $uitype=$field["uitype"];
                     $uitypeFields[$name]=$uitype;
                 }
-		Yii::log('uitypes'.count($uitypeFields),CLogger::LEVEL_INFO);
 		return $uitypeFields;
 	}
 

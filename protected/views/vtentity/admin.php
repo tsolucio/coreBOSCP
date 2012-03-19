@@ -25,7 +25,7 @@ $('.search-form form').submit(function(){
 
 <?php
 	$pageSize=Yii::app()->user->settings->get('pageSize');
-	$currentPage = Yii::app()->getRequest()->getParam($model->modelName.'_page',1)-1;
+	$currentPage = Yii::app()->getRequest()->getParam(get_class($model).'_page',1)-1;
 	$gridOffset="($currentPage*$pageSize)";
 	$this->widget('zii.widgets.grid.CGridView', array(
 	'id'=>$model->modelLinkName.'-grid',

@@ -51,10 +51,22 @@ class Vtentity extends CActiveRecord
 	 * return array of fields to appear in grid view
 	 */
 	public function gridViewColumns() {
-		$lvf=$this->getListViewFields();               
-		//'lvfields'=>$lvf['fields'],
-		//'lvlinkfields'=>$lvf['linkfields'],
-		return $lvf['fields'];
+		$lvf=$this->getListViewFields();
+		$listviewfields=array_values($lvf['fields']);
+		$fields=$this->getFieldsInfo();
+		$fieldlabels=array();
+		foreach ($listviewfields as $lvfield) {
+			foreach($fields as $pos=>$fielddetails){
+				if ($fielddetails['name']==$lvfield) {
+					break;
+				}
+			}
+			$field=$fields[$pos];
+			$key=$field['name'];
+			$label=$field['label'];
+			$fieldlabels[$key]=array('name'=>$key,'header'=>$label);
+		}
+		return $fieldlabels;
 	}
 
 	/**
@@ -74,7 +86,6 @@ class Vtentity extends CActiveRecord
                     array_push($attributes,$write['name']);
                 }
                 $safeFields=implode(',',$attributes);
-                Yii::log('safefields'.$safeFields);
 		return array(
 				array($mandatory, 'required'),
 				array($numerical, 'numerical', 'integerOnly'=>true),
@@ -119,7 +130,6 @@ class Vtentity extends CActiveRecord
 	{
 		// Warning: Please modify the following code to remove attributes that
 		// should not be searched.
-Yii::log('searching');
 		$criteria=new CDbCriteria;
 		$attrs=$this->getAttributes();
 		foreach ($attrs as $key=>$attr) {
