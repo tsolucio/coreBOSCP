@@ -2700,9 +2700,11 @@ abstract class VTActiveResource extends CModel
 			}
     		}
     	}
-        foreach($valid as $moduleValid){
-            if($moduleValid['module']==$module) return true;
-        }
+    	if (is_array($valid)) {
+	        foreach($valid as $moduleValid){
+	            if($moduleValid['module']==$module) return true;
+	        }
+    	}
     	return false;
     }
 
