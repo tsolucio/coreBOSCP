@@ -76,7 +76,7 @@
                     <div class="buttons">
                         <span>
 			<?php //echo Html::icon('mailsend', 16, false, 'core.mail'); ?>
-                        <?php echo CHtml::ajaxSubmitButton(Yii::t('core', Yii::t('core','sendPassword')),BASEURL.'/index.php/site/sendmail',array(
+                        <?php echo CHtml::ajaxSubmitButton(Yii::t('core','sendPassword'),BASEURL.'/index.php/site/sendmail',array(
                                         'error'=>'js:function(){
                                             $("#MessageDIV #Message").css(\'color\', \'red\');
                                             $("#MessageDIV #Message").text("'.Yii::t('core','errSendEmail').'").show();

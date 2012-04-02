@@ -87,7 +87,7 @@ class User extends CActiveRecord
 	$clientvtiger=$this->getClientVtiger();
         if(!$clientvtiger) Yii::log('login failed');
         else{
-           $recordInfo = $clientvtiger->doQuery("Select * from Contacts where portal=1 and email='".$email."'");
+           $recordInfo = $clientvtiger->doQuery("Select portal from Contacts where portal=1 and email='".$email."'");
         }
         $count=count($recordInfo);
         if($count==1) $this->User=$email;
@@ -100,7 +100,7 @@ class User extends CActiveRecord
         $res=array();        
         if(!$clientvtiger) Yii::log('login failed');
         else{
-           $recordInfo = $clientvtiger->doQuery("Select * from Contacts where portal=1 and email='".$email."'");
+           $recordInfo = $clientvtiger->doQuery("Select support_start_date,support_end_date from Contacts where portal=1 and email='".$email."'");
            if (is_array($recordInfo)) {
            $res['startSupportDate']=$recordInfo[0]['support_start_date'];
            $res['endSupportDate']=$recordInfo[0]['support_end_date'];
