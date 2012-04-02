@@ -136,7 +136,6 @@ class Vtentity extends CActiveRecord
 			//if (!is_array($attr)) continue;  // we can only search simple values, not IN
 			// FIXME: remove attributes that should not be searched.                
 //			$criteria->compare($attr['name'],$this->getAttribute($attr['name']),true);
-               yii::log('diana '.$key.' '.$attr);
                 if($attr!=" ")
  		$criteria->compare($key,$attr,true);
 		}

@@ -159,6 +159,9 @@ class VtentityController extends Controller
                         }
 			if($model->save()) {
 				$response->addNotification('success', Yii::t('core', 'success'), Yii::t('core', 'successUpdateRow'));
+				if (empty($_POST['dvcpage']) or $_POST['dvcpage']<1)
+				$response->redirectUrl = '#'.$this->modelLinkName.'/'.$this->entity.'/view/' . $model->__get($this->entityidField);
+				else
 				$response->redirectUrl = '#'.$this->modelLinkName.'/'.$this->entity.'/list/' . $model->__get($this->entityidField).'/dvcpage/'.$_POST['dvcpage'];
 			} else {
 				$response->addNotification('error', Yii::t('core', 'error'), Yii::t('core', 'errorUpdateRow')."<br>".$model->getLastError());
@@ -193,6 +196,7 @@ class VtentityController extends Controller
 			$response = new AjaxResponse();
 			if ($result) {
 				$response->addNotification('success', Yii::t('core', 'success'), Yii::t('core', 'successDeleteRow'));
+				$_SESSION['deleteCache']='true'; // empty cache on next call
 				// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
 				if(!isset($_GET['ajax']))
 					$response->redirectUrl = '#'.$this->modelLinkName.'/'.$this->entity.'/index';
@@ -251,6 +255,10 @@ class VtentityController extends Controller
                 $model->setScenario('search');
                 $fields=$model->getWritableFieldsArray();
 		$uitypes=$model->getUItype();
+		if (!empty($_SESSION['deleteCache']) and $_SESSION['deleteCache']=='true') {
+			$model->deleteCache=true;
+			unset($_SESSION['deleteCache']);
+		}
 		if(isset($_GET[$this->modelName])) {
 			$model->setAttributes($_GET[$this->modelName]);
 			$_SESSION[$this->modelName]=$_GET[$this->modelName];
@@ -270,11 +278,12 @@ class VtentityController extends Controller
 	 * Displays a particular model.
 	 */
 	public function actionView()
-	{		
-                $this->viewButtonActive=true;
-                $_GET[$this->modelName.'_page']=Yii::app()->getRequest()->getParam($this->modelName.'_page',1);                
+	{
+		$this->_model=null;
+		$model=$this->loadModel();
+		$this->viewButtonActive=true;
 		$this->render('view',array(
-			'model'=>$this->loadModel(),
+			'model'=>$model,
 		));
 	}
 

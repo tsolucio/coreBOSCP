@@ -45,6 +45,8 @@ abstract class VTActiveResource extends CModel
     private $module;
     private $clientvtiger;
     private $count;
+    public $deleteCache=false;
+
     /**
      * Constructor.
      * @param string $scenario scenario name. See {@link CModel::scenario} for more details about this parameter.
@@ -1577,11 +1579,13 @@ abstract class VTActiveResource extends CModel
     	$module=$this->getModule();    	
     
     	$criteriaArray=$criteria->toArray();
-    	$id1=isset($criteriaArray['condition'])?$criteriaArray['condition']:'';
-    	//$id2=isset($cols)?$cols:'';
-    	//$Id=$id1.$id2;
     	$pageSize=Yii::app()->user->settings->get('pageSize');
-    	$api_cache_id=md5('findall'.$module.$id1.$pageSize.$criteriaArray['limit'].$criteriaArray['offset'].serialize($criteriaArray['condition']));
+    	$q=$this->createVtigerSQLCommand($module,$criteria,$cols);
+    	$api_cache_id=md5('findall'.$q);
+    	if ($this->deleteCache) {
+    		Yii::app()->cache->delete( $api_cache_id  );
+    		$this->deleteCache=false;
+    	}
     	$findall = Yii::app()->cache->get( $api_cache_id  );
     
     	// If the results were false, then we have no valid data, so load it
@@ -1589,62 +1593,75 @@ abstract class VTActiveResource extends CModel
                 $clientvtiger=$this->getClientVtiger();
     		if(!$clientvtiger) Yii::log('login failed',CLogger::LEVEL_ERROR);
     		else {
-    			$q=$this->createVtigerSQLCommand($module,$criteria,$cols);
     			$findall = $clientvtiger->doQuery($q);
     		}
     		Yii::app()->cache->set( $api_cache_id , $findall, 3600 );
     	}
         $this->setCount(count($findall));
-        $tobelook=array();
-        $tobelookfields=array();
-        $ids=array();
-        foreach($findall as $rec){
-           foreach($rec as $key=>$val){
-               if($key=='id')
-               {
-                   if($module == 'Documents') {
-                       array_push($ids,$val);
-                       break;
-                   }
-                   else continue;
-               } 
-           $ls=explode('x',$val);
-           if(is_array($ls) && count($ls)>1) {
-              list($void,$field)=$ls;      
-          
-           if(is_numeric($void) && is_numeric($field)){
-               if(!in_array($val, $tobelook) && $val!=='') {
-                   array_push($tobelook,$val);
-                 if(!in_array($key,$tobelookfields))  array_push($tobelookfields,$key);
-               }
-           }
-          
-        }}}
-        if(count($ids)>0) {
-            $all_attachments=$this->getDocumentAttachment (implode(',',$ids));            
-        }
-        if(count($tobelook)>0){
-        $respvalues=unserialize($this->getComplexAttributeValues($tobelook));
-        $nr=count($findall);
-        for( $i=0;$i<$nr;$i++){
-            foreach($tobelookfields as $fld){
-               $tm=$findall[$i][$fld];
-               if($tm!=='')
-               $findall[$i][$fld]=$respvalues[$tm];
-               
-        }
-        
-        if($module == 'Documents') {
-                   $idatt=$findall[$i]['id'];                  
-                   if(in_array($idatt,array_keys($all_attachments))) {
-                       $findall[$i]['filename']=$all_attachments[$idatt]['filename'];                       
-                   }
-               }
-        }}
+        $findall=$this->dereferenceIds($findall);
     	Yii::log('findallFromSearch: '.count($findall),CLogger::LEVEL_INFO);
     	return $this->populateRecords($findall,false);
     }
  
+    public function dereferenceIds($recinfo) {
+    	$simplerdo=false;
+    	if (!is_array($recinfo['0'])) {
+    		$simplerdo=true;
+    		$recinfo=array('0'=>$recinfo);
+    	}
+    	$tobelook=array();
+    	$tobelookfields=array();
+    	$ids=array();
+    	foreach($recinfo as $rec){
+    		foreach($rec as $key=>$val){
+    			if($key=='id')
+    			{
+    				if($module == 'Documents') {
+    					array_push($ids,$val);
+    					break;
+    				}
+    				else continue;
+    			}
+    			$ls=explode('x',$val);
+    			if(is_array($ls) && count($ls)>1) {
+    				list($void,$field)=$ls;
+    	
+    				if(is_numeric($void) && is_numeric($field)){
+    					if(!in_array($val, $tobelook) && $val!=='') {
+    						array_push($tobelook,$val);
+    						if(!in_array($key,$tobelookfields))  array_push($tobelookfields,$key);
+    					}
+    				}
+    	
+    			}
+    		}
+    	}
+    	if(count($ids)>0) {
+    		$all_attachments=$this->getDocumentAttachment (implode(',',$ids));
+    	}
+    	if(count($tobelook)>0){
+    		$respvalues=unserialize($this->getComplexAttributeValues($tobelook));
+    		$nr=count($recinfo);
+    		for( $i=0;$i<$nr;$i++){
+    			foreach($tobelookfields as $fld){
+    				$tm=$recinfo[$i][$fld];
+    				if($tm!=='')
+    					$recinfo[$i][$fld]=$respvalues[$tm];
+    			}
+    			if($module == 'Documents') {
+    				$idatt=$recinfo[$i]['id'];
+    				if(in_array($idatt,array_keys($all_attachments))) {
+    					$recinfo[$i]['filename']=$all_attachments[$idatt]['filename'];
+    				}
+    			}
+    		}
+    	}
+    	if ($simplerdo) {
+    		$recinfo=$recinfo['0'];
+    	}
+    	return $recinfo;
+    }
+
     public function findAllSearch($query)
     {
     	$module=$this->getModule();
@@ -1683,6 +1700,7 @@ abstract class VTActiveResource extends CModel
     	else {
     		$recordInfo = $clientvtiger->doRetrieve($record);
     	}
+    	$recordInfo=$this->dereferenceIds($recordInfo);
     	return $this->populateRecord($recordInfo);
     }
 
@@ -2179,7 +2197,7 @@ abstract class VTActiveResource extends CModel
 		}
     }
 
-    static public function getLookupFieldValue($lookupfield,$values) {
+    public function getLookupFieldValue($lookupfield,$values) {
 		if (strpos($lookupfield, ',')>0) {
 			$showValue='';
 			$lookup_fields=explode(',', $lookupfield);
@@ -2188,7 +2206,10 @@ abstract class VTActiveResource extends CModel
 			}
 			$showValue=trim($showValue);
 		} else {
-			$showValue=$values[$lookupfield];
+			if ($this->getModule()=='HelpDesk' and $lookupfield=='title')
+				$showValue=$values['ticket_title'];
+			else
+				$showValue=$values[$lookupfield];
 		}
 		return $showValue;
 	} 
