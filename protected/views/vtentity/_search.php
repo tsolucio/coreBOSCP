@@ -16,7 +16,7 @@
 			if(isset($field['type']['refersTo']) && !empty($field['type']['refersTo'])) $refersTo=$field['type']['refersTo'];
 			else $refersTo='';
 			echo '<div class="row">';
-			echo $form->labelEx($model,$fieldname);
+			echo $form->labelEx($model,$fieldname,array('label'=>$fieldlabel));
 			echo $form->getVtigerEditField($uitype,$model,$fieldname,array('maxlength'=>100),$refersTo,'search');
 			echo '</div>';
 		}

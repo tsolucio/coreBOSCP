@@ -2319,16 +2319,17 @@ abstract class VTActiveResource extends CModel
                         $clientvtiger=$this->getClientVtiger();
 			if(!$clientvtiger) {
 				Yii::log('login failed',CLogger::LEVEL_ERROR);
-				$Fields=array();
+				$this->_fieldinfo=array();
 			} else {
 				$Fieldsdata = $clientvtiger->doDescribe($module);
 				$Fields=$Fieldsdata['fields'];
+				$this->_fieldinfo=$Fields;
+				$this->translateAttributeLabels();
+				Yii::app()->cache->set( $api_cache_id , $this->_fieldinfo, 3600 );
 			}
+		} else {
+			$this->_fieldinfo=$Fields;
 		}
-		$this->_fieldinfo=$Fields;
-		$this->translateAttributeLabels();
-
-		Yii::app()->cache->set( $api_cache_id , $Fields, 3600 );
 	}
 
 	public function getListViewFields()
