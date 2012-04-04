@@ -83,43 +83,17 @@ class SiteController extends Controller
 
 	public function actionSendmail()
 	{
-		//forgotpassword = new ForgetPasswordForm();
-		$requestforgot = Yii::app()->getRequest();
-		//$username = $_REQUEST["usernamemail"];
-		if($requestforgot->isPostRequest ||  $requestforgot->getQuery("usernamemail") !== null)
-		{
-			if($requestforgot->isPostRequest)	{
-				$username = $requestforgot->getPost("usernamemail");
-			}
-			else
-			{
-				$username = $requestforgot->getQuery("usernamemail");
-			}
-			// validate user input and redirect to previous page if valid
-			//	if($forgotpassword->validate())
-			//	{
-			//		$this->redirect(Yii::app()->homeUrl);
-			//	}
-		}
+		$username = Yii::app()->getRequest()->getParam('usernamemail');
 		$model=new User('search','Contacts');
-		$found=$model->findByEmail($username);
-		if($found==0)
-		{
+		$found=$model->findByPortalUserName($username);
+		if(!$found) {
 			echo 'wrongmail';
-		}
-		else
-		{
-			$headers="From: {$username}\r\nReply-To: {$username}";
-			$newpass=$this->createPassword(8);
-			if($model->savePassword($newpass)) {
-				if(mail($username,Yii::t('core', 'Change Password'),Yii::t('core', 'yourNewPassword').$newpass,$headers))
-				{
+		} else {
+			$sent=$model->sendRecoverPassword($username);
+			if($sent) {
 					echo 'success';
-				}
-				else
-				{
+			} else {
 					echo 'fail';
-				}
 			}
 		}
 	}

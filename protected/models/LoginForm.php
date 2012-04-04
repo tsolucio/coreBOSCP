@@ -63,14 +63,30 @@ class LoginForm extends CFormModel
 		if(!$this->hasErrors())
 		{
 			$identity = new UserIdentity($this->username,$this->password);
-
-			if($identity->authenticate())
+			$authResult=$identity->authenticate();
+			if($authResult==$identity::ERROR_NONE)
 			{
 				Yii::app()->user->login($identity);
 			}
 			else
 			{
-				$this->addError('username', Yii::t('core','errCheckCredentials'));
+				switch ($authResult) {
+					case $identity::ERROR_EXPIRED_SUPPORT:
+						$errMsg=Yii::t('core','errExpiredSupport');
+						break;
+					case $identity::ERROR_PASSWORD_INVALID:
+						$errMsg=Yii::t('core','errCheckCredentials');
+						break;
+					case $identity::ERROR_UNKNOWN_IDENTITY:
+						$errMsg=Yii::t('core','errCheckCredentials');
+						break;
+					case $identity::ERROR_USERNAME_INVALID:
+						$errMsg=Yii::t('core','errCheckCredentials');
+						break;
+					default:
+						$errMsg=Yii::t('core','errCheckCredentials');
+				}
+				$this->addError('username', $errMsg);
 	}
 			}
 		}

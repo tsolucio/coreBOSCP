@@ -53,6 +53,7 @@
 	<entry id="noOtherThemesAvailable">There are no other themes available.</entry>
 	<entry id="notice">Notice</entry>
 	<entry id="null">Null</entry>
+	<entry id="none">None</entry>
 	<entry id="off">Off</entry>
 	<entry id="ok">OK</entry>
 	<entry id="on">On</entry>
@@ -98,6 +99,7 @@
 	<entry id="thankYou4Connect">Thank you for using our service.</entry>
 	<entry id="loggedInAs">You are logged in as </entry>
 	<entry id="Change Password">Change Password</entry>
+	<entry id="recoverPassword">Recover password</entry>
 	<entry id="forgotPassword">Forgot Password?</entry>
 	<entry id="yourEmailId">Your Email Id:</entry>
 	<entry id="password">Password</entry>
@@ -105,6 +107,7 @@
 	<entry id="sendPassword">Send Password</entry>
 	<entry id="errSendEmail">Recover password email could not be sent...</entry>
 	<entry id="errEmailIdNotFound">Given email could not be found.</entry>
+	<entry id="errUserNotFound">Given user name could not be found.</entry>
 	<entry id="EmailSent">Recover password email has been sent.</entry>
 	<entry id="yourNewPassword">Your new Password is:</entry>
 	<entry id="newPassword">New Password</entry>
@@ -116,6 +119,8 @@
 	<entry id="errNoUpdatePassword">The Password could not be updated.</entry>
 	<entry id="errInvalidEmail">Email address not valid...</entry>
 	<entry id="errCheckCredentials">Please check your login credentials.</entry>
+	<entry id="errExpiredSupport">Support period has expired. Please contact your providor.</entry>
+	<entry id="errConnection">Connection with main application has failed.</entry>
 	<entry id="save">Save</entry>
 	<entry id="create">Create</entry>
 	<entry id="yourAccessInfo">Access Information</entry>

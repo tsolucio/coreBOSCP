@@ -76,10 +76,9 @@ class User extends CActiveRecord
 		} else {
 			$recordInfo = $clientvtiger->doInvoke('authenticateContact',array('email'=>$email,'password'=>$password));
 		}
-                yii::log(var_dump($recordInfo));
 		if(empty($recordInfo) || !$recordInfo)
 		return null;
-		else return true;
+		else return $recordInfo;
 	}
 
         public function findByEmail($email)
@@ -94,13 +93,40 @@ class User extends CActiveRecord
 	return $count;
 	}
 
-        public function getSupportDates($email)	
+	public function findByPortalUserName($username) {
+		$found=false;
+		$clientvtiger=$this->getClientVtiger();
+		if(!$clientvtiger) Yii::log('login failed');
+		else{
+			$recordInfo = $clientvtiger->doInvoke('findByPortalUserName',array('username'=>$username));
+			if ($recordInfo) {
+				$found=true;
+			}
+		}
+		if($found) $this->User=$username;
+		return $found;
+	}
+
+	public function sendRecoverPassword($username) {
+		$sent=false;
+		$clientvtiger=$this->getClientVtiger();
+		if(!$clientvtiger) Yii::log('login failed');
+		else{
+			$recordInfo = $clientvtiger->doInvoke('sendRecoverPassword',array('username'=>$username));
+			if ($recordInfo) {
+				$sent=true;
+			}
+		}
+		return $sent;
+	}
+
+        public function getSupportDates($contactid)	
         {        
 	$clientvtiger=$this->getClientVtiger();
         $res=array();        
         if(!$clientvtiger) Yii::log('login failed');
         else{
-           $recordInfo = $clientvtiger->doQuery("Select support_start_date,support_end_date from Contacts where portal=1 and email='".$email."'");
+           $recordInfo = $clientvtiger->doQuery("Select support_start_date,support_end_date from Contacts where portal=1 and id='$contactid'");
            if (is_array($recordInfo)) {
            $res['startSupportDate']=$recordInfo[0]['support_start_date'];
            $res['endSupportDate']=$recordInfo[0]['support_end_date'];
@@ -112,14 +138,36 @@ class User extends CActiveRecord
 	return $res;
 	}
 
+	public function getAccountInfo($contactid)
+	{
+		$accid='0';
+		$accname=yii::t('core', 'none');
+		$clientvtiger=$this->getClientVtiger();
+		if(!$clientvtiger) Yii::log('login failed');
+		else{
+			$recordInfo = $clientvtiger->doQuery("Select account_id from Contacts where id='".$contactid."'");
+			if (is_array($recordInfo)) {
+				$accid=$recordInfo[0]['account_id'];
+				$recordInfo = $clientvtiger->doQuery("Select accountname from Accounts where id='".$accid."'");
+				if (is_array($recordInfo)) {
+					$accname=$recordInfo[0]['accountname'];
+				}
+			}
+		}
+		$res=array(
+				'accountid'=>$accid,
+				'accountname'=>$accname,
+				);
+		return $res;
+	}
+
         public function savePassword($pass)
         {
         $clientvtiger=$this->getClientVtiger();
         $email=isset(Yii::app()->user->name)?Yii::app()->user->name:$this->User;
-        Yii::log('diannn '.$email);
         if(!$clientvtiger) Yii::log('login failed');
         else{
-            $recordInfo = $clientvtiger->doInvoke('changePassword',array('email'=>$email,'password'=>$pass));
+            $recordInfo = $clientvtiger->doInvoke('changePortalUserPassword',array('email'=>$email,'password'=>$pass));
             }            
         
 	return $recordInfo;

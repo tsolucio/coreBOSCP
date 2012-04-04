@@ -19,9 +19,14 @@
 
 class UserIdentity extends CUserIdentity
 {
+		const ERROR_EXPIRED_SUPPORT=10;
+
         public $lastLoginTime;
         public $startSupportDate;
         public $endSupportDate;
+        public $contactId;
+        public $companyName;
+        public $accountId;
 
 	/**
 	 * Constructor.
@@ -43,14 +48,18 @@ class UserIdentity extends CUserIdentity
 	{   
             $this->errorCode=0;
 			$user=new User('search','Contacts');
-            $found=$user->findByAttributes(array('username'=>$this->username,'password'=>$this->password));
+            $contactid=$user->findByAttributes(array('username'=>$this->username,'password'=>$this->password));
 
-            if($found===null||$found==false)
+            if($contactid===null||$contactid==false)
             {
             	$this->errorCode=self::ERROR_USERNAME_INVALID;
             }           
             else
             {
+                $supportDates=$user->getSupportDates($contactid);
+                if ($supportDates['endSupportDate']<date('Y-m-d')) {
+                	$this->errorCode=self::ERROR_EXPIRED_SUPPORT;
+                } else {
                 if($this->lastLoginTime===null)
                 {
                 $lastLogin = time();
@@ -60,16 +69,20 @@ class UserIdentity extends CUserIdentity
                 $lastLogin = strtotime($this->lastLoginTime);
                 }
                 //$lastLogin=User::model()->getLastLoginTime();
-                $supportDates=$user->getSupportDates($this->username);
                 $this->setState('lastLoginTime', $lastLogin);
                 $this->setState('password', $this->password);
                 $this->setState('username', $this->username);
+                $this->setState('contactId', $contactid);
+                $accinfo=$user->getAccountInfo($contactid);
+                $this->setState('accountId', $accinfo['accountid']);
+                $this->setState('companyName', $accinfo['accountname']);
                 $this->setState("startSupportDate", $supportDates['startSupportDate']);
-                $this->setState("endSupportDate", $supportDates['endSupportDate']);          
+                $this->setState("endSupportDate", $supportDates['endSupportDate']);
 				// Create settings array
                 $this->setState('settings', new UserSettingsManager($this->username));
                 $this->errorCode=self::ERROR_NONE;
+                }
 			}
-			return !$this->errorCode;
+			return $this->errorCode;
 	}
 }

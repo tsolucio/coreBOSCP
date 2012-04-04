@@ -53,6 +53,7 @@
   <entry id="noOtherThemesAvailable">No hay otros temas disponibles.</entry>
   <entry id="notice">Aviso</entry>
   <entry id="null">Null</entry>
+  <entry id="none">Ninguno</entry>
   <entry id="off">Desactivado</entry>
   <entry id="ok">Aceptar</entry>
   <entry id="on">Activo</entry>
@@ -98,13 +99,15 @@
   <entry id="thankYou4Connect">Gracias por utilizar nuestro servicio.</entry>
   <entry id="loggedInAs">Has accedido al sistema como </entry>
   <entry id="Change Password">Cambiar Contraseña</entry>
-  <entry id="forgotPassword">Recuperar contraseña</entry>
+  <entry id="recoverPassword">Recuperar contraseña</entry>
+  <entry id="forgotPassword">¿Ha olvidado la contraseña?</entry>
   <entry id="yourEmailId">Dirección de email:</entry>
   <entry id="password">Contraseña</entry>
   <entry id="contactEmail">Email acceso portal</entry>
   <entry id="sendPassword">Enviar Contraseña</entry>
   <entry id="errSendEmail">No se ha podido enviar el correo...</entry>
   <entry id="errEmailIdNotFound">No se ha podido encontrar el email dado.</entry>
+  <entry id="errUserNotFound">No se ha podido encontrar el nombre de usuario introducido.</entry>
   <entry id="EmailSent">Se ha enviado el correo de recuperación de contraseña.</entry>
   <entry id="yourNewPassword">Tu nueva contraseña es:</entry>
   <entry id="newPassword">Nueva Contraseña</entry>
@@ -116,6 +119,8 @@
   <entry id="errNoUpdatePassword">No se ha podido actualizar la contraseña.</entry>
   <entry id="errInvalidEmail">Dirección de Email inválida...</entry>
   <entry id="errCheckCredentials">Por favor, verifica los datos de acceso introducidos.</entry>
+  <entry id="errExpiredSupport">El periodo de soporte ha caducado. Contacta con tu proveedor.</entry>
+  <entry id="errConnection">No se ha podido establecer una conexión con la aplicación principal.</entry>
   <entry id="save">Guardar</entry>
   <entry id="create">Crear</entry>  
   <entry id="yourAccessInfo">Información de Acceso</entry>
