@@ -36,7 +36,7 @@ var breadCrumb = {
 		{
 			return;
 		}
-		
+		/*
 		var windowTitle = [];
 		
 		// Create new breadCrumbs
@@ -54,20 +54,15 @@ var breadCrumb = {
 			html += '<span>' + data[i].text.substring(0,11) + '</span>';
 			
 			html += '</a>';
-			/*
-			if(data[i].dialog)
-			{
-				html += '<img src="'+ iconPath + '/16/arrow_next.png" onclick="$(\'#' + data[i].dialog + '\').dialog(\'open\');" class="breadcrumbDropdown" />';
-			}
-			*/
 			
 			ul.append(html);
 			
 			windowTitle.push(data[i].text);
 		}
-		
+		*/
 		// Set window title
-		document.title = windowTitle.join(' » ') + ' | Chive';
+		// change Chive behaviour, we put just module and App Name
+		document.title = data[data.length-1].text + ' » ' + ' vtyiiCPNG';
 	},
 
 	add: function(element)

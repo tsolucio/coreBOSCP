@@ -295,7 +295,7 @@ abstract class VTActiveResource extends CModel
      */
     public function getDbCriteria($createIfNull=true)
     {
-    	if($this->_criteria===null)
+    	if($this->_c===null)
     	{
     		if(($c=$this->defaultScope())!==array() || $createIfNull)
     			$this->_criteria=new CDbCriteria($c);
@@ -333,7 +333,7 @@ abstract class VTActiveResource extends CModel
      */
     public function defaultScope()
     {
-    	return array();
+    	return array(); //'condition'=>"parent_id='3x27'",);
     }
     
     /**
@@ -1826,6 +1826,7 @@ abstract class VTActiveResource extends CModel
     	Yii::trace(get_class($this).'.countByAttributes()','ext.VTActiveResource');
     	$criteria=new CDbCriteria;
     	$criteria->addCondition($condition);
+    	$this->applyScopes($criteria);
     	if (!is_array($attributes)) $attributes=array();
     	foreach ($attributes as $key=>$attr) {
     		if (!is_array($attr)) continue;  // we can only search simple values, not IN
@@ -2537,6 +2538,7 @@ abstract class VTActiveResource extends CModel
 
     public function createVtigerSQLCommand($module, $criteria='', $cols='*') {
     	if (is_object($criteria) and get_class($criteria)=='CDbCriteria') {
+    		$this->applyScopes($criteria);
     		$this->setCriteria($criteria);
     		$cond=$criteria->condition;
     		foreach ($criteria->params as $clv=>$val) {
@@ -2660,6 +2662,18 @@ abstract class VTActiveResource extends CModel
 
     public function setModule($module) {
     	$this->module=$module;
+    }
+    public function getModuleName() {
+    	if(($cache=Yii::app()->cache)!==null) {
+    		if (($modname=$cache->get('yiicpng.sidebar.listmodules'))!==false) {
+    			$modname=$modname[$this->module];
+    		} else {
+    			$modname=Yii::t('core', $this->module);
+    		}
+    	} else {
+    		$modname=Yii::t('core', $this->module);
+    	}
+    	return $modname;
     }
 
     public function translateAttributeLabels() {

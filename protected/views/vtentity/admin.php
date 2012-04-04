@@ -13,7 +13,7 @@ $('.search-form form').submit(function(){
 ");
 ?>
 
-<h1><?php echo $this->entity; ?></h1>
+<h1><?php echo $model->getModuleName(); ?></h1>
 
 <div class="search-form" style="display:none">
 <?php $this->renderPartial('_search',array(

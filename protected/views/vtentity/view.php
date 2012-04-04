@@ -1,14 +1,4 @@
-<h1><?php
-if(($cache=Yii::app()->cache)!==null) {
-	if (($modname=$cache->get('yiicpng.sidebar.listmodules'))!==false) {
-		$modname=$modname[$model->getModule()];
-	} else {
-	  $modname=Yii::t('core', $model->getModule());
-	}
-} else {
-	$modname=Yii::t('core', $model->getModule());
-}
-echo $modname.' : '.$model->getLookupFieldValue($this->entityLookupField,$model->getAttributes()); ?></h1>
+<h1><?php echo $model->getModuleName().' : '.$model->getLookupFieldValue($this->entityLookupField,$model->getAttributes()); ?></h1>
 <?php $this->widget('zii.widgets.CDetailView', array(
 	'data'=>$model,
 	'attributes'=>$model->getDetailViewFieldsID($model->id),
