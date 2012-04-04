@@ -333,7 +333,48 @@ abstract class VTActiveResource extends CModel
      */
     public function defaultScope()
     {
-    	return array(); //'condition'=>"parent_id='3x27'",);
+    	if (Yii::app()->vtyiicpngScope=='vtigerCRM') {
+    		return array();
+    	} else {
+    		switch ($this->getModule()) {
+    			case 'Contacts':
+    				$condition = array('condition'=>"account_id='".Yii::app()->user->accountId."'");
+    				break;
+    			case 'Accounts':
+    				$condition = array('condition'=>"id='".Yii::app()->user->accountId."'");
+    				break;
+    			case 'Quotes':
+    				$condition = array('condition'=>"account_id='".Yii::app()->user->accountId."' or contact_id='".Yii::app()->user->contactId."'");
+    				break;
+    			case 'SalesOrder':
+    				$condition = array('condition'=>"account_id='".Yii::app()->user->accountId."' or contact_id='".Yii::app()->user->contactId."'");
+    				break;
+    			case 'ServiceContracts':
+    				$condition = array('condition'=>"sc_related_to='".Yii::app()->user->accountId."' or sc_related_to='".Yii::app()->user->contactId."'");
+    				break;
+    			case 'Invoice':
+    				$condition = array('condition'=>"account_id='".Yii::app()->user->accountId."' or contact_id='".Yii::app()->user->contactId."'");
+    				break;
+    			case 'HelpDesk':
+    				$condition = array('condition'=>"parent_id='".Yii::app()->user->accountId."' or parent_id='".Yii::app()->user->contactId."'");
+    				break;
+    			case 'Assets':
+    				$condition = array('condition'=>"account='".Yii::app()->user->accountId."'");
+    				break;
+    			case 'Project':
+    				$condition = array('condition'=>"linktoaccountscontacts='".Yii::app()->user->accountId."' or linktoaccountscontacts='".Yii::app()->user->contactId."'");
+    				break;
+    			case 'Products':
+    				$condition = array(); //array('condition'=>"account_id='".Yii::app()->user->accountId."'");
+    				break;
+    			case 'Documents':
+    				$condition = array(); //array('condition'=>"account_id='".Yii::app()->user->accountId."'");
+    				break;
+    			default:
+    				$condition = array();
+    		}
+    		return $condition;
+    	}
     }
     
     /**

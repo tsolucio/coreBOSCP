@@ -134,6 +134,19 @@ $mainConfig=array(
 		'version' => '5.3',
 	),
 
+	'vtyiicpngScope' => 'CPortal',  //  CPortal | vtigerCRM
+	'notSupportedModules' => array(
+			'vtigerCRM' => array(
+				'Calendar','Events','Quotes','SalesOrder','PurchaseOrder','Invoice','Currency',
+				'PriceBooks','Emails','Users','Groups','PBXManager','SMSNotifier','ModComments',
+				'DocumentFolders'
+			),
+			'CPortal' => array(
+					'Contacts','Accounts','Quotes','SalesOrder','ServiceContracts','Invoice','HelpDesk',
+					'Assets','Project','Products','Documents'
+			),
+		),
+
 );
 @include(dirname(__FILE__) . '/devel.php');
 return $mainConfig;

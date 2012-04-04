@@ -306,11 +306,7 @@ class SiteController extends Controller
 	{
 		// Create list for sideBar usage
 		// Omit these modules because they are not yet supported
-		$notSupported=array(
-				'Calendar','Events','Quotes','SalesOrder','PurchaseOrder','Invoice','Currency',
-				'PriceBooks','Emails','Users','Groups','PBXManager','SMSNotifier','ModComments',
-				'DocumentFolders'
-		);
+		$notSupported=Yii::app()->notSupportedModules[Yii::app()->vtyiicpngScope];
                 $api_cache_id='yiicpng.sidebar.availablemodules';
                 $schemata = Yii::app()->cache->get( $api_cache_id  );
                
@@ -334,7 +330,8 @@ class SiteController extends Controller
 			if (is_array($listModules)) {
 				reset($flatlm);
 				foreach($listModules AS $moduleName) {
-					if (!in_array(current($flatlm), $notSupported))
+					if ((Yii::app()->vtyiicpngScope=='vtigerCRM' and !in_array(current($flatlm), $notSupported))
+					 or (Yii::app()->vtyiicpngScope=='CPortal' and in_array(current($flatlm), $notSupported)))
 						$schemata[] = array('module'=>current($flatlm),'name'=>$moduleName);
 					next(($flatlm));
 				}
