@@ -1609,6 +1609,7 @@ abstract class VTActiveResource extends CModel
     		$simplerdo=true;
     		$recinfo=array('0'=>$recinfo);
     	}
+    	$module=$this->getModule();
     	$tobelook=array();
     	$tobelookfields=array();
     	$ids=array();
@@ -1651,7 +1652,13 @@ abstract class VTActiveResource extends CModel
     			if($module == 'Documents') {
     				$idatt=$recinfo[$i]['id'];
     				if(in_array($idatt,array_keys($all_attachments))) {
-    					$recinfo[$i]['filename']=$all_attachments[$idatt]['filename'];
+    					if (!empty($all_attachments[$idatt]['filetype'])) {
+    						$this->writeAttachment2Cache($idatt,$all_attachments[$idatt]['attachment']);
+    						$value='<a href=\'javascript: filedownload.download("'.yii::app()->baseUrl.'/index.php/vtentity/'.$this->getModule().'/download/'.$idatt.'?fn='.CHtml::encode($all_attachments[$idatt]['filename']).'&ft='.CHtml::encode($all_attachments[$idatt]['filetype']).'","")\'>'.CHtml::encode($all_attachments[$idatt]['filename'])."</a>";
+    					} else {
+    						$value=CHtml::encode($all_attachments[$idatt]['filename']);
+    					}
+    					$recinfo[$i]['filename']=$value;
     				}
     			}
     		}
@@ -1999,11 +2006,6 @@ abstract class VTActiveResource extends CModel
     				}
     
     			}  
-//                        if($resource->getModule()== 'Documents'){
-//                           $att=$resource->getDocumentAttachment();
-//                           Yii::log('dianatest '.$att['filename']);
-//                           $resource->setAttribute('filename',$att['filename']);
-//                        }
     			$resource->attachBehaviors($resource->behaviors());
     			if($callAfterFind)
     				$resource->afterFind();
@@ -2208,7 +2210,9 @@ abstract class VTActiveResource extends CModel
 		} else {
 			if ($this->getModule()=='HelpDesk' and $lookupfield=='title')
 				$showValue=$values['ticket_title'];
-			else
+			else if ($this->getModule()=='Documents' and $lookupfield=='title')
+				$showValue=$values['notes_title'];
+			else 
 				$showValue=$values[$lookupfield];
 		}
 		return $showValue;
@@ -2408,20 +2412,14 @@ abstract class VTActiveResource extends CModel
 		return $documentAttachment;
         }
 
-        public function downloadAttachment($id,$fileType,$filecontent){
-                $saveasfile = "storage/" . "_$id";
+        public function writeAttachment2Cache($id,$filecontent){
+		$saveasfile = "protected/runtime/cache/_$id";
 		if(!file_exists($saveasfile)) {
-			Yii::log("Saved attachement as $saveasfile\n");
 			$fh = fopen($saveasfile, 'wb');
 			fwrite($fh, base64_decode($filecontent));
 			fclose($fh);
 		}
-                header("Content-type: $fileType");
-		header("Pragma: public");
-		header("Cache-Control: private");
-		header("Content-Disposition: attachment; filename=$id");
-		header("Content-Description: PHP Generated Data");
-                return $saveasfile;
+		return $saveasfile;
         }
 	public function getUsersInSameGroup()
 	{

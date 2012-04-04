@@ -71,7 +71,7 @@ class VtentityController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view','list','AutoCompleteLookup'),
+				'actions'=>array('index','view','list','AutoCompleteLookup','Download'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -108,14 +108,21 @@ class VtentityController extends Controller
 		if(isset($_POST[$this->modelName]))
 		{
 			$response = new AjaxResponse();
+			$model->unsetAttributes();
 			$model->setAttributes($_POST[$this->modelName]);
                         if($model->getModule()=='Documents' && $model->getAttribute('filelocationtype')=='I')
                         {
-                        $tmp_file=CUploadedFile::getInstance($model,'filename')->getTempName();
+                        $uploadfile=CUploadedFile::getInstance($model,'filename');
+                        $tmp_file=$uploadfile->getTempName();
                         $cont=base64_encode(file_get_contents($tmp_file));
-                        $model->filename=array("name"=>CUploadedFile::getInstance($model,'filename')->getName(),"size"=>CUploadedFile::getInstance($model,'filename')->getSize(),"type"=>CUploadedFile::getInstance($model,'filename')->getType(),'content'=>$cont);//array("attachment_name"=>"ta.pdf",'attachment'=>"ta.pdf");
+                        $model->filename=array(
+                        		"name"=>$uploadfile->getName(),
+                        		"size"=>$uploadfile->getSize(),
+                        		"type"=>$uploadfile->getType(),
+                        		'content'=>$cont);//array("attachment_name"=>"ta.pdf",'attachment'=>"ta.pdf");
                         }
                         if($model->save()) {
+				$_SESSION['deleteCache']='true'; // empty cache on next call
 				$response->addNotification('success', Yii::t('core', 'success'), Yii::t('core', 'successCreateRow'));
 				$response->redirectUrl = '#'.$this->modelLinkName.'/'.$this->entity.'/view/' . $model->__get($this->entityidField);
 			} else {
@@ -153,9 +160,14 @@ class VtentityController extends Controller
 			$model->setAttributes($_POST[$this->modelName]);
                         if($model->getModule()=='Documents' && $model->getAttribute('filelocationtype')=='I')
                         {
-                        $tmp_file=CUploadedFile::getInstance($model,'filename')->getTempName();
+                        $uploadfile=CUploadedFile::getInstance($model,'filename');
+                        $tmp_file=$uploadfile->getTempName();
                         $cont=base64_encode(file_get_contents($tmp_file));
-                        $model->filename=array("name"=>CUploadedFile::getInstance($model,'filename')->getName(),"size"=>CUploadedFile::getInstance($model,'filename')->getSize(),"type"=>CUploadedFile::getInstance($model,'filename')->getType(),'content'=>$cont);//array("attachment_name"=>"ta.pdf",'attachment'=>"ta.pdf");
+                        $model->filename=array(
+                        		"name"=>$uploadfile->getName(),
+                        		"size"=>$uploadfile->getSize(),
+                        		"type"=>$uploadfile->getType(),
+                        		'content'=>$cont);//array("attachment_name"=>"ta.pdf",'attachment'=>"ta.pdf");
                         }
 			if($model->save()) {
 				$response->addNotification('success', Yii::t('core', 'success'), Yii::t('core', 'successUpdateRow'));
@@ -345,6 +357,18 @@ class VtentityController extends Controller
 						'id'=>$entityRecord[$this->entityidField]);
 			}
 			echo CJSON::encode($returnVal);
+		}
+	}
+
+	public function actionDownload() {
+		$saveasfile = "protected/runtime/cache/_".$_GET['id'];
+		if(file_exists($saveasfile)) {
+			header("Content-type: ".$_GET['ft']);
+			header("Pragma: public");
+			header("Cache-Control: private");
+			header("Content-Disposition: attachment; filename=".$_GET['fn']);
+			header("Content-Description: vtyyicpng download");
+			readfile($saveasfile);
 		}
 	}
 

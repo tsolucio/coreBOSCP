@@ -42,7 +42,8 @@
 </fieldset>
 <?php $this->endWidget(); ?>
 <script type="text/javascript">
-	$('form').ajaxForm({           
+	$('#<?php echo $this->modelName ?>-form').ajaxForm({      
+		dataType: 'json',  
 		success: function(response) {
 			if (response.data != undefined && response.data != '') 
 				$('#content').html(response.data);

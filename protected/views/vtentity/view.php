@@ -8,7 +8,7 @@ if(($cache=Yii::app()->cache)!==null) {
 } else {
 	$modname=Yii::t('core', $model->getModule());
 }
-echo $modname.' : '.$model->__get($this->entityLookupField); ?></h1>
+echo $modname.' : '.$model->getLookupFieldValue($this->entityLookupField,$model->getAttributes()); ?></h1>
 <?php $this->widget('zii.widgets.CDetailView', array(
 	'data'=>$model,
 	'attributes'=>$model->getDetailViewFieldsID($model->id),
@@ -18,7 +18,7 @@ echo CHTML::hiddenField('entityidValue',$model->__get($this->entityidField), arr
 echo CHTML::hiddenField('dvcpage',$_GET[$this->modelName.'_page']-1, array('id'=>'dvcpage'));
 ?>
 <script type="text/javascript">
-breadCrumb.add({ icon: 'view', href: 'javascript:chive.goto(\'<?php echo $this->modelLinkName;?>/<?php echo $this->entity;?>/view/<?php echo $model->__get($this->entityidField)?>\')', text: <?php echo CJavaScript::encode($model->__get($this->entityLookupField)); ?>});
+breadCrumb.add({ icon: 'view', href: 'javascript:chive.goto(\'<?php echo $this->modelLinkName;?>/<?php echo $this->entity;?>/view/<?php echo $model->__get($this->entityidField)?>\')', text: <?php echo CJavaScript::encode($model->getLookupFieldValue($this->entityLookupField,$model->getAttributes())); ?>});
 breadCrumb.show();
 sideBar.activate(0);
 </script>

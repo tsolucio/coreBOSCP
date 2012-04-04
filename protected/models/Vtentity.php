@@ -51,9 +51,13 @@ class Vtentity extends CActiveRecord
 	 * return array of fields to appear in grid view
 	 */
 	public function gridViewColumns() {
+		$raw_fields=array(
+			'Documents'=>array('filename'),
+		);
 		$lvf=$this->getListViewFields();
 		$listviewfields=array_values($lvf['fields']);
 		$fields=$this->getFieldsInfo();
+		$module=$this->getModule();
 		$fieldlabels=array();
 		foreach ($listviewfields as $lvfield) {
 			foreach($fields as $pos=>$fielddetails){
@@ -64,7 +68,10 @@ class Vtentity extends CActiveRecord
 			$field=$fields[$pos];
 			$key=$field['name'];
 			$label=$field['label'];
-			$fieldlabels[$key]=array('name'=>$key,'header'=>$label);
+			if (is_array($raw_fields[$module]) and in_array($key,$raw_fields[$module]))
+				$fieldlabels[$key]=array('name'=>$key,'header'=>$label,'type'=>'raw');
+			else
+				$fieldlabels[$key]=array('name'=>$key,'header'=>$label);
 		}
 		return $fieldlabels;
 	}
@@ -355,11 +362,16 @@ class Vtentity extends CActiveRecord
 			case 69:
                                 $id=$this->getId();
                                 $attachmentsdata=$this->getDocumentAttachment($id);
+                                if (!empty($attachmentsdata[$id]['filetype'])) {
+                                	$this->writeAttachment2Cache($id,$attachmentsdata[$id]['attachment']);
+                                	$value='<a href=\'javascript: filedownload.download("'.yii::app()->baseUrl.'/index.php/vtentity/'.$this->getModule().'/download/'.$id.'?fn='.CHtml::encode($attachmentsdata[$id]['filename']).'&ft='.CHtml::encode($attachmentsdata[$id]['filetype']).'","")\'>'.CHtml::encode($attachmentsdata[$id]['filename'])."</a>";
+                                } else {
+                                	$value=CHtml::encode($attachmentsdata[$id]['filename']);
+                                }
                                 $widget=array(
 				'label'=>$label,
 				'type'=>'raw',
-				'value'=>$attachmentsdata[$id]['filetype']!=''?CHtml::link(CHtml::encode($attachmentsdata[$id]['filename']),$this->downloadAttachment($attachmentsdata[$id]['recordid'],$attachmentsdata[$id]['filetype'],$attachmentsdata[$id]['attachment'])):CHtml::link(CHtml::encode($attachmentsdata[$id]['filename']),$attachmentsdata[$id]['filename']),
-                            
+				'value'=>$value,
 				);			
 				break;
                         case 26:
