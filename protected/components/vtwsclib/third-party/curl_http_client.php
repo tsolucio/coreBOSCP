@@ -71,7 +71,7 @@ class Curl_HTTP_Client
 		curl_setopt($this->ch, CURLOPT_FAILONERROR, true);
 
 		// allow redirects
-		curl_setopt($this->ch, CURLOPT_FOLLOWLOCATION, true);
+		curl_setopt($this->ch, CURLOPT_FOLLOWLOCATION, false);
 		
 		// use gzip if possible
 		curl_setopt($this->ch,CURLOPT_ENCODING , 'gzip, deflate');
