@@ -143,4 +143,6 @@
 	<entry id="errmissingFunctions">The vtiger CRM installation to which the Portal is connected doesn't have all the necessary functionality, it is missing certain code enhancementes to work correctly. Please contact whomever did the install to execute the missing steps.</entry>
 	<entry id="invalidRequest">Invalid request. Please do not repeat this request again.</entry>
 	<entry id="invalidEntity">The requested module does not exist in vtiger CRM.</entry>
+	<entry id="Internal">Internal</entry>
+	<entry id="External">External</entry>
 </category>

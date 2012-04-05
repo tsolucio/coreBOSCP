@@ -147,7 +147,7 @@ class VtentityController extends Controller
 	public function actionUpdate()
 	{
 		$this->_model=null;
-                $model=$this->loadModel();
+                $model=$this->loadModel(false);
 		$fields=$model->getWritableFieldsArray();
 		$uitypes=$model->getUItype();               
 		// Uncomment the following line if AJAX validation is needed
@@ -303,17 +303,19 @@ class VtentityController extends Controller
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.
 	 */
-	public function loadModel()
+	public function loadModel($dereference=true)
 	{
 		if($this->_model===null)
 		{
 			$entity=$this->modelName;
-			if(isset($_GET[$this->entityidField]))                        
-                            $this->_model=$entity::model()->findbyPk($_GET[$this->entityidField]);                        
+			$model=$entity::model();
+			$model->doDereference=$dereference;
+			if(isset($_GET[$this->entityidField]))
+				$this->_model=$model->findbyPk($_GET[$this->entityidField]);                        
 			if($this->_model===null)
 			  throw new CHttpException(404,Yii::t('core', 'errorIdNotExist'));                        
 		}                
-                if($this->_model) $this->_model->setIsNewRecord(false);                
+		if($this->_model) $this->_model->setIsNewRecord(false);                
 		$this->entityidValue=$this->_model->__get($this->entityidField);
 		return $this->_model;
 	}

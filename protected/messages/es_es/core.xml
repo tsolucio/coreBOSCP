@@ -143,4 +143,6 @@
   <entry id="errmissingFunctions">La instalación de vtiger CRM al que está conectado el portal no tiene la funcionalidad requerida. Falta instalar modificaciones en el mismo. Por favor, contacta con la persona que ha realizado la instalación para que ejecute los pasos que faltan.</entry>
   <entry id="invalidRequest">Servicio inválido. Por favor, no solicites este servicio de nuevo.</entry>
   <entry id="invalidEntity">El módulo solicitado no existe en vtiger CRM.</entry>
+  <entry id="Internal">Interno</entry>
+  <entry id="External">Externo</entry>
 </category>

@@ -76,7 +76,7 @@ $('.search-form form').submit(function(){
 	)); ?>
 
 <script type="text/javascript">
-breadCrumb.add({ icon: 'browse', href: 'javascript:chive.goto(\'<?php echo $this->modelLinkName;?>/<?php echo $this->entity;?>/index\')', text: '<?php echo $this->entity; ?>'});
+breadCrumb.add({ icon: 'browse', href: 'javascript:chive.goto(\'<?php echo $this->modelLinkName;?>/<?php echo $this->entity;?>/index\')', text: '<?php echo $model->getModuleName(); ?>'});
 breadCrumb.show();
 sideBar.activate(0);
 </script>

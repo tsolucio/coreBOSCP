@@ -51,9 +51,6 @@ class Vtentity extends CActiveRecord
 	 * return array of fields to appear in grid view
 	 */
 	public function gridViewColumns() {
-		$raw_fields=array(
-			'Documents'=>array('filename'),
-		);
 		$lvf=$this->getListViewFields();
 		$listviewfields=array_values($lvf['fields']);
 		$fields=$this->getFieldsInfo();
@@ -68,10 +65,11 @@ class Vtentity extends CActiveRecord
 			$field=$fields[$pos];
 			$key=$field['name'];
 			$label=$field['label'];
-			if (is_array($raw_fields[$module]) and in_array($key,$raw_fields[$module]))
-				$fieldlabels[$key]=array('name'=>$key,'header'=>$label,'type'=>'raw');
+			if (in_array($key,explode(',',$this->getLookupField()))
+			 or (strpos($key,'title') and in_array($module,array('HelpDesk','Documents'))))
+				$fieldlabels[$key]=array('name'=>$key,'header'=>$label,'type'=>'html','value'=>$this->getViewLinkField($key));
 			else
-				$fieldlabels[$key]=array('name'=>$key,'header'=>$label);
+			$fieldlabels[$key]=array('name'=>$key,'header'=>$label,'type'=>$this->convertVtigerUIType2Yii($field['uitype']));
 		}
 		return $fieldlabels;
 	}
@@ -203,46 +201,6 @@ class Vtentity extends CActiveRecord
 	}
 	
 	/**
-	 * Get widget for all given fields
-	 * @param array $fieldlist array of fieldnames to return processed
-	 * @param array $linkfields array of fieldnames which will be html links to view screen
-	 * @param array $htmloptionsAllFields array of fieldname => htmloptions for the field layout
-	 */
-	public function getDetailGridFields($fieldlist,$linkfields=array(),$htmloptionsAllFields=array())
-	{
-		$dvfields=array();
-		$fields=$this->getAttributesArray();
-		if (is_array($fieldlist)) {
-			$dvfs=array();
-			// run through all fields looking for the ones we need
-			foreach ($fields as $field) {
-				if (!is_array($field)) continue;
-				$key=$field['name'];
-				if (!in_array($key, $fieldlist)) continue;
-				if($key!=='id') {
-					$value=$this->getAttribute($key);
-					$uitype=intval($field['uitype']);
-					$label=$field['label'];
-					$dvf=$this->getVtigerGridField($uitype,$key,$value,$label,$htmloptionsAllFields);
-					if (in_array($key, $linkfields)) {
-						$vl=$this->getViewLinkField($key);
-						if (!is_array($dvf))
-							$dvf=array('name'=>$dvf);
-						$dvf['type']='raw';
-						$dvf['value']=$vl;
-					}
-					$dvfs[$key]=$dvf;
-				}
-			}
-			// Put fields in order given by input array
-			foreach ($fieldlist as $fld) {
-				$dvfields[$fld]=$dvfs[$fld];
-			}
-		}
-		return $dvfields;
-	}
-	
-	/**
 	 * Depending on the uitype parameter coming from vtiger CRM, decides what kind of widget to show
 	 * @param integer $uitype
 	 * @param string $fieldname
@@ -271,6 +229,7 @@ class Vtentity extends CActiveRecord
 			case 24:
 				$widget=array(
 				'label'=>$label,
+				'type'=>$this->convertVtigerUIType2Yii($uitype),
 				'value'=>$fieldvalue,
 				);
 				break;
@@ -280,16 +239,16 @@ class Vtentity extends CActiveRecord
 			case 8:
 				$widget=array(
 				'label'=>$label,
-				'type'=>'raw',
-				'value'=>CHtml::mailto(CHtml::encode($fieldvalue),CHtml::encode($fieldvalue)),
+				'type'=>$this->convertVtigerUIType2Yii($uitype),
+				'value'=>$fieldvalue,
 				);
 				break;
 			case 18:
 			case 17:
 				$widget=array(
 				'label'=>$label,
-				'type'=>'raw',
-				'value'=>CHtml::link(CHtml::encode($fieldvalue),'http://'.CHtml::encode($fieldvalue)),
+				'type'=>$this->convertVtigerUIType2Yii($uitype),
+				'value'=>$fieldvalue,
 				);
 				break;
 			case 5:
@@ -328,6 +287,7 @@ class Vtentity extends CActiveRecord
 			case 101:
 				$widget=array(
 				'label'=>$label,
+				'type'=>$this->convertVtigerUIType2Yii($uitype),
 				'value'=>$fieldvalue,
 				);
 				break;
@@ -339,6 +299,7 @@ class Vtentity extends CActiveRecord
 			case 255:
 				$widget=array(
 				'label'=>$label,
+				'type'=>$this->convertVtigerUIType2Yii($uitype),
 				'value'=>$fieldvalue,
 				);
 				break;
@@ -346,6 +307,7 @@ class Vtentity extends CActiveRecord
 			case 34:
 				$widget=array(
 				'label'=>$label,
+				'type'=>$this->convertVtigerUIType2Yii($uitype),
 				'value'=>$fieldvalue,
 				);
 				break;
@@ -353,7 +315,7 @@ class Vtentity extends CActiveRecord
                         case 27:
                                $widget=array(
 				'label'=>$label,
-				'value'=>($fieldvalue=='I'?'Internal':'External'),
+				'value'=>($fieldvalue=='I'?yii::t('core', 'Internal'):yii::t('core', 'External')),
 				);
                                break;
  			case 28:
@@ -380,6 +342,7 @@ class Vtentity extends CActiveRecord
 			case 54:
 				$widget=array(
 				'label'=>$label,
+				'type'=>$this->convertVtigerUIType2Yii($uitype),
 				'value'=>$fieldvalue,
 				);
 				break;
@@ -401,77 +364,63 @@ class Vtentity extends CActiveRecord
 		}
 		return $widget;
 	}
-	
-	/**
-	 * Depending on the uitype parameter coming from vtiger CRM, decides what kind of widget to show
-	 * @param integer $uitype
-	 * @param string $fieldname
-	 * @param mixed $fieldvalue
-	 * @param array $htmlopts
-	 */
-	public function getVtigerGridField($uitype,$fieldname,$fieldvalue,$label,$htmlopts=array())
-	{
-		$widget='';
+
+	public function convertVtigerUIType2Yii($uitype) {
+		$yiiformat='raw';
 		switch ($uitype) {
 			case 1:
 			case 2:
+			case 11:
+			case 85:
+			case 15:
+			case 16:
+			case 55:
+			case 111:
+			case 115:
+			case 255:
+			case 33:
+			case 34:
+			case 26:
+			case 52:
+			case 53:
+			case 54:
+				$yiiformat='text';
+				break;
 			case 7:
 			case 9:
-			case 11:
 			case 25:
+			case 71:
+				$yiiformat='number';
+				break;
 			case 31:
 			case 32:
-			case 71:
-			case 85:
 			case 106:
 			case 19:
 			case 20:
 			case 21:
 			case 22:
 			case 24:
-				$widget=$fieldname;
-				/*
-				 'name'=>$fieldname,
-				'value'=>'$data->'.$fieldname,
-				);
-				*/
+				$yiiformat='ntext';
 				break;
 			case 13:
 			case 104:
 			case 12:
-			case 8:
-				$widget=array(
-				'name'=>$fieldname,
-				'type'=>'raw',
-				'value'=>'CHtml::mailto(CHtml::encode($data["'.$fieldname.'"]),CHtml::encode($data["'.$fieldname.'"]))',
-				);
+				$yiiformat='email';
 				break;
 			case 18:
 			case 17:
-				$widget=array(
-				'name'=>$fieldname,
-				'type'=>'raw',
-				'value'=>'CHtml::link(CHtml::encode($data["'.$fieldname.'"]),"http://".CHtml::encode($data["'.$fieldname.'"]))',
-				);
+				$yiiformat='url';
 				break;
 			case 5:
-				$dateformat='Y-m-d';
-				$widget=array(
-						'name'=>$fieldname,
-						'value'=>'(empty($data["'.$fieldname.'"]) ? "" : date("'.$dateformat.'",strtotime($data["'.$fieldname.'"])))',
-	
-				);
+				$yiiformat='text';  // date
 				break;
 			case 23:
 			case 6:
 			case 70:
-				// FIXME  get date format from portal user config or setup contact's preferences?
-				$dateformat='Y-m-d h:i:s';
-				$widget=array(
-						'name'=>$fieldname,
-						'value'=>'(empty($data["'.$fieldname.'"]) ? "" : date("'.$dateformat.'",strtotime($data["'.$fieldname.'"])))',
-	
-				);
+				$yiiformat='text';  // datetime
+				break;
+			case 56:
+				$yiiformat='boolean';
 				break;
 			case 10:
 			case 51:
@@ -490,69 +439,20 @@ class Vtentity extends CActiveRecord
 			case 80:
 			case 81:
 			case 101:
-				$widget=array(
-				'name'=>$fieldname,
-				'value'=>'Vtentity::getComplexAttributeValue($data["'.$fieldname.'"])',
-				);
-				break;
-			case 15:
-			case 16:
-			case 55:
-			case 111:
-			case 115:
-			case 255:
-				$widget=array(
-				'name'=>$fieldname,
-				'value'=>'$data["'.$fieldname.'"]',
-				);
-				break;
-			case 33:
-			case 34:
-				$widget=array(
-				'name'=>$fieldname,
-				'value'=>'$data["'.$fieldname.'"]',
-				);
-				break;
-			case 26:
 			case 27:
 			case 28:
-			case 29:
-			case 61:
 			case 69:
-				// Document fields, don't know how to treat these yet
-				break;
-			case 52:
-			case 53:
-			case 54:
-				$widget=array(
-				'name'=>$fieldname,
-				'value'=>'Vtentity::getComplexAttributeValue($data["'.$fieldname.'"])',
-				);
-				break;
-			case 56:
-				$widget=array(
-				'name'=>$fieldname,
-				'type'=>'raw',
-				'value'=>'CHtml::image(ICONPATH."/16/".($data["'.$fieldname.'"] ? "square_green.png" : "square_red.png"))',
-				);
-				break;
-			case 'file':
-				//$widget=CHtml::activeFileField($model, $fieldname, $htmlopts);
-				break;
 			default:
-				$widget=array(
-						'name'=>$fieldname,
-						'value'=>'$data["'.$fieldname.'"]',
-				);
+				$yiiformat='raw';
 		}
-		return $widget;
+		return $yiiformat;
 	}
-	
+
 	function getViewLinkField($fieldname) {
 		$currentPage = Yii::app()->getRequest()->getParam('Vtentity_page',1)-1;
 		$pageSize=Yii::app()->user->settings->get('pageSize');
 		$gridOffset="($currentPage*$pageSize)+1";
-		return 'CHtml::link(CHtml::encode($data["'.$fieldname.'"]),"#vtentity/'.$this->getModule().'/list/".$data["id"]."/dvcpage/".('.$gridOffset.'+$row))';
+		return 'CHtml::link(CHtml::encode($data["'.$fieldname.'"]),"#vtentity/'.$this->getModule().'/list/".$data["id"]."/dvcpage/".('.$gridOffset.'+$row-1))';
 	}
 
 }

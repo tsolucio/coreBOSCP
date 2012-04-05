@@ -125,10 +125,20 @@ class vtyiicpngActiveForm extends CActiveForm
 					echo CHtml::hiddenField($cname.$fieldname."_type");
 				}
 				$htmlopts['onClick']="if (jQuery('#".$cname.$fieldname."_display').val()=='".Yii::t('core', 'search')."') jQuery('#".$cname.$fieldname."_display').val('');";
+				if ($action=='edit') {
+					$frmvalue=$model->getComplexAttributeValue($model->$fieldname);
+					if (is_array($frmvalue) and !empty($frmvalue['reference'])) {
+						$frmvalue=$frmvalue['reference'];
+					} else {
+						$frmvalue=Yii::t('core', 'search');
+					}
+				} else {
+					$frmvalue=Yii::t('core', 'search');
+				}
 				$this->widget('zii.widgets.jui.CJuiAutoComplete', array(
 					'model'=>$model,
 					'name'=>$cname.$fieldname."_display",                                       
-					'value'=>$action=='edit'?$model->getComplexAttributeValue($model->$fieldname):Yii::t('core', 'search'),                                  
+					'value'=>$frmvalue,                                  
 					'source'=>'js:function(request, response){ // el truco es reescribir source
 						     $.getJSON("'.Yii::app()->createUrl($model->modelLinkName).'"+"/"+$("#'.$cname.$fieldname."_type".'").val()+"/AutoCompleteLookup",
 						     {

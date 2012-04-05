@@ -23,7 +23,7 @@
 			else $refersTo='';
                         $action=$model->getIsNewRecord()?'create':'edit';
 			echo '<div class="row">';
-			echo $form->labelEx($model,$fieldname);
+			echo $form->labelEx($model,$fieldname,array('label'=>$fieldlabel));
 			echo $form->getVtigerEditField($uitype,$model,$fieldname,array('maxlength'=>100),$refersTo,$action);
 			echo $form->error($model,$fieldname);
 			echo '</div>';

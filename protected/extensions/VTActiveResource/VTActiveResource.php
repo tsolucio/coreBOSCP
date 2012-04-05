@@ -46,6 +46,7 @@ abstract class VTActiveResource extends CModel
     private $clientvtiger;
     private $count;
     public $deleteCache=false;
+    public $doDereference=true;
 
     /**
      * Constructor.
@@ -1645,6 +1646,7 @@ abstract class VTActiveResource extends CModel
     }
  
     public function dereferenceIds($recinfo) {
+    	if (!$this->doDereference) return $recinfo;
     	$simplerdo=false;
     	if (!is_array($recinfo['0'])) {
     		$simplerdo=true;
@@ -1667,7 +1669,6 @@ abstract class VTActiveResource extends CModel
     			$ls=explode('x',$val);
     			if(is_array($ls) && count($ls)>1) {
     				list($void,$field)=$ls;
-    	
     				if(is_numeric($void) && is_numeric($field)){
     					if(!in_array($val, $tobelook) && $val!=='') {
     						array_push($tobelook,$val);
@@ -1687,8 +1688,14 @@ abstract class VTActiveResource extends CModel
     		for( $i=0;$i<$nr;$i++){
     			foreach($tobelookfields as $fld){
     				$tm=$recinfo[$i][$fld];
-    				if($tm!=='')
-    					$recinfo[$i][$fld]=$respvalues[$tm];
+    				if($tm!=='') {
+    					if ((Yii::app()->vtyiicpngScope=='CPortal' and in_array($respvalues[$tm]['module'],Yii::app()->notSupportedModules[Yii::app()->vtyiicpngScope]))
+    					 or (Yii::app()->vtyiicpngScope=='vtigerCRM' and !in_array($respvalues[$tm]['module'],Yii::app()->notSupportedModules[Yii::app()->vtyiicpngScope]))) {
+    						$recinfo[$i][$fld]=CHtml::link(CHtml::encode($respvalues[$tm]['reference']),'#vtentity/'.$respvalues[$tm]['module']."/view/$tm");
+    					} else {
+    						$recinfo[$i][$fld]=$respvalues[$tm]['reference'];
+    					}
+    				}
     			}
     			if($module == 'Documents') {
     				$idatt=$recinfo[$i]['id'];
@@ -2734,8 +2741,6 @@ abstract class VTActiveResource extends CModel
     }
 
     public function validModule() {
-    	
-    	
     	$module=$this->getModule();    
         $api_cache_id='yiicpng.sidebar.availablemodules';
     	$valid = Yii::app()->cache->get( $api_cache_id  );
@@ -2745,15 +2750,7 @@ abstract class VTActiveResource extends CModel
         if(!$clientvtiger)
     		Yii::log('login failed',CLogger::LEVEL_ERROR);
     	else {
-    		
-    		$notSupported=array(
-				'Calendar','Events','Quotes','SalesOrder','PurchaseOrder','Invoice','Currency',
-				'PriceBooks','Emails','Users','Groups','PBXManager','SMSNotifier','ModComments',
-				'DocumentFolders'
-		);
-    		// If the results were false, then we have no valid data, so load it
-    		
-    			$listModules = $clientvtiger->doListTypes();
+			$listModules = $clientvtiger->doListTypes();
 			// flatten array
 			$flatlm=array();
 			foreach($listModules AS $key=>$schema) {
@@ -2763,7 +2760,8 @@ abstract class VTActiveResource extends CModel
 			if (is_array($listModules)) {
 				reset($flatlm);
 				foreach($listModules AS $moduleName) {
-					if (!in_array(current($flatlm), $notSupported))
+					if ((Yii::app()->vtyiicpngScope=='CPortal' and in_array(current($flatlm),Yii::app()->notSupportedModules[Yii::app()->vtyiicpngScope]))
+					 or (Yii::app()->vtyiicpngScope=='vtigerCRM' and !in_array(current($flatlm),Yii::app()->notSupportedModules[Yii::app()->vtyiicpngScope])))
 						$valid[] = array('module'=>current($flatlm),'name'=>$moduleName);
 					next(($flatlm));
 				}
