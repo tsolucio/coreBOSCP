@@ -36,7 +36,7 @@ var breadCrumb = {
 		{
 			return;
 		}
-		/*
+
 		var windowTitle = [];
 		
 		// Create new breadCrumbs
@@ -59,7 +59,7 @@ var breadCrumb = {
 			
 			windowTitle.push(data[i].text);
 		}
-		*/
+
 		// Set window title
 		// change Chive behaviour, we put just module and App Name
 		document.title = data[data.length-1].text + ' » ' + ' vtyiiCPNG';
