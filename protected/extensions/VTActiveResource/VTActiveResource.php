@@ -1647,6 +1647,7 @@ abstract class VTActiveResource extends CModel
  
     public function dereferenceIds($recinfo) {
     	if (!$this->doDereference) return $recinfo;
+    	$all_attachments=array();
     	$simplerdo=false;
     	if (!is_array($recinfo['0'])) {
     		$simplerdo=true;

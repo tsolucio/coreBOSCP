@@ -95,6 +95,7 @@ $mainConfig=array(
 		'messages' => array(
 		    'class' => 'application.components.messages.CXmlMessageSource',
 			'cachingDuration' => 24 * 60 * 60, // 24h
+			'forceTranslation' => true,
 		),
 		
 		'cache' => array(
