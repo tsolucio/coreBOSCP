@@ -209,7 +209,7 @@ class vtyiicpngActiveForm extends CActiveForm
                                 }
 				break;
                              case 27:                               
-                                $values=array("Internal","External");
+                                $values=array(yii::t('core', 'Internal'),yii::t('core', 'External'));
                                 $trp=array("I","E");
                                 if($action=='search') {
                                     array_unshift($values,' ');
@@ -228,6 +228,8 @@ class vtyiicpngActiveForm extends CActiveForm
                                                                             document.getElementById(\'Vtentity_filename_E__\').name="Vtentity[filename]_E__";
                                                                             document.getElementById(\'Vtentity_filename\').name="Vtentity[filename]";
                                                                             }';
+				if(empty($model->filelocationtype) || $model->getIsNewResource())
+					 $model->setAttribute($fieldname,'E');
 				$widget=$this->dropDownList($model,$fieldname,$plvalues,$htmlopts);
                                 break;
                             case 26:
