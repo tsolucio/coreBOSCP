@@ -121,6 +121,7 @@
   <entry id="errCheckCredentials">Por favor, verifica los datos de acceso introducidos.</entry>
   <entry id="errExpiredSupport">El periodo de soporte ha caducado. Contacta con tu proveedor.</entry>
   <entry id="errConnection">No se ha podido establecer una conexión con la aplicación principal.</entry>
+  <entry id="errPermission">No tienes permisos suficientes para ejecutar esta operación.</entry>
   <entry id="save">Guardar</entry>
   <entry id="create">Crear</entry>  
   <entry id="yourAccessInfo">Información de Acceso</entry>

@@ -38,8 +38,10 @@ class VtentityController extends Controller
 	public $entityLookupField;
 	public $entityidField;
 	public $entityidValue;
-	public $viewButtonActive=FALSE;
-	public $viewButtonSearch=FALSE;
+	public $viewButtonEdit=false;
+	public $viewButtonDelete=false;
+	public $viewButtonCreate=false;
+	public $viewButtonSearch=false;
 
 	public function __construct($id,$module)
 	{
@@ -50,6 +52,47 @@ class VtentityController extends Controller
 		$this->entityidField=$model->primaryKey();
 		$this->entity=$model->getModule();
 		parent::__construct($id,$module);
+	}
+
+	public function setCRUDpermissions($module) {
+		$moduleAccessInformation = Yii::app()->cache->get('moduleAccessInformation');
+		$this->viewButtonDelete = $moduleAccessInformation[$module]['deleteable'];
+		$this->viewButtonEdit = $moduleAccessInformation[$module]['updateable'];
+		//$this->viewButtonCreate = $moduleAccessInformation[$module]['createable'];
+		// at this moment vtiger CRM has these two concepts together so, although REST has them
+		// separate, create always comes true so we ignore it and map it to the edit permissions
+		$this->viewButtonCreate = $this->viewButtonEdit;
+		$this->viewButtonSearch = $moduleAccessInformation[$module]['retrieveable'];
+	}
+
+	public function vtyii_canCreate($module) {
+		$moduleAccessInformation = Yii::app()->cache->get('moduleAccessInformation');
+		//return $moduleAccessInformation[$module]['createable'];
+		// at this moment vtiger CRM has these two concepts together so, although REST has them
+		// separate, create always comes true so we ignore it and map it to the edit permissions
+		return $moduleAccessInformation[$module]['updateable'];
+	}
+
+	public function vtyii_canEdit($module) {
+		$moduleAccessInformation = Yii::app()->cache->get('moduleAccessInformation');
+		// normally to decide this we would need to consult the permission not only on the module
+		// but also the record ID. I count on the vtiger CRM REST interface for the record ID decision
+		// As is, the REST will only return records the configured user has access to, so for any ID
+		// that can be passed in through the application the module edit permission is valid
+		// for any ID that can be forced into the URL, instead of calling REST to find out, we will send
+		// it in and get a REST error in return
+		return $moduleAccessInformation[$module]['updateable'];
+	}
+
+	public function vtyii_canDelete($module) {
+		$moduleAccessInformation = Yii::app()->cache->get('moduleAccessInformation');
+		// normally to decide this we would need to consult the permission not only on the module
+		// but also the record ID. I count on the vtiger CRM REST interface for the record ID decision
+		// As is, the REST will only return records the configured user has access to, so for any ID
+		// that can be passed in through the application the module edit permission is valid
+		// for any ID that can be forced into the URL, instead of calling REST to find out, we will send
+		// it in and get a REST error in return
+		return $moduleAccessInformation[$module]['deleteable'];
 	}
 
 	/**
@@ -98,6 +141,12 @@ class VtentityController extends Controller
 		unset($_SESSION[$this->modelName]);
 
 		$model=new $this->modelName;
+		if (!$this->vtyii_canCreate($model->getModule())) {
+			$response = new AjaxResponse();
+			$response->addNotification('error', Yii::t('core', 'error'), Yii::t('core', 'errorCreateRow')."<br>".Yii::t('core', 'errorPermssion'));
+			$response->send();
+			return true;
+		}
 		$fields=$model->getWritableFieldsArray();
 		$uitypes=$model->getUItype();
                 $model->setIsNewRecord(true);
@@ -147,7 +196,13 @@ class VtentityController extends Controller
 	public function actionUpdate()
 	{
 		$this->_model=null;
-                $model=$this->loadModel(false);
+		$model=$this->loadModel(false);
+		if (!$this->vtyii_canEdit($model->getModule())) {
+			$response = new AjaxResponse();
+			$response->addNotification('error', Yii::t('core', 'error'), Yii::t('core', 'errorUpdateRow')."<br>".Yii::t('core', 'errorPermssion'));
+			$response->send();
+			return true;
+		}
 		$fields=$model->getWritableFieldsArray();
 		$uitypes=$model->getUItype();               
 		// Uncomment the following line if AJAX validation is needed
@@ -202,9 +257,15 @@ class VtentityController extends Controller
 		if(Yii::app()->request->isPostRequest)
 		{
 			// we only allow deletion via POST request
-                        $this->_model=null;
-			$result=$this->loadModel()->delete();
-
+			$this->_model=null;
+			$model=$this->loadModel();
+			if (!$this->vtyii_canDelete($model->getModule())) {
+				$response = new AjaxResponse();
+				$response->addNotification('error', Yii::t('core', 'error'), Yii::t('core', 'errorDeleteRow')."<br>".Yii::t('core', 'errorPermssion'));
+				$response->send();
+				return true;
+			}
+			$result=$model->delete();
 			$response = new AjaxResponse();
 			if ($result) {
 				$response->addNotification('success', Yii::t('core', 'success'), Yii::t('core', 'successDeleteRow'));
@@ -226,7 +287,6 @@ class VtentityController extends Controller
 	 */
 	public function actionList()
 	{
-		$this->viewButtonActive=true;
 		$pos=array('pageSize'=>1);
 		if(isset($_GET['dvcpage'])) {
 			$pos['currentPage']=$_GET['dvcpage'];                        
@@ -241,7 +301,9 @@ class VtentityController extends Controller
 		} elseif (isset($_SESSION[$this->modelName])) {                  
 			$model->setAttributes($_SESSION[$this->modelName]);
 		}                                   
-               
+
+		$this->setCRUDpermissions($model->getModule());
+		$this->viewButtonSearch=false;
 		$dataProvider=$model->search($pos);
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
@@ -277,8 +339,10 @@ class VtentityController extends Controller
 		} elseif (isset($_SESSION[$this->entity])) {
 			$model->setAttributes($_SESSION[$this->modelName]);
 		}                
-                        
-		$this->viewButtonSearch=true;
+
+		$this->setCRUDpermissions($model->getModule());
+		$this->viewButtonEdit=false;
+		$this->viewButtonDelete=false;
 		$this->render('admin',array(
 			'model'=>$model,                    
 			'fields'=>$fields,                
@@ -293,7 +357,8 @@ class VtentityController extends Controller
 	{
 		$this->_model=null;
 		$model=$this->loadModel();
-		$this->viewButtonActive=true;
+		$this->setCRUDpermissions($model->getModule());
+		$this->viewButtonSearch=false;
 		$this->render('view',array(
 			'model'=>$model,
 		));

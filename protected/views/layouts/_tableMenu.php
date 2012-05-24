@@ -11,7 +11,7 @@
 							'onclick'=>"chive.goto('".$this->modelLinkName."/".$this->entity."/update/'+$('#entityidValue').val()+'?dvcpage='+$('#dvcpage').val());return false;",
 							),
 				),
-				'visible' => $this->viewButtonActive,
+				'visible' => $this->viewButtonEdit,
 			),
 			array(
 				'label' => Yii::t('core','delete'),
@@ -23,7 +23,7 @@
 							'onclick' => "return deleteRecord($('#entityidValue').val(),".CJavaScript::encode(Yii::t('zii','Are you sure you want to delete this item?')).",'".$this->entity."','".$this->modelLinkName."');",
 							),
 				),
-				'visible' => $this->viewButtonActive,
+				'visible' => $this->viewButtonDelete,
 			),
 			array(
 				'label' => Yii::t('core','insert'),
@@ -32,7 +32,7 @@
 					'url' => $this->modelLinkName."/".$this->entity.'/create',
 					'htmlOptions' => array('class'=>'icon'),
 				),
-				'visible' => true,
+				'visible' => $this->viewButtonCreate,
 			),
 			array(
 				'label' => Yii::t('core','search'),

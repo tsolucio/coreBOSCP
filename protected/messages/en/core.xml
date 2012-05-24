@@ -121,6 +121,7 @@
 	<entry id="errCheckCredentials">Please check your login credentials.</entry>
 	<entry id="errExpiredSupport">Support period has expired. Please contact your providor.</entry>
 	<entry id="errConnection">Connection with main application has failed.</entry>
+	<entry id="errPermission">Permission to execute this operation is denied.</entry>
 	<entry id="save">Save</entry>
 	<entry id="create">Create</entry>
 	<entry id="yourAccessInfo">Access Information</entry>

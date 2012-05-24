@@ -2282,6 +2282,17 @@ abstract class VTActiveResource extends CModel
 			else {
 				$moduledata = $clientvtiger->doDescribe($module);
 				$labelFields=$moduledata["labelFields"];
+				$moduleAccessInformation = Yii::app()->cache->get('moduleAccessInformation');
+				if($moduleAccessInformation===false){
+					$moduleAccessInformation=array();
+				}
+				$moduleAccessInformation[$module]=array(
+						'createable' => $moduledata['createable'],
+						'updateable' => $moduledata['updateable'],
+						'deleteable' => $moduledata['deleteable'],
+						'retrieveable' => $moduledata['retrieveable'],
+						);
+				Yii::app()->cache->set( 'moduleAccessInformation' , $moduleAccessInformation);
 			}
 			Yii::app()->cache->set( $api_cache_id , $labelFields);
 		}

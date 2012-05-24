@@ -37,4 +37,37 @@ class vtyiicpngButtonColumn extends CButtonColumn
 		if($js!==array())
 			Yii::app()->getClientScript()->registerScript(__CLASS__.'#'.$this->id, implode("\n",$js));
 	}
+
+	protected function checkButtons($data, $id) {
+		$moduleAccessInformation = Yii::app()->cache->get('moduleAccessInformation');
+		switch ($id) {
+			case 'delete':
+				$ret = $moduleAccessInformation[$data->getModule()]['deleteable'];
+				break;
+			case 'update':
+				$ret = $moduleAccessInformation[$data->getModule()]['updateable'];
+				break;
+			case 'view':
+				$ret = $moduleAccessInformation[$data->getModule()]['retrieveable'];
+				break;
+			default:
+				$ret = true;
+				break;
+		}
+		return $ret;
+	}
+	
+	protected function renderDataCellContent($row, $data) {
+		$tr = array();
+		ob_start();
+		foreach ($this->buttons as $id => $button) {
+			if ($this->checkButtons($data, $id)) {
+				$this->renderButton($id, $button, $row, $data);
+			}
+			$tr['{' . $id . '}'] = ob_get_contents();
+			ob_clean();
+		}
+		ob_end_clean();
+		echo strtr($this->template, $tr);
+	}
 }
