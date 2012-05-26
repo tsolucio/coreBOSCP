@@ -25,6 +25,9 @@ Files and directories
 => protected/components/vtwsclib/extensions
   contains vtiger CRM webservice enhancements necessary to support the vtyiiCPng project
 
+=> protected/patches
+  contains patch files with tests and other functionality examples (like three column detail view patch)
+
 => protected/config/devel.php and protected/config/devel.template.php
   the main.php config file loads the protected/config/devel.php file to override the configuration
   values with developers dependent values. There is an example of the structure of the file in
@@ -39,5 +42,5 @@ Files and directories
   inside the directory the file VERSION is a text file with the exact version used, the file LICENSE
   is the yii framework license and the files vtyiiCPng.* detail the modifications that have been made
   to the base code framework files in case an upgrade is needed. If no vtyiiCPng.* file exist it is
-  beacuse no change was required (which should be the normal case)
+  because no change was required (which should be the normal case)
 

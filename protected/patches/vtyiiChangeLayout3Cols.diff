@@ -1,0 +1,51 @@
+Index: protected/views/vtentity/_view.php
+===================================================================
+--- protected/views/vtentity/_view.php	(revisión: 289)
++++ protected/views/vtentity/_view.php	(copia de trabajo)
+@@ -3,6 +3,9 @@
+ 	$this->widget('zii.widgets.CDetailView', array(
+ 		'data'=>$data,
+ 		'attributes'=>$data->getDetailViewFields(),
++		'tagName'=>'ul',
++		'itemTemplate'=>"<li class=\"{class}\"><label>{label}</label>{value}</li>\n",
++		'itemCssClass'=>array('col1','col2','col3'),
+ 		'cssFile'=>BASEURL.'/themes/'.Yii::app()->getTheme()->getName().'/css/list.css',
+ 	));
+ 	echo CHTML::hiddenField('entityidValue',$data->__get($this->entityidField), array('id'=>'entityidValue'));
+Index: themes/standard/css/list.css
+===================================================================
+--- themes/standard/css/list.css	(revisión: 289)
++++ themes/standard/css/list.css	(copia de trabajo)
+@@ -274,5 +274,31 @@
+ 	{
+ 		content: url('../../../images/blank.gif');
+ 	}
++
++	.view li{
++		list-style:none;
++		padding-bottom:8px;
++		float:left;
++		width:32%;
++		height: 30px;
++		color: #000;
++		background: #E0E0E0;
++		border: 2px outset #d7b9c9;
++	}
+ 	
++	.view li label{
++		font-weight: bold;
++		width: 140px;
++		float: left;
++		text-align: right;
++		margin-right: 0.7em;
++		display: block;
++	}
++	.col3{
++		clear: right;
++	}
++	.col1{
++		clear: left;
++	}
++
+ }
+\ No newline at end of file
