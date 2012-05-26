@@ -102,15 +102,15 @@ var chive = {
 			.ajaxStart(function() {
 				if(this.loadingIndicator)
 				{
-					$('#loading').css({'background-image': 'url(../images/loading4.gif)'}).fadeIn();
+					$('#loading').css({'background-image': 'url(images/loading4.gif)'}).fadeIn();
 				}
 			})
 			.ajaxStop(function() {
-				$('#loading').css({'background-image': 'url(../images/loading5.gif)'}).fadeOut();
+				$('#loading').css({'background-image': 'url(images/loading5.gif)'}).fadeOut();
 			})
 			.ajaxError(function(error, xhr) {
 				Notification.add('ajaxerror', lang.get('core', 'ajaxRequestFailed'), lang.get('core', 'ajaxRequestFailedText'), xhr.responseText);
-				$('#loading').css({'background-image': 'url(../images/loading5.gif)'}).fadeOut();
+				$('#loading').css({'background-image': 'url(images/loading5.gif)'}).fadeOut();
 			});
 
 	},
@@ -159,11 +159,11 @@ var chive = {
 	
 	ajaxloading: function(id, data)
 	{	
-		$('#loading').css({'background-image': 'url(../images/loading4.gif)'}).fadeIn();
+		$('#loading').css({'background-image': 'url(images/loading4.gif)'}).fadeIn();
 	},
 	ajaxloaded: function(id, data)
 	{	
-		$('#loading').css({'background-image': 'url(../images/loading5.gif)'}).fadeOut();
+		$('#loading').css({'background-image': 'url(images/loading5.gif)'}).fadeOut();
 	},
 
 	/*
