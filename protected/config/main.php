@@ -18,16 +18,15 @@
  */
 
 define('URL_MATCH', '([^\/]*)');
+require(dirname(__FILE__).'/PortalConfig.php');
 
 $mainConfig=array(
 	'basePath' => dirname(__FILE__) . DIRECTORY_SEPARATOR . '..',
 	'name' => 'vtigerCRM vtyiiCPng',
 	'theme' => 'standard',
-	'site'=>'http://studiosynthesisdemo.com/cpvtiger',
-	'resource'=>'Accounts',
-	'loginuser'=>'admin',
-	'accesskey'=>'U7f44ZhKCZ8ZTkZU',
-        //'accesskey'=>'2x3JIqix9MzwErR',
+	'site'=>$vtyiicpng_Server_Path,
+	'loginuser'=>$vtyiicpng_Login_User,
+	'accesskey'=>$vtyiicpng_Access_Key,
 
 	// Activate debuging
 	'debug'=>true,

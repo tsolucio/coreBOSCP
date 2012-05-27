@@ -20,7 +20,6 @@ class VTActiveResourceMetaData
 
     public $schema; 
     public $site;
-    public $resource;
     public $container;
     public $embedded;
     public $fileextension;

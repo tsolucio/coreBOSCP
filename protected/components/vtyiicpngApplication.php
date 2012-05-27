@@ -19,7 +19,6 @@
 class vtyiiCPngApplication extends CWebApplication
 {
 	public $site;
-	public $resource;
 	public $loginuser;
 	public $accesskey;
 	public $vtyiicpngScope;

@@ -708,17 +708,17 @@ abstract class VTActiveResource extends CModel
      * <p>
      * <b>site</b>: Defines the baseUri of the REST service. Example.: http://iamaRESTapi/apiversion
      * <p>
-     * <b>resource</b>:  the actual uri of the resource. Example: If we want to use a modelclass to represent resources of people the resource could be 'people' which would lead to an uri like 'http://iamaRESTapi/apiversion/people'.
+     * <b>loginuser</b>: vtiger CRM user to access the main application with
      * <p>
-     * <b>idProperty</b>: The id property of this class. If the service returns responses including the resource id then you should specify this attribute here. Example: The service response contains a valuefield called "_id" with the value "1". Specify "_id" as the idProperty in your configuration. Now update requests would automatically look for a field called "_id" and send their requests to 'http://iamaRESTapi/apiversion/people/1'
-     * <p>
-     * <b>container</b>: Sometimes all responses include additional meta information about a request or the number of hits etc and the actual modelobject is contained within a container like 'result'. If this is the case you can specify this container here to allow ActiveResource to only load attributes specified within this container (e.g.: "results").
+     * <b>accesskey</b>: vtiger CRM user's access key to use with webservice interface
      * <p>
      * <b>contenttype</b>: Defines the content type that is send via HTTP header and is used to determine how the data has to be converted from php. If you use 'application/json' then data will automatically be converted to JSON.
      * <p>
      * <b>accepttype</b>: Defines the accept type send via HTTP header. It is also used to convert the response back to a php readable format like an array of attributes. Define application/json to automatically convert JSON responses to PHP arrays.
      * <p>
      * <b>fileExtension</b>: This is used to append something like '.json' to every GET request. This can be useful if the service doesn't respect headers but uses a formatextension to know what type of response you are looking for. Always remember to use a '.' in front of the extension!
+     * <p>
+     * <b>container</b>: Sometimes all responses include additional meta information about a request or the number of hits etc and the actual modelobject is contained within a container like 'result'. If this is the case you can specify this container here to allow ActiveResource to only load attributes specified within this container (e.g.: "results").
      * <p>
      * <b>embedded</b>: Some services respond with an complex object containing other resources (like Twitter does by also returning user objects when requesting statuses). If you know that a certain field (like 'user') contains another object that you defined already defined as a subclass of VTActiveResource than use the following syntax:
      * <ul>
@@ -732,10 +732,8 @@ abstract class VTActiveResource extends CModel
     {
         return array(
 			'site'=>Yii::app()->site,
-			'resource'=>Yii::app()->resource,
 			'loginuser'=>Yii::app()->loginuser,
 			'accesskey'=>Yii::app()->accesskey,
-			//'idProperty'=>$this->idProperty,
 			'contenttype'=>'application/json',
 			'accepttype'=>'application/json',
 			'fileextension'=>'.json',
@@ -1474,7 +1472,7 @@ abstract class VTActiveResource extends CModel
      */
     public function equals($resource)
     {
-    	return $this->getSite()===$resource->getSite() && $this->getResource()===$resource->getResource() && $this->getId()===$resource->getId();
+    	return $this->getSite()===$resource->getSite() && $this->getModule()===$resource->getModule() && $this->getId()===$resource->getId();
     }
     
     /**
@@ -2159,15 +2157,6 @@ abstract class VTActiveResource extends CModel
     public function getSite()
     {
         return $this->getMetaData()->site;
-    }
-
-    /**
-     * Returns the resource as specified within Configuration()
-     * @return string
-     */
-    public function getResource()
-    {
-        return $this->getMetaData()->resource;
     }
 
     /**

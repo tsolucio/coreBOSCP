@@ -17,27 +17,13 @@
  *
  */
 
-$mainConfig= CMap::mergeArray(
-	$mainConfig,
-	array(
-	'site'=>'http://localhost/vtcpng',
-	'loginuser'=>'admin',
-	'accesskey'=>'U7f44ZhKCZ8ZTkZU',
+//This is the vtiger CRM server path i.e., the url to access the vtiger CRM server in browser
+//Ex. if you access your vtiger CRM with http://mickie:90/vtiger/index.php you will use http://mickie:90/vtiger
+$vtyiicpng_Server_Path = "http://mickie:90/vtiger";
 
-	// application components
-	'components' => array(
-	
-		// Database settings
-		/*
-		'db' => array(
-			'class' => 'CDbConnection',
-			'connectionString' => 'mysql:host=localhost;dbname=vt_ts521devel',
-			'charset' => 'utf8',
-			'username' => 'root',
-			'password' => '',
-			'schemaCachingDuration' => 3600,
-			'emulatePrepare' => true,
-		),
-		*/
-	),
-));
+// The next two variables define the portal webservice user to be used to connect to the vtiger CRM server
+// This user must be created and configured in your vtiger CRM application
+$vtyiicpng_Login_User='admin';
+$vtyiicpng_Access_Key='U7f44ZhKCZ8ZTkZU';
+
+?>
