@@ -42,6 +42,7 @@ class VtentityController extends Controller
 	public $viewButtonDelete=false;
 	public $viewButtonCreate=false;
 	public $viewButtonSearch=false;
+	public $viewButtonDownloadPDF=false;
 
 	public function __construct($id,$module)
 	{
@@ -114,7 +115,7 @@ class VtentityController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view','list','AutoCompleteLookup','Download'),
+				'actions'=>array('index','view','list','AutoCompleteLookup','Download','DownloadPDF'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -304,6 +305,7 @@ class VtentityController extends Controller
 
 		$this->setCRUDpermissions($model->getModule());
 		$this->viewButtonSearch=false;
+		$this->viewButtonDownloadPDF=true;
 		$dataProvider=$model->search($pos);
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
@@ -431,11 +433,37 @@ class VtentityController extends Controller
 		$saveasfile = "protected/runtime/cache/_".$_GET['id'];
 		if(file_exists($saveasfile)) {
 			header("Content-type: ".$_GET['ft']);
+			header("Content-Type: application/download");
 			header("Pragma: public");
 			header("Cache-Control: private");
 			header("Content-Disposition: attachment; filename=".$_GET['fn']);
-			header("Content-Description: vtyyicpng download");
+			header("Content-Description: vtyiicpng download");
 			readfile($saveasfile);
+		}
+	}
+
+	public function actionDownloadPDF() {
+		$model=Vtentity::model();
+		$clientvtiger=$model->getClientVtiger();
+		if(!$clientvtiger) {
+			Yii::log('login failed');
+			$recordInfo=0;
+		} else {
+			$recordInfo = $clientvtiger->doInvoke('getpdfdata',array('id'=>$_GET['id']));
+		}
+		if(empty($recordInfo) || !$recordInfo) {
+			return null;
+		} else {
+			header("Content-Type: application/force-download");
+			header('Content-Type: application/pdf');
+			header("Content-Type: application/download");
+			header("Expires: 0"); // set expiration time
+			header("Pragma: public");
+			header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+			$fn=$model->getModuleName().$recordInfo[0]['recordid'];
+			header("Content-Disposition: attachment; filename=$fn.pdf");
+			header("Content-Description: vtyiicpng download PDF");
+			echo base64_decode($recordInfo[0]['pdf_data']);
 		}
 	}
 

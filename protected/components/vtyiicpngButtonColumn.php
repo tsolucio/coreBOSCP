@@ -50,6 +50,10 @@ class vtyiicpngButtonColumn extends CButtonColumn
 			case 'view':
 				$ret = $moduleAccessInformation[$data->getModule()]['retrieveable'];
 				break;
+			case 'dlpdf':
+				$mod = $data->getModule();
+				$ret = $moduleAccessInformation[$mod]['retrieveable'] && in_array($mod,array('Invoice','Quotes','SalesOrder','PurchaseOrder'));
+				break;
 			default:
 				$ret = true;
 				break;

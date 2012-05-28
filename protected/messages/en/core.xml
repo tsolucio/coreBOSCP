@@ -17,6 +17,7 @@
 	<entry id="doYouReallyWantToDeleteBookmark">Do you really want to delete the bookmark?</entry>
 	<entry id="doYouReallyWantToDeleteSelectedRows">Do you really want to delete the selected row(s)?</entry>
 	<entry id="download">Download</entry>
+	<entry id="downloadpdf">Download PDF</entry>
 	<entry id="drop">Drop</entry>
 	<entry id="dropUsers">Drop users</entry>
 	<entry id="edit">Edit</entry>

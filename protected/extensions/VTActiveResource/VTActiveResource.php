@@ -1647,7 +1647,7 @@ abstract class VTActiveResource extends CModel
     	if (!$this->doDereference) return $recinfo;
     	$all_attachments=array();
     	$simplerdo=false;
-    	if (!is_array($recinfo['0'])) {
+    	if (empty($recinfo['0']) or !is_array($recinfo['0'])) {
     		$simplerdo=true;
     		$recinfo=array('0'=>$recinfo);
     	}
@@ -1703,7 +1703,8 @@ abstract class VTActiveResource extends CModel
     						$this->writeAttachment2Cache($idatt,$all_attachments[$idatt]['attachment']);
     						$value='<a href=\'javascript: filedownload.download("'.yii::app()->baseUrl.'/index.php/vtentity/'.$this->getModule().'/download/'.$idatt.'?fn='.CHtml::encode($all_attachments[$idatt]['filename']).'&ft='.CHtml::encode($all_attachments[$idatt]['filetype']).'","")\'>'.CHtml::encode($all_attachments[$idatt]['filename'])."</a>";
     					} else {
-    						$value=CHtml::encode($all_attachments[$idatt]['filename']);
+    						$fname = (empty($all_attachments[$idatt]['filename']) ? yii::t('core', 'none') : $all_attachments[$idatt]['filename']);
+    						$value=CHtml::encode($fname);
     					}
     					$recinfo[$i]['filename']=$value;
     				}
@@ -2680,7 +2681,7 @@ abstract class VTActiveResource extends CModel
     public function getPicklistValues($fieldname)
     {    	
     	$allpicklists=$this->getAllPicklistsValuesModule();
-        return $allpicklists[$fieldname];
+        return (empty($allpicklists[$fieldname]) ? array() : $allpicklists[$fieldname]);
     }
     public function getAllPicklistsValuesModule(){
         $module = $this->getModule();

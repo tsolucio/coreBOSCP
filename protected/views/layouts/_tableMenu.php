@@ -43,17 +43,15 @@
 				),
 				'visible' => $this->viewButtonSearch,
 			),
-			/*
 			array(
-				'label' => Yii::t('core','drop'),
-				'icon' => 'delete',
+				'label' => Yii::t('core','downloadpdf'),
+				'icon' => ICONPATH . '/16/pdf_icon_16.gif',
 				'link' => array(
 					'url' => 'javascript:void(0)',
-					'htmlOptions' => array('class'=>'icon', 'onclick'=>'tableGeneral.drop()'),
+					'htmlOptions' => array('class'=>'icon', 'onclick'=>'javascript: filedownload.download(\''.yii::app()->baseUrl.'/index.php/vtentity/'.$this->entity."/downloadpdf/'+$('#entityidValue').val(),'');return false;"),
 				),
-				'visible' => Yii::app()->user->privileges->hasPermission($this->modelLinkName, $this->module, 'DROP'),
+				'visible' => $this->viewButtonDownloadPDF && in_array($this->entity,array('Invoice','Quotes','SalesOrder','PurchaseOrder')),
 			),
-			*/
 			array(
 				'label' => Yii::t('core','export'),
 				'icon' => 'export',

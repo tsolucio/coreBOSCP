@@ -38,7 +38,7 @@ $('.search-form form').submit(function(){
 		$model->gridViewColumns(),// $model->getDetailGridFields($lvfields,$lvlinkfields), this worked in ENTITY
 		array(array(
 			'class'=>'vtyiicpngButtonColumn',
-			'template'=>'{view}{update}{delete}', //{related}',               
+			'template'=>'{view}{update}{delete}{dlpdf}', //{related}',               
 			'header'=>CHtml::dropDownList('pageSize',
 				$pageSize,
 				array(5=>5,10=>10,20=>20,30=>30,50=>50,100=>100),
@@ -54,6 +54,13 @@ $('.search-form form').submit(function(){
 			'deleteButtonUrl'=>'"index.php/'.$model->modelLinkName.'/'.$model->getModule().'/delete/".$data["'.$model->entityidField.'"]',
 			//'deleteConfirmation'=>CJavaScript::encode(Yii::t("zii","Are you sure you want to delete this item?")),
 			'afterDelete'=>'function (link, success, data) {AjaxResponse.handle(data);}',
+			'buttons'=>array(
+				'dlpdf' => array (
+					'label'=>Yii::t('core', 'downloadpdf'),
+					'imageUrl'=>ICONPATH . '/16/pdf_icon_16.gif',
+					'url'=>'"javascript: filedownload.download(\''.yii::app()->baseUrl.'/index.php/vtentity/'.$model->getModule().'/downloadpdf/".$data["'.$model->entityidField."\"].\"','')\"",
+				),
+			),
 		/*
 			'buttons'=>array(
 		        'related' => array (

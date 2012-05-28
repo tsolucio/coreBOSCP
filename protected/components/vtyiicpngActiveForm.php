@@ -229,7 +229,7 @@ class vtyiicpngActiveForm extends CActiveForm
                                                                             document.getElementById(\'Vtentity_filename\').name="Vtentity[filename]";
                                                                             }';
 				if(empty($model->filelocationtype) || $model->getIsNewResource())
-					 $model->setAttribute($fieldname,'E');
+					 $model->setAttribute($fieldname,'I');
 				$widget=$this->dropDownList($model,$fieldname,$plvalues,$htmlopts);
                                 break;
                             case 26:
