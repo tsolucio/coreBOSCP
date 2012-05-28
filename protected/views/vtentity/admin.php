@@ -24,6 +24,7 @@ $('.search-form form').submit(function(){
 </div><!-- search-form -->
 
 <?php
+	$modelURL=$model->modelLinkName.'/'.$model->getModule();
 	$pageSize=Yii::app()->user->settings->get('pageSize');
 	$currentPage = Yii::app()->getRequest()->getParam(get_class($model).'_page',1)-1;
 	$gridOffset="($currentPage*$pageSize)";
@@ -47,18 +48,18 @@ $('.search-form form').submit(function(){
 				)
 			),
 			'viewButtonImageUrl'=>ICONPATH . '/16/view.png',
-			'viewButtonUrl'=>'"#'.$model->modelLinkName.'/'.$model->getModule().'/list/".$data["'.$model->entityidField.'"]."/dvcpage/".('.$gridOffset.'+$row)',
+			'viewButtonUrl'=>'"#'.$modelURL.'/list/".$data["'.$model->entityidField.'"]."/dvcpage/".('.$gridOffset.'+$row)',
 			'updateButtonImageUrl'=>ICONPATH . '/16/edit.png',
-			'updateButtonUrl'=>'"#'.$model->modelLinkName.'/'.$model->getModule().'/update/".$data["'.$model->entityidField.'"]."?dvcpage=".('.$gridOffset.'+$row)',
+			'updateButtonUrl'=>'"#'.$modelURL.'/update/".$data["'.$model->entityidField.'"]."?dvcpage=".('.$gridOffset.'+$row)',
 			'deleteButtonImageUrl'=>ICONPATH . '/16/delete.png',
-			'deleteButtonUrl'=>'"index.php/'.$model->modelLinkName.'/'.$model->getModule().'/delete/".$data["'.$model->entityidField.'"]',
+			'deleteButtonUrl'=>'"index.php/'.$modelURL.'/delete/".$data["'.$model->entityidField.'"]',
 			//'deleteConfirmation'=>CJavaScript::encode(Yii::t("zii","Are you sure you want to delete this item?")),
 			'afterDelete'=>'function (link, success, data) {AjaxResponse.handle(data);}',
 			'buttons'=>array(
 				'dlpdf' => array (
 					'label'=>Yii::t('core', 'downloadpdf'),
 					'imageUrl'=>ICONPATH . '/16/pdf_icon_16.gif',
-					'url'=>'"javascript: filedownload.download(\''.yii::app()->baseUrl.'/index.php/vtentity/'.$model->getModule().'/downloadpdf/".$data["'.$model->entityidField."\"].\"','')\"",
+					'url'=>'"javascript: filedownload.download(\''.yii::app()->baseUrl.'/index.php/'.$modelURL.'/downloadpdf/".$data["'.$model->entityidField."\"].\"','')\"",
 				),
 			),
 		/*
@@ -83,7 +84,7 @@ $('.search-form form').submit(function(){
 	)); ?>
 
 <script type="text/javascript">
-breadCrumb.add({ icon: 'browse', href: 'javascript:chive.goto(\'<?php echo $this->modelLinkName;?>/<?php echo $this->entity;?>/index\')', text: '<?php echo $model->getModuleName(); ?>'});
+breadCrumb.add({ icon: 'browse', href: 'javascript:chive.goto(\'<?php echo $modelURL;?>/index\')', text: '<?php echo $model->getModuleName(); ?>'});
 breadCrumb.show();
 sideBar.activate(0);
 </script>
