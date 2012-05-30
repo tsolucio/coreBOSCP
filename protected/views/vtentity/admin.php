@@ -16,7 +16,7 @@ $('.search-form form').submit(function(){
 <h1><?php echo $model->getModuleName(); ?></h1>
 
 <div class="search-form" style="display:none">
-<?php $this->renderPartial('_search',array(
+<?php $this->renderPartial('//vtentity/_search',array(
 	'model'=>$model,
 	'fields'=>$fields,
 	'uitypes'=>$uitypes,

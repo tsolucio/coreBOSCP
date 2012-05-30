@@ -9,7 +9,7 @@ if(($cache=Yii::app()->cache)!==null) {
 	$modname=Yii::t('core', $model->getModule());
 }
 ?>
-<?php echo $this->renderPartial('_form', 
+<?php echo $this->renderPartial('//vtentity/_form', 
         array('model'=>$model,
             'fields'=>$fields,
             'uitypes'=>$uitypes,

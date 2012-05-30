@@ -1,4 +1,4 @@
- <?php echo $this->renderPartial('_form', array(
+ <?php echo $this->renderPartial('//vtentity/_form', array(
     'model'=>$model,
     'fields'=>$fields,
     'uitypes'=>$uitypes,

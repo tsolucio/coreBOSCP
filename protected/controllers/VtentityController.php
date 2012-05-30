@@ -27,7 +27,7 @@ class VtentityController extends Controller
 	/**
 	 * @var Controller variables
 	 */
-	private $_model;
+	public $_model;
 	public $modelName='Vtentity';
 	public $modelLinkName='vtentity';
 	public $entity;  // vtiger CRM entity name
@@ -173,13 +173,13 @@ class VtentityController extends Controller
 				$response->redirectUrl = '#'.$this->modelLinkName.'/'.$this->entity.'/view/' . $model->__get($this->entityidField);
 			} else {
 				$response->addNotification('error', Yii::t('core', 'error'), Yii::t('core', 'errorCreateRow')."<br>".$model->getLastError());
-				$response->addData(null, $this->render('create',array('model'=>$model,'fields'=>$fields,'uitypes'=>$uitypes),true));
+				$response->addData(null, $this->render('//vtentity/create',array('model'=>$model,'fields'=>$fields,'uitypes'=>$uitypes),true));
 			}
 			$response->send();
 			return true;
 		}
 
-		$this->render('create',array(
+		$this->render('//vtentity/create',array(
 			'model'=>$model,
 			'fields'=>$fields,
 			'uitypes'=>$uitypes,
@@ -229,13 +229,13 @@ class VtentityController extends Controller
 				$response->redirectUrl = '#'.$this->modelLinkName.'/'.$this->entity.'/list/' . $model->__get($this->entityidField).'/dvcpage/'.$_POST['dvcpage'];
 			} else {
 				$response->addNotification('error', Yii::t('core', 'error'), Yii::t('core', 'errorUpdateRow')."<br>".$model->getLastError());
-				$response->addData(null, $this->render('update',array('model'=>$model,'fields'=>$fields,'uitypes'=>$uitypes),true));
+				$response->addData(null, $this->render('//vtentity/update',array('model'=>$model,'fields'=>$fields,'uitypes'=>$uitypes),true));
 			}
 			$response->send();
 			return true;
 		}
 
-		$this->render('update',array(
+		$this->render('//vtentity/update',array(
 			'model'=>$model,
 			'fields'=>$fields,
 			'uitypes'=>$uitypes,
@@ -303,7 +303,7 @@ class VtentityController extends Controller
 		$this->viewButtonSearch=false;
 		$this->viewButtonDownloadPDF=true;
 		$dataProvider=$model->search($pos);
-		$this->render('index',array(
+		$this->render('//vtentity/index',array(
 			'dataProvider'=>$dataProvider,
 			'model'=>$model,
 		));
@@ -341,7 +341,7 @@ class VtentityController extends Controller
 		$this->setCRUDpermissions($model->getModule());
 		$this->viewButtonEdit=false;
 		$this->viewButtonDelete=false;
-		$this->render('admin',array(
+		$this->render('//vtentity/admin',array(
 			'model'=>$model,                    
 			'fields'=>$fields,                
 			'uitypes'=>$uitypes,
@@ -357,7 +357,7 @@ class VtentityController extends Controller
 		$model=$this->loadModel();
 		$this->setCRUDpermissions($model->getModule());
 		$this->viewButtonSearch=false;
-		$this->render('view',array(
+		$this->render('//vtentity/view',array(
 			'model'=>$model,
 		));
 	}

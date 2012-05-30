@@ -2,7 +2,7 @@
 
 <?php $this->widget('zii.widgets.CListView', array(
 	'dataProvider'=>$dataProvider,
-	'itemView'=>'_view',
+	'itemView'=>'//vtentity/_view',
 	'enableSorting'=>false,
 	'template'=>"{pager}\n{summary}\n{items}\n{pager}",
 	'afterAjaxUpdate'=>'chive.ajaxloaded',
