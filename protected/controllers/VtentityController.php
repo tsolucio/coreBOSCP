@@ -17,10 +17,6 @@
 *
 */
 
-/*
- * READ Project model for instructions on how to customize this for any database table.
- */
-
 class VtentityController extends Controller
 {
 	/**
