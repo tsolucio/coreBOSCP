@@ -147,4 +147,10 @@
   <entry id="invalidEntity">El módulo solicitado no existe en vtiger CRM.</entry>
   <entry id="Internal">Interno</entry>
   <entry id="External">Externo</entry>
+  <entry id="product">Producto</entry>
+  <entry id="category">Categoría</entry>
+  <entry id="createdtime">Fecha creación</entry>
+  <entry id="modifiedtime">Fecha Modificación</entry>
+  <entry id="attachments">Adjuntos</entry>
+  <entry id="comments">Comentarios</entry>
 </category>

@@ -114,6 +114,14 @@ $mainConfig=array(
             	// Base entity model
 				'vtentity/notranslate/index'=>'site/notranslate',
 				'vtentity/<module:'.URL_MATCH.'>/AutoCompleteLookup'=>'vtentity/AutoCompleteLookup',
+
+            	// Faq module specific class
+            	'vtentity/<module:Faq>'=>'faq/index',
+            	'vtentity/<module:Faq>/<action:'.URL_MATCH.'>'=>'faq/<action>',
+            	'vtentity/<module:Faq>/<action:'.URL_MATCH.'>/<id:'.URL_MATCH.'>'=>'faq/<action>',
+            	'vtentity/<module:Faq>/list/<id:'.URL_MATCH.'>/dvcpage/<dvcpage:'.URL_MATCH.'>'=>'faq/list',
+
+            	// Default vtentity behaviour
             	'vtentity/<module:'.URL_MATCH.'>'=>'vtentity/index',
             	'vtentity/<module:'.URL_MATCH.'>/<action:'.URL_MATCH.'>'=>'vtentity/<action>',
             	'vtentity/<module:'.URL_MATCH.'>/<action:'.URL_MATCH.'>/<id:'.URL_MATCH.'>'=>'vtentity/<action>',

@@ -26,6 +26,7 @@
 @import "pagination.css";
 @import "code.css";
 @import "../jquery-ui/start.css";
+@import 'faq.css'; /* Import CSS for special FAQ views */
 
 @media screen, projection
 {
