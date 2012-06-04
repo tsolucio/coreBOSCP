@@ -156,6 +156,10 @@ class Vtentity extends CActiveRecord
 		));
 	}
 
+	public function GetRelatedRecords($relatedModule,$productDiscriminator='') {
+		$cvt = $this->getClientVtiger();
+		return $cvt->doGetRelatedRecords($this->getId(), $this->getModule(), $relatedModule, $productDiscriminator);
+	}
 	/**
 	 * Get widget for all available fields
 	 * @param array $htmloptionsAllFields array of fieldname => htmloptions for the field layout

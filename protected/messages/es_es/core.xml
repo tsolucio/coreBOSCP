@@ -18,6 +18,7 @@
   <entry id="doYouReallyWantToDeleteSelectedRows">¿Realmente quiere eliminar las filas seleccionadas?</entry>
   <entry id="download">Descargar</entry>
   <entry id="downloadpdf">Descargar PDF</entry>
+  <entry id="downloads">Descargas</entry>
   <entry id="drop">Quitar</entry>
   <entry id="dropUsers">Quitar usuarios</entry>
   <entry id="edit">Editar</entry>
@@ -153,4 +154,7 @@
   <entry id="modifiedtime">Fecha Modificación</entry>
   <entry id="attachments">Adjuntos</entry>
   <entry id="comments">Comentarios</entry>
+  <entry id="title">Título</entry>
+  <entry id="reference">Referencia</entry>
+  <entry id="description">Descripción</entry>
 </category>

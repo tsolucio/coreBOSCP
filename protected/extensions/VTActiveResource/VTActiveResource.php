@@ -2203,6 +2203,7 @@ abstract class VTActiveResource extends CModel
 	public function setId($value)
 	{
 		$this->_id=$value;
+		$this->id=$value;
 	}        
 
     public function getItemCount($refresh=false)

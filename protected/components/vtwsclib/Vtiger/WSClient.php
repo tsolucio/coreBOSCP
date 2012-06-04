@@ -384,5 +384,28 @@ class WSClient {
 		return $resultdata['result'];
 	}
 
+	/**
+	 * Retrieve related records.
+	 */
+	function doGetRelatedRecords($record, $module, $relatedModule, $productDiscriminator) {
+		// Perform re-login if required.
+		$this->__checkLogin();
+	
+		$postdata = Array(
+			'operation' => 'getRelatedRecords',
+			'sessionName'  => $this->_sessionid,
+			'id' => $record,
+			'module' => $module,
+			'relatedModule' => $relatedModule,
+			'productDiscriminator' => $productDiscriminator,
+		);
+		$resultdata = $this->_client->doPost($postdata, true);
+		yii::log(CVarDumper::dumpAsString($postdata));
+		if($this->hasError($resultdata)) {
+			return false;
+		}
+		return $resultdata['result']['records'];
+	}
+
 }
 ?>

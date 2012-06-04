@@ -18,6 +18,7 @@
 	<entry id="doYouReallyWantToDeleteSelectedRows">Do you really want to delete the selected row(s)?</entry>
 	<entry id="download">Download</entry>
 	<entry id="downloadpdf">Download PDF</entry>
+	<entry id="downloads">Downloads</entry>
 	<entry id="drop">Drop</entry>
 	<entry id="dropUsers">Drop users</entry>
 	<entry id="edit">Edit</entry>
@@ -153,4 +154,7 @@
 	<entry id="modifiedtime">Modified on</entry>
 	<entry id="attachments">Attachments</entry>
 	<entry id="comments">Comments</entry>
+	<entry id="title">Title</entry>
+	<entry id="reference">Reference</entry>
+	<entry id="description">Description</entry>
 </category>
