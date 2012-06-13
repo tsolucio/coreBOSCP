@@ -400,7 +400,6 @@ class WSClient {
 			'productDiscriminator' => $productDiscriminator,
 		);
 		$resultdata = $this->_client->doPost($postdata, true);
-		yii::log(CVarDumper::dumpAsString($postdata));
 		if($this->hasError($resultdata)) {
 			return false;
 		}

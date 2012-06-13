@@ -332,7 +332,7 @@ class Vtentity extends CActiveRecord
                                 	$this->writeAttachment2Cache($id,$attachmentsdata[$id]['attachment']);
                                 	$value='<a href=\'javascript: filedownload.download("'.yii::app()->baseUrl.'/index.php/vtentity/'.$this->getModule().'/download/'.$id.'?fn='.CHtml::encode($attachmentsdata[$id]['filename']).'&ft='.CHtml::encode($attachmentsdata[$id]['filetype']).'","")\'>'.CHtml::encode($attachmentsdata[$id]['filename'])."</a>";
                                 } else {
-                                	$value=CHtml::encode($attachmentsdata[$id]['filename']);
+                                	$value=(empty($attachmentsdata[$id]['filename']) ? yii::t('core', 'none') : CHtml::encode($attachmentsdata[$id]['filename']));
                                 }
                                 $widget=array(
 				'label'=>$label,
