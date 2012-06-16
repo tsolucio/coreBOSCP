@@ -366,10 +366,10 @@ abstract class VTActiveResource extends CModel
     				$condition = array('condition'=>"linktoaccountscontacts='".Yii::app()->user->accountId."' or linktoaccountscontacts='".Yii::app()->user->contactId."'");
     				break;
     			case 'Products':
-    				$condition = array(); //array('condition'=>"account_id='".Yii::app()->user->accountId."'");
+    				$condition = array('condition'=>"related.Contacts='".Yii::app()->user->contactId."'");
     				break;
     			case 'Documents':
-    				$condition = array(); //array('condition'=>"account_id='".Yii::app()->user->accountId."'");
+    				$condition = array('condition'=>"related.Accounts='".Yii::app()->user->accountId."'");
     				break;
     			default:
     				$condition = array();
