@@ -368,8 +368,12 @@ abstract class VTActiveResource extends CModel
     			case 'Products':
     				$condition = array('condition'=>"related.Contacts='".Yii::app()->user->contactId."'");
     				break;
+    			case 'Services':
+    				$condition = array('condition'=>"related.Contacts='".Yii::app()->user->contactId."'");
+    				break;
     			case 'Documents':
-    				$condition = array('condition'=>"related.Accounts='".Yii::app()->user->accountId."'");
+    				// the way the related enhancement is done I know I can filter on crm2, but that is REALLY dependent and basically wrong
+    				$condition = array('condition'=>"related.Contacts='".Yii::app()->user->contactId."' or crm2.crmid = '".Yii::app()->user->accountId."'");
     				break;
     			default:
     				$condition = array();
