@@ -426,7 +426,13 @@ class VtentityController extends Controller
 	}
 
 	public function actionDownload() {
-		$saveasfile = "protected/runtime/cache/_".$_GET['id'];
+		$id=$_GET['id'];
+		$saveasfile = "protected/runtime/cache/_$id";
+		if(!file_exists($saveasfile)) {
+			$model=Vtentity::model();
+			$attachmentsdata=$model->getDocumentAttachment($id,true);
+			$model->writeAttachment2Cache($id,$attachmentsdata[$id]['attachment']);
+		}
 		if(file_exists($saveasfile)) {
 			header("Content-type: ".$_GET['ft']);
 			header("Content-Type: application/download");

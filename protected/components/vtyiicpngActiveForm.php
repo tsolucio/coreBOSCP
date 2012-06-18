@@ -195,7 +195,7 @@ class vtyiicpngActiveForm extends CActiveForm
 			case 29:
 			case 61:
 			case 69:
-//				// Document fields, don't know how to treat these yet
+				// Document fields
                                 if($model->getAttribute('filelocationtype')=='I' || $model->getIsNewResource()){
 				echo $this->textField($model,$fieldname.'_E__',array('style'=>'display:none'));
                                 echo $this->fileField($model,$fieldname,$htmlopts);

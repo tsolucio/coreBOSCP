@@ -1683,7 +1683,7 @@ abstract class VTActiveResource extends CModel
     		}
     	}
     	if(count($ids)>0) {
-    		$all_attachments=$this->getDocumentAttachment (implode(',',$ids));
+    		$all_attachments=$this->getDocumentAttachment (implode(',',$ids),false);
     	}
     	if(count($tobelook)>0){
     		$respvalues=unserialize($this->getComplexAttributeValues($tobelook));
@@ -1704,7 +1704,6 @@ abstract class VTActiveResource extends CModel
     				$idatt=$recinfo[$i]['id'];
     				if(in_array($idatt,array_keys($all_attachments))) {
     					if (!empty($all_attachments[$idatt]['filetype'])) {
-    						$this->writeAttachment2Cache($idatt,$all_attachments[$idatt]['attachment']);
     						$value='<a href=\'javascript: filedownload.download("'.yii::app()->baseUrl.'/index.php/vtentity/'.$this->getModule().'/download/'.$idatt.'?fn='.CHtml::encode($all_attachments[$idatt]['filename']).'&ft='.CHtml::encode($all_attachments[$idatt]['filetype']).'","")\'>'.CHtml::encode($all_attachments[$idatt]['filename'])."</a>";
     					} else {
     						$fname = (empty($all_attachments[$idatt]['filename']) ? yii::t('core', 'none') : $all_attachments[$idatt]['filename']);
@@ -2450,8 +2449,7 @@ abstract class VTActiveResource extends CModel
                     return $tr[$fieldvalue];
         }
 
-        public function getDocumentAttachment($ids){
-                $module = $this->getModule();               
+        public function getDocumentAttachment($ids,$getfile=true){
 		$api_cache_id='getDocumentAttachment'.$ids;
 		$documentAttachment = Yii::app()->cache->get( $api_cache_id  );
 
@@ -2461,7 +2459,7 @@ abstract class VTActiveResource extends CModel
                         $clientvtiger=$this->getClientVtiger();
 			if(!$clientvtiger) Yii::log('login failed',CLogger::LEVEL_ERROR);
 			else {
-				$documentAttachment = $clientvtiger->doInvoke('retrievedocattachment',array('id'=>$ids));
+				$documentAttachment = $clientvtiger->doInvoke('retrievedocattachment',array('id'=>$ids,'returnfile'=>$getfile));
 			}
 			Yii::app()->cache->set( $api_cache_id , $documentAttachment, 3600 );
 		} 
@@ -2470,18 +2468,13 @@ abstract class VTActiveResource extends CModel
 
         public function writeAttachment2Cache($id,$filecontent){
 		$saveasfile = "protected/runtime/cache/_$id";
-		if(!file_exists($saveasfile)) {
-			$fh = fopen($saveasfile, 'wb');
-			fwrite($fh, base64_decode($filecontent));
-			fclose($fh);
-		}
+		$fh = fopen($saveasfile, 'wb');
+		fwrite($fh, base64_decode($filecontent));
+		fclose($fh);
 		return $saveasfile;
         }
 	public function getUsersInSameGroup()
 	{
-		$module = $this->getModule();
-		
-
 		$api_cache_id='getUsersInSameGroup';
 		$usersinsamegroup = Yii::app()->cache->get( $api_cache_id  );
 

@@ -327,10 +327,13 @@ class Vtentity extends CActiveRecord
 //			case 61:
 			case 69:
                                 $id=$this->getId();
-                                $attachmentsdata=$this->getDocumentAttachment($id);
-                                if (!empty($attachmentsdata[$id]['filetype'])) {
-                                	$this->writeAttachment2Cache($id,$attachmentsdata[$id]['attachment']);
-                                	$value='<a href=\'javascript: filedownload.download("'.yii::app()->baseUrl.'/index.php/vtentity/'.$this->getModule().'/download/'.$id.'?fn='.CHtml::encode($attachmentsdata[$id]['filename']).'&ft='.CHtml::encode($attachmentsdata[$id]['filetype']).'","")\'>'.CHtml::encode($attachmentsdata[$id]['filename'])."</a>";
+                                $attr=$this->getAttributesArray();
+                                if (!empty($attr['filetype']) and !empty($attr['filelocationtype']) and $attr['filelocationtype']=='I') {
+                                	if (stripos($attr['filename'],'filedownload.download')) {
+                                		$value=$attr['filename'];
+                                	} else {
+                                		$value='<a href=\'javascript: filedownload.download("'.yii::app()->baseUrl.'/index.php/vtentity/'.$this->getModule().'/download/'.$id.'?fn='.CHtml::encode($attachmentsdata[$id]['filename']).'&ft='.CHtml::encode($attachmentsdata[$id]['filetype']).'","")\'>'.CHtml::encode($attachmentsdata[$id]['filename'])."</a>";
+                                	}
                                 } else {
                                 	$value=(empty($attachmentsdata[$id]['filename']) ? yii::t('core', 'none') : CHtml::encode($attachmentsdata[$id]['filename']));
                                 }
