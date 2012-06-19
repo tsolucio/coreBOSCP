@@ -35,3 +35,16 @@ Index: yii/web/helpers/CHtml.php
  	}
  
  	/**
+Index: yii/zii/widgets/assets/gridview/jquery.yiigridview.js
+===================================================================
+--- yii/zii/widgets/assets/gridview/jquery.yiigridview.js	(revisión: 302)
++++ yii/zii/widgets/assets/gridview/jquery.yiigridview.js	(copia de trabajo)
+@@ -78,7 +78,7 @@
+ 				gridSettings[id] = settings;
+ 
+ 				if (settings.ajaxUpdate.length > 0) {
+-					$(document).on('click', settings.updateSelector, function () {
++					$(document).off('click', settings.updateSelector).on('click', settings.updateSelector, function () {
+ 						$('#' + id).yiiGridView('update', {url: $(this).attr('href')});
+ 						return false;
+ 					});

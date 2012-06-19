@@ -118,7 +118,7 @@
 			<td>
 				<a href="http://jquery.com" class="icon">
 					<?php echo Html::icon('jquery'); ?>
-					<span>jQuery 1.6.1</span>
+					<span>jQuery 1.7.1</span>
 				</a>
 			</td>
 			<td>jQuery is a fast and concise JavaScript Library that simplifies HTML document traversing, event handling, animating, and Ajax interactions for rapid web development.</td>

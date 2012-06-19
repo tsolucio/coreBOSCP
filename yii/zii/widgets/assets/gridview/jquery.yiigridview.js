@@ -78,7 +78,7 @@
 				gridSettings[id] = settings;
 
 				if (settings.ajaxUpdate.length > 0) {
-					$(document).on('click', settings.updateSelector, function () {
+					$(document).off('click', settings.updateSelector).on('click', settings.updateSelector, function () {
 						$('#' + id).yiiGridView('update', {url: $(this).attr('href')});
 						return false;
 					});
