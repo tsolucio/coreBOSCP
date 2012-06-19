@@ -5,7 +5,7 @@
 	'itemView'=>'//vtentity/_view',
 	'enableSorting'=>false,
 	'template'=>"{pager}\n{summary}\n{items}\n{pager}",
-	'afterAjaxUpdate'=>'chive.ajaxloaded',
+	'afterAjaxUpdate'=>'_viewSetBreadcrumb',
 	'beforeAjaxUpdate'=>'chive.ajaxloading',
 	'pager'=>array(
 		'pageSize'=>1,
