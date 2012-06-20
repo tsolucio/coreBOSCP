@@ -2592,6 +2592,8 @@ abstract class VTActiveResource extends CModel
     		foreach ($criteria->params as $clv=>$val) {
     			$cond=str_replace($clv, $this->quoteValue($val), $cond);
     		}
+    		// vtiger CRM does not support parenthesis in conditionals so we eliminate here, any that yii may have put
+    		$cond = str_replace(array('(',')'),'',$cond);
     		if (!empty($cond)) $cond=' where '.$cond;
     		$cond=$this->applyOrder($cond, trim($criteria->order,' "'));
     		$cond=$this->applyLimit($cond, $criteria->limit,$criteria->offset);
