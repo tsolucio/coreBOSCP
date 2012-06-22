@@ -94,38 +94,43 @@ if (count($relDocs)>0) {
 </table>
 </div>
 <?php } // close div attachments
+echo '<div class="faq_comments" id="faq_comments">';
 if (count($relComments)>0) {
+	$this->renderPartial('//faq/_comments',array(
+			'relComments'=>$relComments,
+	));
+}
+echo '</div>'; // close div comments
+
+echo CHTML::hiddenField('entityidValue',$data->__get($this->entityidField), array('id'=>'entityidValue'));
+$pnum = (empty($_GET[$this->modelName.'_page']) ? 1 : $_GET[$this->modelName.'_page']);
+echo CHTML::hiddenField('dvcpage',$pnum-1, array('id'=>'dvcpage'));
 ?>
-<div class="faq_comments">
-<table class="list">
-	<colgroup>
-		<col style="width: 15%;"></col>
-		<col style="width: 85%;"></col>
-	</colgroup>
-	<thead>
-		<tr>
-			<th colspan="2"><?php echo Yii::t('core','comments'); ?></th>
-		</tr>
-	</thead>
-	<tbody>
-	<?php
-		$i=0;
-		foreach ($relComments as $faqc) {
-			echo '<tr class="'.($i % 2 == 0 ? 'even' : 'odd').'">
-			<td><b>'.$faqc['createdtime'].'</b></td>
-			<td>'.$faqc['commentcontent'].'</td>
-			</tr>';
-			$i++;
-		} ?>
-	</tbody>
-</table>
+<div class="addfaqcomment">
+<?php $form=$this->beginWidget('CActiveForm', array(
+	'id'=>'addfaqcomment-form',
+	'enableAjaxValidation'=>false,
+	'enableClientValidation'=>true,
+	'action'=>array('vtentity/Faq/addticket/'.$data->__get($this->entityidField)),
+)); ?>
+<fieldset>
+<textarea name="ItemCommentParam" rows="1" class="post-message" placeholder="<?php echo Yii::t('core','addonecomment')?>" style="height: 60px;"></textarea>
+<div class="row buttons"><?php echo CHtml::submitButton(Yii::t('core', 'addcomment')); ?></div>
+</fieldset>
+<?php $this->endWidget(); ?>
+<script type="text/javascript">
+	$('#addfaqcomment-form').ajaxForm({      
+		dataType: 'json',  
+		success: function(response) {
+			if (response.data != undefined && response.data != '') {
+				$('#faq_comments').html(response.data);
+				$('#ItemCommentParam').val('');
+			}
+			AjaxResponse.handle(response);
+		}
+	});
+</script>
 </div>
-<?php } // close div comments ?>
-<?php
-	echo CHTML::hiddenField('entityidValue',$data->__get($this->entityidField), array('id'=>'entityidValue'));
-	$pnum = (empty($_GET[$this->modelName.'_page']) ? 1 : $_GET[$this->modelName.'_page']);
-	echo CHTML::hiddenField('dvcpage',$pnum-1, array('id'=>'dvcpage'));
-?>
 </div>
 <script type="text/javascript">
 breadCrumb.add({ icon: 'view', href: 'javascript:chive.goto(\'<?php echo $this->modelLinkName;?>/<?php echo $this->entity;?>/list/<?php echo $data->__get($this->entityidField)?>/dvcpage/<?php echo $pnum-1; ?>\')', text: <?php echo CJavaScript::encode($data->getLookupFieldValue($this->entityLookupField,$data->getAttributes())); ?>});

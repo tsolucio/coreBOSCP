@@ -111,7 +111,7 @@ class VtentityController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view','list','AutoCompleteLookup','Download','DownloadPDF'),
+				'actions'=>array('index','view','list','AutoCompleteLookup','Download','DownloadPDF','Addticket'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -467,6 +467,45 @@ class VtentityController extends Controller
 			header("Content-Description: vtyiicpng download PDF");
 			echo base64_decode($recordInfo[0]['pdf_data']);
 		}
+	}
+
+	/**
+	 * Create a new comment attached to the related entity
+	 */
+	public function actionAddticket()
+	{
+		$response = new AjaxResponse();
+		$values = array();
+		$model=Vtentity::model();
+		$module=$model->getModule();
+		$view=strtolower($module);
+		switch ($module) {
+			case 'HelpDesk':
+				$values['from_portal']=1;
+				$values['parent_id']=Yii::app()->user->contactId;
+				// break has been delibertly left out!
+			case 'Faq':
+				$values['comments']=$_POST['ItemCommentParam'];
+				$clientvtiger=$model->getClientVtiger();
+				if(!$clientvtiger) {
+					Yii::log('login failed');
+					$recordInfo=0;
+				} else {
+					$recordInfo = $clientvtiger->doInvoke('addTicketFaqComment',array('id'=>$_GET['id'],'values'=>CJSON::encode($values)));
+				}
+				if($clientvtiger->hasError($recordInfo)) {
+					$response->addNotification('error', Yii::t('core', 'error'), Yii::t('core', 'errorCreateRow')."<br>".$clientvtiger->lastError());
+				} else {
+					$response->addNotification('success', Yii::t('core', 'success'), Yii::t('core', 'successCreateRow'));
+					$relComments = $clientvtiger->doGetRelatedRecords($_GET['id'], $module, 'ModComments', '');
+					$response->addData(null, $this->renderPartial("//$view/_comments",array('relComments'=>$relComments),true));
+				}
+				break;
+			default: // modcomments
+				break;
+		}
+		$response->send();
+		return true;
 	}
 
 }

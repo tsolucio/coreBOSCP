@@ -387,7 +387,7 @@ class WSClient {
 	/**
 	 * Retrieve related records.
 	 */
-	function doGetRelatedRecords($record, $module, $relatedModule, $productDiscriminator) {
+	function doGetRelatedRecords($record, $module, $relatedModule, $queryParameters) {
 		// Perform re-login if required.
 		$this->__checkLogin();
 	
@@ -397,7 +397,7 @@ class WSClient {
 			'id' => $record,
 			'module' => $module,
 			'relatedModule' => $relatedModule,
-			'productDiscriminator' => $productDiscriminator,
+			'queryParameters' => $queryParameters,
 		);
 		$resultdata = $this->_client->doPost($postdata, true);
 		if($this->hasError($resultdata)) {

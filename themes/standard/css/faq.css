@@ -19,7 +19,7 @@
 @media screen, projection
 {
 	
-	div.faq, div.faq_docs, div.faq_comments {
+	div.faq, div.faq_docs, div.faq_comments, div.addfaqcomment {
 		width: 98%;
 		margin: 10px auto 10px auto;
 		clear: both;

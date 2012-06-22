@@ -157,4 +157,6 @@
 	<entry id="title">Title</entry>
 	<entry id="reference">Reference</entry>
 	<entry id="description">Description</entry>
+	<entry id="addcomment">Add Comment</entry>
+	<entry id="addonecomment">Add a comment...</entry>
 </category>
