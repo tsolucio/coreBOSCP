@@ -1,0 +1,68 @@
+/*
+ * vtigerCRM vtyiiCPng - web based vtiger CRM Customer Portal
+ * Copyright (C) 2011 Opencubed shpk: JPL TSolucio, S.L./StudioSynthesis, S.R.L.
+ *
+ * This file is part of vtyiiCPng.
+ *
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0 ("License")
+ * You may not use this file except in compliance with the License
+ * The Original Code is:  Opencubed Open Source
+ * The Initial Developer of the Original Code is Opencubed.
+ * Portions created by Opencubed are Copyright (C) Opencubed.
+ * All Rights Reserved.
+ *
+ * vtyiiCPng is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ */
+
+@media screen, projection
+{
+	
+	div.helpdesk, div.helpdesk_docs, div.helpdesk_comments, div.addhelpdeskcomment {
+		width: 98%;
+		margin: 10px auto 10px auto;
+		clear: both;
+	}
+	
+	div.helpdesk_left {
+		margin-bottom: 10px;
+		width: 72%;
+		float: left;
+	}
+
+	div.helpdesk_right {
+		margin-bottom: 10px;
+		width: 26%;
+		float: left;
+		margin-left: 5px;
+		border: 6px solid #685d5d;
+	}	
+
+	div.helpdesk_t {
+		position: relative;
+		font-style: italic;
+		font-weight: bolder;
+		font-size: medium;
+	}
+
+	div.helpdesk_q {
+		border: 8px solid #7ac0d0;
+		padding: 10px;
+		background: white;
+		position: relative;
+		font-style: italic;
+	}
+
+	div.helpdesk_a {
+		background: white;
+		position: relative;
+		width: 90%;
+		margin: 0 auto;
+		padding: 10px;
+		border-left: 8px solid #dedede;
+        border-right: 8px solid #dedede;
+        border-bottom: 8px solid #dedede;
+	}
+
+}

@@ -121,6 +121,12 @@ $mainConfig=array(
             	'vtentity/<module:Faq>/<action:'.URL_MATCH.'>/<id:'.URL_MATCH.'>'=>'faq/<action>',
             	'vtentity/<module:Faq>/list/<id:'.URL_MATCH.'>/dvcpage/<dvcpage:'.URL_MATCH.'>'=>'faq/list',
 
+            	// HelpDesk module specific class
+            	'vtentity/<module:HelpDesk>'=>'helpdesk/index',
+            	'vtentity/<module:HelpDesk>/<action:'.URL_MATCH.'>'=>'helpdesk/<action>',
+            	'vtentity/<module:HelpDesk>/<action:'.URL_MATCH.'>/<id:'.URL_MATCH.'>'=>'helpdesk/<action>',
+            	'vtentity/<module:HelpDesk>/list/<id:'.URL_MATCH.'>/dvcpage/<dvcpage:'.URL_MATCH.'>'=>'helpdesk/list',
+
             	// Default vtentity behaviour
             	'vtentity/<module:'.URL_MATCH.'>'=>'vtentity/index',
             	'vtentity/<module:'.URL_MATCH.'>/<action:'.URL_MATCH.'>'=>'vtentity/<action>',

@@ -33,7 +33,11 @@
 		margin-top: 20px;
 	}
 	
-	
+	.list-view .pager
+	{
+		clear: both;
+	}
+
 	/*
 	 * Table
 	 */
