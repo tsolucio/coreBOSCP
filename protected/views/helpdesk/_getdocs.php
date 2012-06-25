@@ -36,7 +36,7 @@
 				$value=CHtml::encode($fname);
 			}
 			echo '<tr class="'.($i % 2 == 0 ? 'even' : 'odd').'">
-			<td><b>'.$helpdeskd['title'].'</b></td>
+			<td><b>'.CHtml::link($helpdeskd['title'],"index.php#vtentity/Documents/view/$idatt").'</b></td>
 			<td>'.$helpdeskd['notecontent'].'</td>
 			<td>'.$value.'</td>
 			<td align="right">'.round($helpdeskd['filesize']/1024,($helpdeskd['filesize']<1024 ? 2 : 0)).'Kb</td>

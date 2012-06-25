@@ -29,6 +29,7 @@ if (count($relComments)>0) {
 }
 ?>
 </div>
+<?php if ($data->__get('ticketstatus')!='Closed' and $data->__get('ticketstatus')!=Yii::t('core', 'closed')) {?>
 <div class="addelements">
 	<div class="addhelpdeskcomment">
 	<?php $form=$this->beginWidget('CActiveForm', array(
@@ -85,6 +86,7 @@ if (count($relComments)>0) {
 	</script>
 	</div>
 </div>
+<?php }  // is closed ?>
 </div>
 <div class="helpdesk_right">
 <table class="list">
