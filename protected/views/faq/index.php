@@ -1,5 +1,3 @@
-<h1><?php echo $model->getModuleName(); ?></h1>
-
 <?php $this->widget('zii.widgets.CListView', array(
 	'dataProvider'=>$dataProvider,
 	'itemView'=>'//faq/_view',

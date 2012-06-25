@@ -34,6 +34,7 @@ class VtentityController extends Controller
 	public $entityLookupField;
 	public $entityidField;
 	public $entityidValue;
+	public $moduleName;
 	public $viewButtonEdit=false;
 	public $viewButtonDelete=false;
 	public $viewButtonCreate=false;
@@ -48,6 +49,7 @@ class VtentityController extends Controller
 		$this->entityLookupField=$model->getLookupField();
 		$this->entityidField=$model->primaryKey();
 		$this->entity=$model->getModule();
+		$this->moduleName=$model->getModuleName();
 		parent::__construct($id,$module);
 	}
 

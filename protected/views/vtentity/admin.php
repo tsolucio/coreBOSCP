@@ -12,9 +12,6 @@ $('.search-form form').submit(function(){
 });
 ");
 ?>
-
-<h1><?php echo $model->getModuleName(); ?></h1>
-
 <div class="search-form" style="display:none">
 <?php $this->renderPartial('//vtentity/_search',array(
 	'model'=>$model,

@@ -1,3 +1,4 @@
+<div class="upperMenu">
 <div class="tabMenu">
 	<?php $this->widget('TabMenu', array(
 		'items' => array(
@@ -73,4 +74,6 @@
 		),
 	));
 	?>
+</div>
+<div class="upperTitle"><?php echo $this->moduleName; ?></div>
 </div>
