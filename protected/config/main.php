@@ -27,6 +27,7 @@ $mainConfig=array(
 	'site'=>$vtyiicpng_Server_Path,
 	'loginuser'=>$vtyiicpng_Login_User,
 	'accesskey'=>$vtyiicpng_Access_Key,
+	'attachment_folder'=>$vtyiicpng_AttachmentFolderName,
 
 	// Activate debuging
 	'debug'=>true,

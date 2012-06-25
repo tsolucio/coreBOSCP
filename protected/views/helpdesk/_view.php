@@ -9,11 +9,11 @@ echo CHTML::hiddenField('dvcpage',$pnum-1, array('id'=>'dvcpage'));
 <div class="helpdesk_t"><?php echo $data->__get('ticket_title'); ?>&nbsp;</div>
 <div class="helpdesk_q"><?php echo $data->__get('description'); ?>&nbsp;</div>
 <div class="helpdesk_a"><?php echo $data->__get('solution'); ?>&nbsp;</div>
-<div class="helpdesk_docs">
+<div class="helpdesk_docs" id="helpdesk_docs">
 <?php
 $relDocs = $data->GetRelatedRecords('Documents');
 if (count($relDocs)>0) {
-	$this->renderPartial('//helpdesk/_hddocs',array(
+	$this->renderPartial('//helpdesk/_getdocs',array(
 		'relDocs'=>$relDocs,
 	));
 }
@@ -29,30 +29,61 @@ if (count($relComments)>0) {
 }
 ?>
 </div>
-<div class="addhelpdeskcomment">
-<?php $form=$this->beginWidget('CActiveForm', array(
-	'id'=>'addhelpdeskcomment-form',
-	'enableAjaxValidation'=>false,
-	'enableClientValidation'=>true,
-	'action'=>array('vtentity/HelpDesk/addticket/'.$data->__get($this->entityidField)),
-)); ?>
-<fieldset>
-<textarea name="ItemCommentParam" rows="1" class="post-message" placeholder="<?php echo Yii::t('core','addonecomment')?>" style="height: 60px;"></textarea>
-<div class="row buttons"><?php echo CHtml::submitButton(Yii::t('core', 'addcomment')); ?></div>
-</fieldset>
-<?php $this->endWidget(); ?>
-<script type="text/javascript">
-	$('#addhelpdeskcomment-form').ajaxForm({      
-		dataType: 'json',  
-		success: function(response) {
-			if (response.data != undefined && response.data != '') {
-				$('#helpdesk_comments').html(response.data);
-				$('#ItemCommentParam').val('');
+<div class="addelements">
+	<div class="addhelpdeskcomment">
+	<?php $form=$this->beginWidget('CActiveForm', array(
+		'id'=>'addhelpdeskcomment-form',
+		'enableAjaxValidation'=>false,
+		'enableClientValidation'=>true,
+		'action'=>array('vtentity/HelpDesk/addticket/'.$data->__get($this->entityidField)),
+	)); ?>
+	<fieldset>
+	<textarea name="ItemCommentParam" rows="1" class="post-message" placeholder="<?php echo Yii::t('core','addonecomment')?>" style="height: 60px;"></textarea>
+	<div class="row buttons"><?php echo CHtml::submitButton(Yii::t('core', 'addcomment')); ?></div>
+	</fieldset>
+	<?php $this->endWidget(); ?>
+	<script type="text/javascript">
+		$('#addhelpdeskcomment-form').ajaxForm({      
+			dataType: 'json',  
+			success: function(response) {
+				if (response.data != undefined && response.data != '') {
+					$('#helpdesk_comments').html(response.data);
+					$('#ItemCommentParam').val('');
+				}
+				AjaxResponse.handle(response);
 			}
-			AjaxResponse.handle(response);
-		}
-	});
-</script>
+		});
+	</script>
+	</div>
+	<div class="addhelpdeskattachment">
+	<?php $form=$this->beginWidget('CActiveForm', array(
+		'id'=>'addhelpdeskdoc-form',
+		'enableAjaxValidation'=>false,
+		'enableClientValidation'=>true,
+		'htmlOptions'=>array('enctype' => 'multipart/form-data'),
+		'action'=>array('vtentity/Documents/adddocument/'.$data->__get($this->entityidField)),
+	));
+	echo '<fieldset>';
+	echo CHTML::label(Yii::t('core','addoneattachment'), 'filename').'<br/>';
+	echo CHTML::fileField('filename','',array('id'=>'filename'));
+	?>
+	<div class="row buttons"><?php echo CHtml::submitButton(Yii::t('core', 'addattachment')); ?></div>
+	</fieldset>
+	<?php $this->endWidget(); ?>
+	<script type="text/javascript">
+		$('#addhelpdeskdoc-form').ajaxForm({
+			dataType: 'json',
+			success: function(response) {
+				console.debug(response);
+				if (response.data != undefined && response.data != '') {
+					$('#helpdesk_docs').html(response.data);
+					$('#filename').val('');
+				}
+				AjaxResponse.handle(response);
+			}
+		});
+	</script>
+	</div>
 </div>
 </div>
 <div class="helpdesk_right">

@@ -23,7 +23,10 @@ $vtyiicpng_Server_Path = "http://mickie:90/vtiger";
 
 // The next two variables define the portal webservice user to be used to connect to the vtiger CRM server
 // This user must be created and configured in your vtiger CRM application
-$vtyiicpng_Login_User='admin';
-$vtyiicpng_Access_Key='U7f44ZhKCZ8ZTkZU';
+$vtyiicpng_Login_User = 'admin';
+$vtyiicpng_Access_Key = 'U7f44ZhKCZ8ZTkZU';
+
+// name of the folder within which you want any trouble ticket attachments to be uploaded
+$vtyiicpng_AttachmentFolderName = 'Default';
 
 ?>

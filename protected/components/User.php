@@ -22,6 +22,7 @@ class User extends CActiveRecord
 	public $plainPassword;
         public $password_repeat;
         public $password;
+        public $userId;
 
 	public static function splitId($id)
 	{
@@ -74,6 +75,7 @@ class User extends CActiveRecord
 			Yii::log('login failed');
 			$recordInfo=0;
 		} else {
+			$this->userId = $clientvtiger->_userid;  // save this for certain functionality in the model
 			$recordInfo = $clientvtiger->doInvoke('authenticateContact',array('email'=>$email,'password'=>$password));
 		}
 		if(empty($recordInfo) || !$recordInfo)
@@ -227,11 +229,6 @@ class User extends CActiveRecord
 	public function getId()
 	{
 		return base64_encode($this->User . '@' . $this->Host);
-	}
-
-	public function getDomId()
-	{
-		return md5($this->getId());
 	}
 
 }

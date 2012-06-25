@@ -2790,7 +2790,39 @@ abstract class VTActiveResource extends CModel
     }
 
     public function getLastError() {
-    	return $this->_lasterror;
+    	$error = '';
+    	$le=$this->getErrors();
+    	if (is_array($le)) {
+    		foreach ($le as $err) {
+    			if (is_array($err)) {
+    				$error.=$err[0].'<br/>';
+    			} else {
+    				$error.=$err.'<br/>';
+    			}
+    		}
+    	}
+    	$error.=$this->_lasterror.'<br/>';
+    	return $error;
     }
+
+	public function getAttachmentFolderId() {
+		$clientvt = $this->getClientVtiger();
+		// First we look for the folder defined in configuration
+		$command="select id from documentfolders where foldername='".Yii::app()->attachment_folder."'";
+		$recordInfo = $clientvt->doQuery($command);
+		if ($recordInfo)
+			return $recordInfo[0]['id'];
+		// Next we look for the Default folder
+		$command="select id from documentfolders where foldername='Default'";
+		$recordInfo = $clientvt->doQuery($command);
+		if ($recordInfo)
+			return $recordInfo[0]['id'];
+		// Finally get the first folder we can find
+		$command="select id from documentfolders limit 1";
+		$recordInfo = $clientvt->doQuery($command);
+		if ($recordInfo)
+			return $recordInfo[0]['id'];
+		return false;  // error
+	}
 }
 ?>

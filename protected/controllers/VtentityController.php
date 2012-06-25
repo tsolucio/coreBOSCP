@@ -111,7 +111,7 @@ class VtentityController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view','list','AutoCompleteLookup','Download','DownloadPDF','Addticket'),
+				'actions'=>array('index','view','list','AutoCompleteLookup','Download','DownloadPDF','Addticket','Adddocument'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -502,7 +502,61 @@ class VtentityController extends Controller
 				}
 				break;
 			default: // modcomments
+				// TODO FIXME
+				$response->addNotification('error', Yii::t('core', 'error'), "Not implemented yet!!");
 				break;
+		}
+		$response->send();
+		return true;
+	}
+
+	/**
+	 * Create a new document with attachment to the related entity
+	 * must be called with the module=Documents parameter set in URL
+	 */
+	public function actionAdddocument()
+	{
+		$response = new AjaxResponse();
+		$model=new $this->modelName;
+		$module=$model->getModule();
+		if ($module!='Documents' or !$this->vtyii_canCreate($module)) {
+			$response->addNotification('error', Yii::t('core', 'error'), Yii::t('core', 'errorCreateRow')."<br>".Yii::t('core', 'errorPermssion'));
+			$response->send();
+			return true;
+		}
+		$clientvtiger=$model->getClientVtiger();
+		$model->setIsNewRecord(true);
+		$model->unsetAttributes();
+		$uploadfile=CUploadedFile::getInstanceByName('filename');
+		$tmp_file=$uploadfile->getTempName();
+		$cont=base64_encode(file_get_contents($tmp_file));
+		$model_filename=array(
+				"name"=>$uploadfile->getName(),
+				"size"=>$uploadfile->getSize(),
+				"type"=>$uploadfile->getType(),
+				'content'=>$cont);
+		$model->setAttribute('filename',$model_filename);
+		$model->setAttribute('notes_title',$model_filename['name']);
+		$model->setAttribute('filename',$model_filename);
+		$model->setAttribute('filetype',$model_filename['type']);
+		$model->setAttribute('filesize',$model_filename['size']);
+		$model->setAttribute('filelocationtype', 'I');
+		$model->setAttribute('filedownloadcount', 0);
+		$model->setAttribute('filestatus', 1);
+		$model->setAttribute('folderid', $model->getAttachmentFolderId());
+		$model->setAttribute('assigned_user_id', Yii::app()->user->userId);
+		$ticketid = Yii::app()->getRequest()->getParam('id',0);
+		if (!empty($ticketid)) {
+			$model->setAttribute('relations',$ticketid);
+		}
+		if($model->save()) {
+			$view='helpdesk';
+			$_SESSION['deleteCache']='true'; // empty cache on next call
+			$response->addNotification('success', Yii::t('core', 'success'), Yii::t('core', 'successCreateRow'));
+			$relDocs = $clientvtiger->doGetRelatedRecords($ticketid, 'HelpDesk', 'Documents', '');
+			$response->addData(null, $this->renderPartial("//$view/_getdocs",array('relDocs'=>$relDocs),true));
+		} else {
+			$response->addNotification('error', Yii::t('core', 'error'), Yii::t('core', 'errorCreateRow').'<br>'.$model->getLastError());
 		}
 		$response->send();
 		return true;

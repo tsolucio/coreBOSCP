@@ -159,4 +159,6 @@
 	<entry id="description">Description</entry>
 	<entry id="addcomment">Add Comment</entry>
 	<entry id="addonecomment">Add a comment...</entry>
+	<entry id="addattachment">Add Attachment</entry>
+	<entry id="addoneattachment">Select Attachment</entry>
 </category>

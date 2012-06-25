@@ -159,4 +159,6 @@
   <entry id="description">Descripción</entry>
   <entry id="addcomment">Añadir Comentario</entry>
   <entry id="addonecomment">Añadir un comentario...</entry>
+  <entry id="addattachment">Añadir adjunto</entry>
+  <entry id="addoneattachment">Selecciona un fichero...</entry>
 </category>

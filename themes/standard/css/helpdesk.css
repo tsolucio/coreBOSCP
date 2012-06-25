@@ -24,7 +24,30 @@
 		margin: 10px auto 10px auto;
 		clear: both;
 	}
-	
+
+	div.addelements {
+		/* border: 1px solid #000000; */
+		overflow: hidden;
+		width: 98%;
+		margin: auto;
+	}
+
+	div.addhelpdeskcomment, div.addhelpdeskattachment {
+		width: 49%;
+	}
+
+	div.addhelpdeskcomment {
+		margin: 10px 2px 10px 5px;
+		clear: left;
+		float: left;
+	}
+
+	div.addhelpdeskattachment {
+		margin: 10px 5px 10px 2px;
+		clear: right;
+		float: right;
+	}
+
 	div.helpdesk_left {
 		margin-bottom: 10px;
 		width: 72%;

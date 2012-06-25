@@ -21,6 +21,7 @@ class vtyiiCPngApplication extends CWebApplication
 	public $site;
 	public $loginuser;
 	public $accesskey;
+	public $attachment_folder;
 	public $vtyiicpngScope;
 	public $notSupportedModules;
 	public $debug;
