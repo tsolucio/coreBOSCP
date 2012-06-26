@@ -4,6 +4,8 @@
 echo CHTML::hiddenField('entityidValue',$data->__get($this->entityidField), array('id'=>'entityidValue'));
 $pnum = (empty($_GET[$this->modelName.'_page']) ? 1 : $_GET[$this->modelName.'_page']);
 echo CHTML::hiddenField('dvcpage',$pnum-1, array('id'=>'dvcpage'));
+echo CHTML::hiddenField('idfieldtxt',$data->getLookupFieldValue($this->entityLookupField,$data->getAttributes()), array('id'=>'idfieldtxt'));
+echo CHTML::hiddenField('idfieldval',$data->__get($this->entityidField), array('id'=>'idfieldval'));
 ?>
 <div class="helpdesk_left">
 <div class="helpdesk_t"><?php echo $data->__get('ticket_title'); ?>&nbsp;</div>
@@ -43,18 +45,6 @@ if (count($relComments)>0) {
 	<div class="row buttons"><?php echo CHtml::submitButton(Yii::t('core', 'addcomment')); ?></div>
 	</fieldset>
 	<?php $this->endWidget(); ?>
-	<script type="text/javascript">
-		$('#addhelpdeskcomment-form').ajaxForm({      
-			dataType: 'json',  
-			success: function(response) {
-				if (response.data != undefined && response.data != '') {
-					$('#helpdesk_comments').html(response.data);
-					$('#ItemCommentParam').val('');
-				}
-				AjaxResponse.handle(response);
-			}
-		});
-	</script>
 	</div>
 	<div class="addhelpdeskattachment">
 	<?php $form=$this->beginWidget('CActiveForm', array(
@@ -71,19 +61,6 @@ if (count($relComments)>0) {
 	<div class="row buttons"><?php echo CHtml::submitButton(Yii::t('core', 'addattachment')); ?></div>
 	</fieldset>
 	<?php $this->endWidget(); ?>
-	<script type="text/javascript">
-		$('#addhelpdeskdoc-form').ajaxForm({
-			dataType: 'json',
-			success: function(response) {
-				console.debug(response);
-				if (response.data != undefined && response.data != '') {
-					$('#helpdesk_docs').html(response.data);
-					$('#filename').val('');
-				}
-				AjaxResponse.handle(response);
-			}
-		});
-	</script>
 	</div>
 </div>
 <?php }  // is closed ?>
@@ -124,7 +101,32 @@ if (count($relComments)>0) {
 </div>
 </div>
 <script type="text/javascript">
-breadCrumb.add({ icon: 'view', href: 'javascript:chive.goto(\'<?php echo $this->modelLinkName;?>/<?php echo $this->entity;?>/list/<?php echo $data->__get($this->entityidField)?>/dvcpage/<?php echo $pnum-1; ?>\')', text: <?php echo CJavaScript::encode($data->getLookupFieldValue($this->entityLookupField,$data->getAttributes())); ?>});
-breadCrumb.show();
-sideBar.activate(0);
+function _viewExecuteJS() {
+	breadCrumb.add({ icon: 'view', href: 'javascript:chive.goto(\'<?php echo $this->modelLinkName;?>/<?php echo $this->entity;?>/list/'+jQuery('#idfieldval').val()+'/dvcpage/'+jQuery('#dvcpage').val()+'\')', text: jQuery('#idfieldtxt').val()});
+	breadCrumb.show();
+	sideBar.activate(0);
+	$('#addhelpdeskcomment-form').ajaxForm({      
+		dataType: 'json',  
+		success: function(response) {
+			if (response.data != undefined && response.data != '') {
+				$('#helpdesk_comments').html(response.data);
+				$('#ItemCommentParam').val('');
+			}
+			AjaxResponse.handle(response);
+		}
+	});
+	$('#addhelpdeskdoc-form').ajaxForm({
+		dataType: 'json',
+		success: function(response) {
+			console.debug(response);
+			if (response.data != undefined && response.data != '') {
+				$('#helpdesk_docs').html(response.data);
+				$('#filename').val('');
+			}
+			AjaxResponse.handle(response);
+		}
+	});
+	chive.ajaxloaded;
+}
+_viewExecuteJS(); // executed only once on first load, then called by CListView  afterAjaxUpdate
 </script>

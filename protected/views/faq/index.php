@@ -3,7 +3,7 @@
 	'itemView'=>'//faq/_view',
 	'enableSorting'=>false,
 	'template'=>"{pager}\n{summary}\n{items}\n{pager}",
-	'afterAjaxUpdate'=>'chive.ajaxloaded',
+	'afterAjaxUpdate'=>'_viewExecuteJS',
 	'beforeAjaxUpdate'=>'chive.ajaxloading',
 	'pager'=>array(
 		'pageSize'=>1,
