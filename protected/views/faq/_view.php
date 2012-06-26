@@ -81,7 +81,7 @@ if (count($relDocs)>0) {
 			$data->setId($faqd['id']);
 			$dlwidget=$data->getVtigerViewField(69,'','','');
 			echo '<tr class="'.($i % 2 == 0 ? 'even' : 'odd').'">
-			<td><b>'.$faqd['title'].'</b></td>
+			<td>'.CHtml::link($faqd['title'],"index.php#vtentity/Documents/view/".$faqd['id']).'</td>
 			<td>'.$faqd['notecontent'].'</td>
 			<td>'.$dlwidget['value'].'</td>
 			<td align="right">'.round($faqd['filesize']/1024,($faqd['filesize']<1024 ? 2 : 0)).'Kb</td>
