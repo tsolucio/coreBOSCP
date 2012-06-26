@@ -28,6 +28,7 @@
 @import "../jquery-ui/start.css";
 @import 'faq.css'; /* Import CSS for special FAQ views */
 @import 'helpdesk.css'; /* Import CSS for special HELPDESK views */
+@import 'project.css'; /* Import CSS for special PROJECT views */
 
 @media screen, projection
 {

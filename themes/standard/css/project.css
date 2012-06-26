@@ -1,0 +1,51 @@
+/*
+ * vtigerCRM vtyiiCPng - web based vtiger CRM Customer Portal
+ * Copyright (C) 2011 Opencubed shpk: JPL TSolucio, S.L./StudioSynthesis, S.R.L.
+ *
+ * This file is part of vtyiiCPng.
+ *
+ * The contents of this file are subject to the vtiger CRM Public License Version 1.0 ("License")
+ * You may not use this file except in compliance with the License
+ * The Original Code is:  Opencubed Open Source
+ * The Initial Developer of the Original Code is Opencubed.
+ * Portions created by Opencubed are Copyright (C) Opencubed.
+ * All Rights Reserved.
+ *
+ * vtyiiCPng is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ */
+
+@media screen, projection
+{
+	
+	div.prjtask, div.prjmstone, div.prjticket, div.prjdocs {
+		width: 100%;
+		margin: 2px auto 10px auto;
+		clear: both;
+	}
+
+	div.projectview {
+		/* border: 1px solid #000000; */
+		overflow: hidden;
+		width: 100%;
+		margin: auto;
+	}
+
+	div.projectdetails, div.projectrelated {
+		width: 47%;
+	}
+
+	div.projectdetails {
+		margin: 10px 2px 10px 5px;
+		clear: left;
+		float: left;
+	}
+
+	div.projectrelated {
+		margin: 10px 5px 10px 2px;
+		clear: right;
+		float: right;
+	}
+
+}

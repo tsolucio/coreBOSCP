@@ -128,6 +128,12 @@ $mainConfig=array(
             	'vtentity/<module:HelpDesk>/<action:'.URL_MATCH.'>/<id:'.URL_MATCH.'>'=>'helpdesk/<action>',
             	'vtentity/<module:HelpDesk>/list/<id:'.URL_MATCH.'>/dvcpage/<dvcpage:'.URL_MATCH.'>'=>'helpdesk/list',
 
+            	// Project module specific class
+            	'vtentity/<module:Project>'=>'project/index',
+            	'vtentity/<module:Project>/<action:'.URL_MATCH.'>'=>'project/<action>',
+            	'vtentity/<module:Project>/<action:'.URL_MATCH.'>/<id:'.URL_MATCH.'>'=>'project/<action>',
+            	'vtentity/<module:Project>/list/<id:'.URL_MATCH.'>/dvcpage/<dvcpage:'.URL_MATCH.'>'=>'project/list',
+
             	// Default vtentity behaviour
             	'vtentity/<module:'.URL_MATCH.'>'=>'vtentity/index',
             	'vtentity/<module:'.URL_MATCH.'>/<action:'.URL_MATCH.'>'=>'vtentity/<action>',
@@ -158,7 +164,7 @@ $mainConfig=array(
 			),
 			'CPortal' => array(
 					'Contacts','Accounts','Quotes','Services','Invoice','HelpDesk','Faq',
-					'Assets','Products','Documents'
+					'Assets','Products','Documents','ProjectMilestone','ProjectTask','Project'
 			),
 		),
 
