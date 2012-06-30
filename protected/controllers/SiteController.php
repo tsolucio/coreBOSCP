@@ -313,11 +313,9 @@ class SiteController extends Controller
                 // If the results were false, then we have no valid data, so load it
                 if($schemata===false){
                 $schemata = array();
-		$url = Yii::app()->site;
-		$clientvtiger = new WSClient($url);
-		$login = $clientvtiger->doLogin(Yii::app()->loginuser, Yii::app()->accesskey);
-                if(!$login)
-			Yii::log('login failed');
+		$clientvtiger = $this->getClientVtiger();
+		if(!$clientvtiger)
+			Yii::log('login failed',CLogger::LEVEL_ERROR);
 		else {
 			// get available modules from vtiger CRM
 			$listModules = $clientvtiger->doListTypes();

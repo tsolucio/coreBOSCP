@@ -692,7 +692,7 @@ abstract class VTActiveResource extends CModel
 
     public function setClientVtiger($clientvtiger)
     {
-        if($this->clientvtiger==null && $clientvtiger==null)
+        if($this->clientvtiger==null || $clientvtiger==null)
         {
             $clientvtiger=$this->loginREST();
             $this->clientvtiger=$clientvtiger;
