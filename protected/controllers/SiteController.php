@@ -313,7 +313,8 @@ class SiteController extends Controller
                 // If the results were false, then we have no valid data, so load it
                 if($schemata===false){
                 $schemata = array();
-		$clientvtiger = $this->getClientVtiger();
+		$model=Vtentity::model();
+		$clientvtiger = $model->getClientVtiger();
 		if(!$clientvtiger)
 			Yii::log('login failed',CLogger::LEVEL_ERROR);
 		else {

@@ -163,7 +163,7 @@ $mainConfig=array(
 				'DocumentFolders'
 			),
 			'CPortal' => array(
-					'Contacts','Accounts','Quotes','Services','Invoice','HelpDesk','Faq',
+					'Contacts','Accounts','Quotes','Services','Invoice','HelpDesk','Faq','Timecontrol',
 					'Assets','Products','Documents','ProjectMilestone','ProjectTask','Project'
 			),
 		),
