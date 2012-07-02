@@ -1,6 +1,6 @@
 <!-- 
  * vtigerCRM vtyiiCPng - web based vtiger CRM Customer Portal
- * Copyright (C) 2011 Opencubed shpk: JPL TSolucio, S.L./StudioSynthesis, S.R.L.
+ * Copyright (C) 2011-2012 Opencubed shpk: JPL TSolucio, S.L./StudioSynthesis, S.R.L.
  *
  * This file is part of vtyiiCPng.
  *
@@ -19,7 +19,7 @@
 <?php
 /*
  * vtigerCRM vtyiiCPng - web based vtiger CRM Customer Portal
- * Copyright (C) 2011 Opencubed shpk: JPL TSolucio, S.L./StudioSynthesis, S.R.L.
+ * Copyright (C) 2011-2012 Opencubed shpk: JPL TSolucio, S.L./StudioSynthesis, S.R.L.
  *
  * This file is part of vtyiiCPng.
  *
