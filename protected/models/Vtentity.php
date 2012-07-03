@@ -136,15 +136,72 @@ class Vtentity extends CActiveRecord
 		// Warning: Please modify the following code to remove attributes that
 		// should not be searched.
 		$criteria=new CDbCriteria;
+		$sattr = array();
+		if (!empty($_GET['fnumrows'])) {  // we have advanced search conditions, we process the input for later compare
+			for ($nr=1;$nr<=$_GET['fnumrows'];$nr++) {
+				if ($_GET['fdelete'.$nr]==1) continue; // this row has been deleted
+				if ($_GET['fcol'.$nr]=='' or $_GET['fop'.$nr]=='') continue; // this row is empty
+				$value = $_GET['fval'.$nr];
+				switch ($_GET['fop'.$nr]) {
+					case 'e':
+						$value = '='.$value;
+						break;
+					case 'n':
+						$value = '<>'.$value;
+						break;
+					case 's':
+						$value = $value.'%';
+						break;
+					case 'z':
+						$value = '%'.$value;
+						break;
+					case 'c':
+						$value = '%'.$value.'%';
+						break;
+					case 'k':
+						$value = '<>%'.$value.'%';
+						break;
+					case 'l':
+						$value = '<'.$value;
+						break;
+					case 'g':
+						$value = '>'.$value;
+						break;
+					case 'm':
+					case 'b':
+						$value = '<='.$value;
+						break;
+					case 'h':
+					case 'a':
+						$value = '>='.$value;
+						break;
+					default:
+						$value = '';
+				}
+				$conds = array(
+						'value' => $value,
+						'glue' => (empty($_GET['fglue'.($nr-1)]) ? '' : $_GET['fglue'.($nr-1)]),
+						);
+				$sattr[$_GET['fcol'.$nr]][] = $conds;
+				$this->setAttribute($_GET['fcol'.$nr],$value);
+			}
+		}
 		$attrs=$this->getAttributes();
 		foreach ($attrs as $key=>$attr) {
 			//if (!is_array($attr)) continue;  // we can only search simple values, not IN
 			// FIXME: remove attributes that should not be searched.                
-//			$criteria->compare($attr['name'],$this->getAttribute($attr['name']),true);
-                if($attr!=" ")
- 		$criteria->compare($key,$attr,true);
+			//$criteria->compare($attr['name'],$this->getAttribute($attr['name']),true);
+			if($attr!=" ") {
+				if (!empty($sattr[$key])) {
+					foreach ($sattr[$key] as $cond) {
+						$criteria->compare($key,$cond['value'],true,$cond['glue'],false);
+					}
+				} else {
+					$criteria->compare($key,$attr,true);
+				}
+			}
 		}
-               // Yii::log(implode(',',$pagectrl));
+		$this->setCriteria($criteria);
 		if (is_null($pagectrl))
 		$pagectrl=array(
 			'pageSize'=>Yii::app()->user->settings->get('pageSize'),

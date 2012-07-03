@@ -343,6 +343,7 @@ class VtentityController extends Controller
 		$this->setCRUDpermissions($model->getModule());
 		$this->viewButtonEdit=false;
 		$this->viewButtonDelete=false;
+		$model->search();
 		$this->render('//vtentity/admin',array(
 			'model'=>$model,                    
 			'fields'=>$fields,                

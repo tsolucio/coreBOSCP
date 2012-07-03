@@ -162,4 +162,20 @@
 	<entry id="addattachment">Add Attachment</entry>
 	<entry id="addoneattachment">Select Attachment</entry>
 	<entry id="closed">Closed</entry>
+	<entry id="equals">equals</entry>
+	<entry id="not equal to">not equal to</entry>
+	<entry id="starts with"></entry>
+	<entry id="ends with">ends with</entry>
+	<entry id="contains"></entry>
+	<entry id="does not contain">does not contain</entry>
+	<entry id="less than">less than</entry>
+	<entry id="greater than">greater than</entry>
+	<entry id="less or equal">less or equal</entry>
+	<entry id="greater or equal">greater or equal</entry>
+	<entry id="after">after</entry>
+	<entry id="before">before</entry>
+	<entry id="clear">Clear</entry>
+	<entry id="and">and</entry>
+	<entry id="or">or</entry>
+	<entry id="addcondition">Add condition</entry>
 </category>

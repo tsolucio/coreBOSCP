@@ -161,5 +161,21 @@
   <entry id="addonecomment">Añadir un comentario...</entry>
   <entry id="addattachment">Añadir adjunto</entry>
   <entry id="addoneattachment">Selecciona un fichero...</entry>
-  <entry id="closed">Cerrado</entry>  
+  <entry id="closed">Cerrado</entry>
+  <entry id="equals">igual</entry>
+  <entry id="not equal to">distinto</entry>
+  <entry id="starts with">empieza con</entry>
+  <entry id="ends with">termina en</entry>
+  <entry id="contains">contiene</entry>
+  <entry id="does not contain">no contiene</entry>
+  <entry id="less than">menor que</entry>
+  <entry id="greater than">mayor que</entry>
+  <entry id="less or equal">menor o igual</entry>
+  <entry id="greater or equal">mayor o igual</entry>
+  <entry id="after">posterior</entry>
+  <entry id="before">anterior</entry>
+  <entry id="clear">vaciar</entry>
+  <entry id="and">y</entry>
+  <entry id="or">o</entry>
+  <entry id="addcondition">Añadir condición</entry>
 </category>

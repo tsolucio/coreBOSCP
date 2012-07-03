@@ -49,6 +49,7 @@ $scriptFiles = array(
 	'js/views/global/import.js',
 	'js/tipsy/jquery.tipsy.js',
    	'assets/lang_js/' . Yii::app()->getLanguage() . '.js',
+	'js/advancesearch.js',
 );
 foreach($scriptFiles AS $file)
 {
