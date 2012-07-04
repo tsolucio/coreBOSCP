@@ -69,7 +69,7 @@ $("button").click(function() {
 });</script>
     
 	<div class="row buttons">
-		<?php echo CHtml::submitButton('Search'); ?>
+		<?php echo CHtml::submitButton(Yii::t('core','search')); ?>
 	</div>
 </fieldset>
 <?php $this->endWidget(); ?>
