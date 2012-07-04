@@ -46,7 +46,7 @@ function init()
 }
 
 function deleteRecord(recID,msg,module,controller) {
-	if(!confirm(msg+"\n"+recID)) return false;
+	if(!confirm(msg)) return false;
 	if (controller==undefined || controller == '')
 		controller='vtentity';
 	$.post(baseUrl + '/' + controller + '/' + module + '/delete/' + recID, {}, AjaxResponse.handle);

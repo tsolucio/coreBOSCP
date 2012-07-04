@@ -21,7 +21,7 @@
 					'url' => '',
 					'htmlOptions' => array(
 							'class'=>'icon',
-							'onclick' => "return deleteRecord($('#entityidValue').val(),".CJavaScript::encode(Yii::t('zii','Are you sure you want to delete this item?')).",'".$this->entity."','".$this->modelLinkName."');",
+							'onclick' => "return deleteRecord($('#entityidValue').val(),".CJavaScript::encode(Yii::t('zii','Are you sure you want to delete this item?')."\n")."+$('#idfieldtxt').val(),'".$this->entity."','".$this->modelLinkName."');",
 							),
 				),
 				'visible' => $this->viewButtonDelete,
