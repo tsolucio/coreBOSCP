@@ -81,12 +81,12 @@ class LoginForm extends CFormModel
 						$errMsg=Yii::t('core','errCheckCredentials');
 						break;
 					case $identity::ERROR_USERNAME_INVALID:
-						$errMsg=Yii::t('core','errCheckCredentials');
+						$errMsg=Yii::t('core','errUserNotFound');
 						break;
 					default:
 						$errMsg=Yii::t('core','errCheckCredentials');
 				}
-				$this->addError('username', $errMsg);
+				$this->addError('username', "($authResult) $errMsg");
 	}
 			}
 		}
