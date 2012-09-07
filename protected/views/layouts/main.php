@@ -115,13 +115,13 @@ $(document).ready(function() {
 			<?php echo Html::ajaxLink('site/changepassword', array('class' => 'icon')); ?>
 				<?php echo Html::icon('privileges'); ?>
 				<span><?php echo Yii::t('core', 'Change Password'); ?></span>
-			
+			</a>
 		</li>
 		<li class="nowrap">
 			<?php echo Html::ajaxLink('information/about', array('class' => 'icon')); ?>
 				<?php echo Html::icon('info'); ?>
 				<span><?php echo Yii::t('core', 'about'); ?></span>
-			
+			</a>
 		</li>
 		<li class="nowrap">
 			<a class="icon" href="<?php echo Yii::app()->urlManager->baseUrl; ?>/site/logout">
