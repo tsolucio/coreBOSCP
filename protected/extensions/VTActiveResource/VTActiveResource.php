@@ -1702,7 +1702,7 @@ abstract class VTActiveResource extends CModel
     			}
     			if($module == 'Documents') {
     				$idatt=$recinfo[$i]['id'];
-    				if(in_array($idatt,array_keys($all_attachments))) {
+    				if(!empty($all_attachments) && in_array($idatt,array_keys($all_attachments))) {
     					if (!empty($all_attachments[$idatt]['filetype'])) {
     						$value='<a href=\'javascript: filedownload.download("'.yii::app()->baseUrl.'/index.php/vtentity/'.$this->getModule().'/download/'.$idatt.'?fn='.CHtml::encode($all_attachments[$idatt]['filename']).'&ft='.CHtml::encode($all_attachments[$idatt]['filetype']).'","")\'>'.CHtml::encode($all_attachments[$idatt]['filename'])."</a>";
     					} else {
