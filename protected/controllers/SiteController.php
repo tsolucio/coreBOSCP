@@ -259,6 +259,8 @@ class SiteController extends Controller
 	public function actionLogout()
 	{
 		Yii::app()->user->logout();
+		$api_cache_id='yiicpng.sidebar.availablemodules';
+		Yii::app()->cache->delete( $api_cache_id  );
 		$this->redirect(Yii::app()->homeUrl);
 	}
 
