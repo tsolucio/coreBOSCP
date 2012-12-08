@@ -57,11 +57,14 @@ class Vtentity extends CActiveRecord
 		$module=$this->getModule();
 		$fieldlabels=array();
 		foreach ($listviewfields as $lvfield) {
+			$found = false;
 			foreach($fields as $pos=>$fielddetails){
 				if ($fielddetails['name']==$lvfield) {
+					$found = true;
 					break;
 				}
 			}
+			if (!$found) continue;
 			$field=$fields[$pos];
 			$key=$field['name'];
 			$label=$field['label'];
@@ -122,7 +125,7 @@ class Vtentity extends CActiveRecord
             foreach($fields as $field)
             {
                 if (!is_array($field)) continue;
-    		array_push($labels,$field['label']);
+					$labels[$field['name']] = $field['label'];
             }
             return $labels;
 	}
@@ -135,7 +138,8 @@ class Vtentity extends CActiveRecord
 	{
 		// Warning: Please modify the following code to remove attributes that
 		// should not be searched.
-		$criteria=new CDbCriteria;
+		//$criteria=new CDbCriteria();
+		$criteria=$this->getDBCriteria();
 		$sattr = array();
 		if (!empty($_GET['fnumrows'])) {  // we have advanced search conditions, we process the input for later compare
 			for ($nr=1;$nr<=$_GET['fnumrows'];$nr++) {
@@ -180,13 +184,18 @@ class Vtentity extends CActiveRecord
 				}
 				$conds = array(
 						'value' => $value,
-						'glue' => (empty($_GET['fglue'.($nr-1)]) ? '' : $_GET['fglue'.($nr-1)]),
+						'glue' => (empty($_GET['fglue'.($nr)]) ? '' : $_GET['fglue'.($nr)]),
 						);
 				$sattr[$_GET['fcol'.$nr]][] = $conds;
 				$this->setAttribute($_GET['fcol'.$nr],$value);
 			}
+			Yii::app()->session[$this->getModule().'_searchvals']=$this->getAttributesArray();
+			Yii::app()->session[$this->getModule().'_searchconds']=$sattr;
 		}
 		$attrs=$this->getAttributes();
+		if (count($sattr)==0 and !empty(Yii::app()->session[$this->getModule().'_searchconds'])) {
+			$sattr = Yii::app()->session[$this->getModule().'_searchconds'];
+		}
 		foreach ($attrs as $key=>$attr) {
 			//if (!is_array($attr)) continue;  // we can only search simple values, not IN
 			// FIXME: remove attributes that should not be searched.                
@@ -218,6 +227,25 @@ class Vtentity extends CActiveRecord
 		return $cvt->doGetRelatedRecords($this->getId(), $this->getModule(), $relatedModule, $productDiscriminator);
 	}
 	/**
+	 * Get raw data for all available fields
+	 */
+	public function getRawDetailViewFields()
+	{
+		$dvfields=array();
+		if (!empty($this->_attributes))
+			$fields=$this->_attributes;
+		else
+			$fields=$this->getFieldsInfo();
+		foreach ($fields as $field) {
+			if (!is_array($field)) continue;
+                       $key=$field['name'];
+			if($key!=='id') {                            
+				$dvfields[$key]=$this->getAttribute($key);
+			}
+		}
+		return $dvfields;
+	}
+	/**
 	 * Get widget for all available fields
 	 * @param array $htmloptionsAllFields array of fieldname => htmloptions for the field layout
 	 */
@@ -235,7 +263,10 @@ class Vtentity extends CActiveRecord
 				$value=$this->getAttribute($key);
 				$uitype=intval($field['uitype']);
 				$label=$field['label'];
-				$dvfields[$key]=$this->getVtigerViewField($uitype,$key,$value,$label,$htmloptionsAllFields);
+				$sequence=$field['sequence'];
+				$block=$field['block']['blockname'];
+				$blocksequence=$field['block']['blocksequence'];
+				$dvfields[$key]=$this->getVtigerViewField($uitype,$key,$value,$label,$sequence,$block,$blocksequence,$htmloptionsAllFields);
 			}
 		}
 		return $dvfields;
@@ -255,7 +286,10 @@ class Vtentity extends CActiveRecord
 				$value=$this->getAttribute($key);
 				$uitype=intval($field['uitype']);
 				$label=$field['label'];
-				$dvfields[$key]=$this->getVtigerViewField($uitype,$key,$value,$label,$htmloptionsAllFields);
+				$sequence=$field['sequence'];
+				$block=$field['block']['blockname'];
+				$blocksequence=$field['block']['blocksequence'];
+				$dvfields[$key]=$this->getVtigerViewField($uitype,$key,$value,$label,$sequence,$block,$blocksequence,$htmloptionsAllFields);
 			}
 		}
 		return $dvfields;
@@ -268,7 +302,7 @@ class Vtentity extends CActiveRecord
 	 * @param mixed $fieldvalue
 	 * @param array $htmlopts
 	 */
-	public function getVtigerViewField($uitype,$fieldname,$fieldvalue,$label,$htmlopts=array())
+	public function getVtigerViewField($uitype,$fieldname,$fieldvalue,$label,$sequence,$block,$blocksequence,$htmlopts=array())
 	{
 		$widget='';
 		switch ($uitype) {
@@ -289,9 +323,12 @@ class Vtentity extends CActiveRecord
 			case 22:
 			case 24:
 				$widget=array(
+				'sequence'=>$sequence,
 				'label'=>$label,
 				'type'=>$this->convertVtigerUIType2Yii($uitype),
 				'value'=>$fieldvalue,
+				'block'=>$block,
+				'blocksequence'=>$blocksequence,
 				);
 				break;
 			case 13:
@@ -299,24 +336,33 @@ class Vtentity extends CActiveRecord
 			case 12:
 			case 8:
 				$widget=array(
+				'sequence'=>$sequence,
 				'label'=>$label,
 				'type'=>$this->convertVtigerUIType2Yii($uitype),
 				'value'=>$fieldvalue,
+				'block'=>$block,
+				'blocksequence'=>$blocksequence,
 				);
 				break;
 			case 18:
 			case 17:
 				$widget=array(
+				'sequence'=>$sequence,
 				'label'=>$label,
 				'type'=>$this->convertVtigerUIType2Yii($uitype),
 				'value'=>$fieldvalue,
+				'block'=>$block,
+				'blocksequence'=>$blocksequence,
 				);
 				break;
 			case 5:
 				$dateformat='Y-m-d';
 				$widget=array(
+						'sequence'=>$sequence,
 						'label'=>$label,
 						'value'=>date($dateformat,strtotime($fieldvalue)),
+						'block'=>$block,
+						'blocksequence'=>$blocksequence,
 				);
 				break;
 			case 23:
@@ -325,8 +371,11 @@ class Vtentity extends CActiveRecord
 				// FIXME  get date format from portal user config or setup contact's preferences?
 				$dateformat='Y-m-d h:i:s';
 				$widget=array(
+						'sequence'=>$sequence,
 						'label'=>$label,
 						'value'=>date($dateformat,strtotime($fieldvalue)),
+						'block'=>$block,
+						'blocksequence'=>$blocksequence,
 				);
 				break;
 			case 10:
@@ -347,9 +396,12 @@ class Vtentity extends CActiveRecord
 			case 81:                       
 			case 101:
 				$widget=array(
+				'sequence'=>$sequence,
 				'label'=>$label,
 				'type'=>$this->convertVtigerUIType2Yii($uitype),
 				'value'=>$fieldvalue,
+				'block'=>$block,
+				'blocksequence'=>$blocksequence,
 				);
 				break;
 			case 15:
@@ -359,24 +411,33 @@ class Vtentity extends CActiveRecord
 			case 115:
 			case 255:
 				$widget=array(
+				'sequence'=>$sequence,
 				'label'=>$label,
 				'type'=>$this->convertVtigerUIType2Yii($uitype),
 				'value'=>$fieldvalue,
+				'block'=>$block,
+				'blocksequence'=>$blocksequence,
 				);
 				break;
 			case 33:
 			case 34:
 				$widget=array(
+				'sequence'=>$sequence,
 				'label'=>$label,
 				'type'=>$this->convertVtigerUIType2Yii($uitype),
 				'value'=>$fieldvalue,
+				'block'=>$block,
+				'blocksequence'=>$blocksequence,
 				);
 				break;
 
                         case 27:
                                $widget=array(
+				'sequence'=>$sequence,
 				'label'=>$label,
 				'value'=>($fieldvalue=='I'?yii::t('core', 'Internal'):yii::t('core', 'External')),
+				'block'=>$block,
+				'blocksequence'=>$blocksequence,
 				);
                                break;
  			case 28:
@@ -395,9 +456,12 @@ class Vtentity extends CActiveRecord
                                 	$value=(empty($attachmentsdata[$id]['filename']) ? yii::t('core', 'none') : CHtml::encode($attachmentsdata[$id]['filename']));
                                 }
                                 $widget=array(
+				'sequence'=>$sequence,
 				'label'=>$label,
 				'type'=>'raw',
 				'value'=>$value,
+				'block'=>$block,
+				'blocksequence'=>$blocksequence,
 				);			
 				break;
                         case 26:
@@ -405,16 +469,22 @@ class Vtentity extends CActiveRecord
 			case 53:
 			case 54:
 				$widget=array(
+				'sequence'=>$sequence,
 				'label'=>$label,
 				'type'=>$this->convertVtigerUIType2Yii($uitype),
 				'value'=>$fieldvalue,
+				'block'=>$block,
+				'blocksequence'=>$blocksequence,
 				);
 				break;
 			case 56:
 				$widget=array(
+				'sequence'=>$sequence,
 				'label'=>$label,
 				'type'=>'raw',
 				'value'=>CHtml::image(ICONPATH.'/16/'.($fieldvalue ? 'square_green.png' : 'square_red.png')),
+				'block'=>$block,
+				'blocksequence'=>$blocksequence,
 				);
 				break;
 			case 'file':
@@ -422,8 +492,11 @@ class Vtentity extends CActiveRecord
 				break;
 			default:
 				$widget=array(
+						'sequence'=>$sequence,
 						'label'=>$label,
 						'value'=>$fieldvalue,
+						'block'=>$block,
+						'blocksequence'=>$blocksequence,
 				);
 		}
 		return $widget;

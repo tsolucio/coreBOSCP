@@ -136,9 +136,6 @@ class VtentityController extends Controller
 	 */
 	public function actionCreate()
 	{
-		// Eliminate any previous search conditions
-		unset($_SESSION[$this->modelName]);
-
 		$model=new $this->modelName;
 		if (!$this->vtyii_canCreate($model->getModule())) {
 			$response = new AjaxResponse();
@@ -146,6 +143,8 @@ class VtentityController extends Controller
 			$response->send();
 			return true;
 		}
+		// Eliminate any previous search conditions
+		$this->actionCleansearch($model->getModule());
 		$fields=$model->getWritableFieldsArray();
 		$uitypes=$model->getUItype();
                 $model->setIsNewRecord(true);
@@ -170,7 +169,6 @@ class VtentityController extends Controller
                         		'content'=>$cont);//array("attachment_name"=>"ta.pdf",'attachment'=>"ta.pdf");
                         }
                         if($model->save()) {
-				$_SESSION['deleteCache']='true'; // empty cache on next call
 				$response->addNotification('success', Yii::t('core', 'success'), Yii::t('core', 'successCreateRow'));
 				$response->redirectUrl = '#'.$this->modelLinkName.'/'.$this->entity.'/view/' . $model->__get($this->entityidField);
 			} else {
@@ -245,14 +243,28 @@ class VtentityController extends Controller
 	}
 
 	/**
+	 * Duplicate a particular model.
+	 * Loads record id passed in and redirects to create
+	 */
+	public function actionDuplicate() {
+		$this->_model=null;
+		$model=$this->loadModel(false);
+		$this->actionCreate($model);
+	}
+
+	public function actionCleansearch($modname)
+	{
+		// Eliminate any previous search conditions
+		Yii::app()->session->remove($modname.'_searchvals');
+		Yii::app()->session->remove($modname.'_searchconds');
+	}
+
+	/**
 	 * Deletes a particular model.
 	 * If deletion is successful, the browser will be redirected to the 'index' page.
 	 */
 	public function actionDelete()
 	{
-		// Eliminate any previous search conditions
-		unset($_SESSION[$this->modelName]);
-
 		if(Yii::app()->request->isPostRequest)
 		{
 			// we only allow deletion via POST request
@@ -264,11 +276,12 @@ class VtentityController extends Controller
 				$response->send();
 				return true;
 			}
+			// Eliminate any previous search conditions
+			$this->actionCleansearch($model->getModule());
 			$result=$model->delete();
 			$response = new AjaxResponse();
 			if ($result) {
 				$response->addNotification('success', Yii::t('core', 'success'), Yii::t('core', 'successDeleteRow'));
-				$_SESSION['deleteCache']='true'; // empty cache on next call
 				// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
 				if(!isset($_GET['ajax']))
 					$response->redirectUrl = '#'.$this->modelLinkName.'/'.$this->entity.'/index';
@@ -294,11 +307,12 @@ class VtentityController extends Controller
                 $model=$this->_model;
                 $model->unsetAttributes();
                 $model->setScenario('search');
-		if(isset($_GET[$this->modelName])) {                  
+		if(isset($_GET[$this->modelName])) {
 			$model->setAttributes($_GET[$this->modelName]);
-			$_SESSION[$this->modelName]=$_GET[$this->modelName];
-		} elseif (isset($_SESSION[$this->modelName])) {                  
-			$model->setAttributes($_SESSION[$this->modelName]);
+			$this->actionCleansearch($model->getModule());
+			Yii::app()->session[$model->getModule().'_searchvals']=$_GET[$this->modelName];
+		} elseif (isset(Yii::app()->session[$model->getModule().'_searchvals'])) {                  
+			$model->setAttributes(Yii::app()->session[$model->getModule().'_searchvals']);
 		}                                   
 
 		$this->setCRUDpermissions($model->getModule());
@@ -329,15 +343,12 @@ class VtentityController extends Controller
                 $model->setScenario('search');
                 $fields=$model->getWritableFieldsArray();
 		$uitypes=$model->getUItype();
-		if (!empty($_SESSION['deleteCache']) and $_SESSION['deleteCache']=='true') {
-			$model->deleteCache=true;
-			unset($_SESSION['deleteCache']);
-		}
 		if(isset($_GET[$this->modelName])) {
 			$model->setAttributes($_GET[$this->modelName]);
-			$_SESSION[$this->modelName]=$_GET[$this->modelName];
-		} elseif (isset($_SESSION[$this->entity])) {
-			$model->setAttributes($_SESSION[$this->modelName]);
+			$this->actionCleansearch($model->getModule());
+			Yii::app()->session[$model->getModule().'_searchvals']=$_GET[$this->modelName];
+		} elseif (isset(Yii::app()->session[$model->getModule().'_searchvals'])) {
+			$model->setAttributes(Yii::app()->session[$model->getModule().'_searchvals']);
 		}                
 
 		$this->setCRUDpermissions($model->getModule());
@@ -360,6 +371,7 @@ class VtentityController extends Controller
 		$model=$this->loadModel();
 		$this->setCRUDpermissions($model->getModule());
 		$this->viewButtonSearch=false;
+		
 		$this->render('//vtentity/view',array(
 			'model'=>$model,
 		));
@@ -409,13 +421,13 @@ class VtentityController extends Controller
 			$name = $_GET['term'];
 			// this was set with the "max" attribute of the CAutoComplete widget
 			$limit = min((isset($_GET['limit']) ? $_GET['limit'] : 100), 40);
-			$criteria = new CDbCriteria;
+			$model=Vtentity::model();
+			$criteria = $model->getDbCriteria();
 			// lookupfield can contain list of fields
 			$lookup_fields=explode(',', $this->entityLookupField);
-			$criteria->condition = implode(" LIKE :sterm OR ", $lookup_fields)." LIKE :sterm";
+			$criteria->addCondition(implode(" LIKE :sterm OR ", $lookup_fields)." LIKE :sterm");
 			$criteria->params = array(":sterm"=>"%$name%");
 			$criteria->limit = $limit;
-			$model=Vtentity::model();
 			$model->setCriteria($criteria);
 			$entityArray = $model->getData($this->entityLookupField);
 			$returnVal = array();
@@ -554,7 +566,6 @@ class VtentityController extends Controller
 		}
 		if($model->save()) {
 			$view='helpdesk';
-			$_SESSION['deleteCache']='true'; // empty cache on next call
 			$response->addNotification('success', Yii::t('core', 'success'), Yii::t('core', 'successCreateRow'));
 			$relDocs = $clientvtiger->doGetRelatedRecords($ticketid, 'HelpDesk', 'Documents', '');
 			$response->addData(null, $this->renderPartial("//$view/_getdocs",array('relDocs'=>$relDocs),true));

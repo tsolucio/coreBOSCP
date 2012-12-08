@@ -43,10 +43,12 @@ class vtyiicpngActiveForm extends CActiveForm
 			case 25:
 			case 31:
 			case 32:
+			case 55:
 			case 71:
 			case 85:
 			case 104:
 			case 106:
+			case 255:
 				$widget=$this->textField($model,$fieldname,$htmlopts);
 				break;
 			case 5:
@@ -100,12 +102,12 @@ class vtyiicpngActiveForm extends CActiveForm
 			case 101:
 				$widget='';
 				$cname=get_class($model);
-                                if($action=='edit')
-				echo CHtml::hiddenField($cname."[$fieldname]",$model->$fieldname);
+                                if($action=='edit' or !empty($model->$fieldname))
+				$widget.=CHtml::hiddenField($cname."[$fieldname]",$model->$fieldname);
                                 else
-                                echo CHtml::hiddenField($cname."[$fieldname]");
+                                $widget.=CHtml::hiddenField($cname."[$fieldname]");
 				if (!empty($capturerefersto) and is_array($capturerefersto)) {
-					echo CHtml::hiddenField($cname.$fieldname."_type",$capturerefersto[0]);
+					$widget.=CHtml::hiddenField($cname.$fieldname."_type",$capturerefersto[0]);
 					if (count($capturerefersto)>1) {
 						$translation=false;
 						if(($cache=Yii::app()->cache)!==null) {
@@ -117,15 +119,15 @@ class vtyiicpngActiveForm extends CActiveForm
 						foreach ($capturerefersto as $modulename) {
 							$pl10values[$modulename]=($translation ? $modname[$modulename] : $modulename);
 						}
-						echo $this->dropDownList($model,$cname.$fieldname."_select",$pl10values,array(
+						$widget.= $this->dropDownList($model,$cname.$fieldname."_select",$pl10values,array(
 						  'onchange'=>"jQuery('#".$cname.$fieldname."_display').val('');jQuery('#".$cname.'_'.$fieldname."').val('');jQuery('#".$cname.$fieldname."_type').val(jQuery('#".$cname.'_'.$cname.$fieldname."_select').val());",
 						)).'&nbsp;';
 					}
 				} else { // this has to be an error, but we will setup the type field to avoid JS error
-					echo CHtml::hiddenField($cname.$fieldname."_type");
+					$widget.= CHtml::hiddenField($cname.$fieldname."_type");
 				}
 				$htmlopts['onClick']="if (jQuery('#".$cname.$fieldname."_display').val()=='".Yii::t('core', 'search')."') jQuery('#".$cname.$fieldname."_display').val('');";
-				if ($action=='edit') {
+				if ($action=='edit' or !empty($model->$fieldname)) {
 					$frmvalue=$model->getComplexAttributeValue($model->$fieldname);
 					if (is_array($frmvalue) and !empty($frmvalue['reference'])) {
 						$frmvalue=$frmvalue['reference'];
@@ -135,7 +137,7 @@ class vtyiicpngActiveForm extends CActiveForm
 				} else {
 					$frmvalue=Yii::t('core', 'search');
 				}
-				$this->widget('zii.widgets.jui.CJuiAutoComplete', array(
+				$widget.=$this->widget('zii.widgets.jui.CJuiAutoComplete', array(
 					'model'=>$model,
 					'name'=>$cname.$fieldname."_display",                                       
 					'value'=>$frmvalue,                                  
@@ -155,14 +157,12 @@ class vtyiicpngActiveForm extends CActiveForm
 						'select' => 'js:function(event, ui){ jQuery("#'.$cname.'_'.$fieldname.'").val(ui.item["id"]); }'
 					),
 					'htmlOptions'=>$htmlopts,
-				));
+				),true);
 				break;
 			case 15:
 			case 16:
-			case 55:
 			case 111:
 			case 115:
-			case 255:                         
 				if($fieldname !='firstname' && $fieldname !='lastname')
                                 {
                                 $plvals=$model->getPicklistValues($fieldname);

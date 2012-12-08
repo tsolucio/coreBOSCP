@@ -45,7 +45,7 @@ abstract class VTActiveResource extends CModel
     private $module;
     private $clientvtiger;
     private $count;
-    public $deleteCache=false;
+    public $defaultCacheTimeout = 3000;
     public $doDereference=true;
 
     /**
@@ -59,7 +59,7 @@ abstract class VTActiveResource extends CModel
 
     	$this->setScenario($scenario);
     	$this->setIsNewResource(true);
-    	$this->_criteria=new CDbCriteria();
+    	//$this->_criteria=new CDbCriteria();
     	if (empty($moduleParam))
     	$module=Yii::app()->getRequest()->getParam('module');
     	else
@@ -296,7 +296,7 @@ abstract class VTActiveResource extends CModel
      */
     public function getDbCriteria($createIfNull=true)
     {
-    	if($this->_c===null)
+    	if($this->_criteria===null)
     	{
     		if(($c=$this->defaultScope())!==array() || $createIfNull)
     			$this->_criteria=new CDbCriteria($c);
@@ -1622,16 +1622,14 @@ abstract class VTActiveResource extends CModel
     {
     	$module=$this->getModule();    	
     
-    	$criteriaArray=$criteria->toArray();
+    	if(empty($criteria)){
+	    $criteria=$this->getcriteria();
+	}
     	$pageSize=Yii::app()->user->settings->get('pageSize');
     	$q=$this->createVtigerSQLCommand($module,$criteria,$cols);
-    	$api_cache_id=md5('findall'.$q);
-    	if ($this->deleteCache) {
-    		Yii::app()->cache->delete( $api_cache_id  );
-    		$this->deleteCache=false;
-    	}
+    	$api_cache_id='findall'.$q;
     	$findall = Yii::app()->cache->get( $api_cache_id  );
-    
+
     	// If the results were false, then we have no valid data, so load it
     	if($findall===false){
                 $clientvtiger=$this->getClientVtiger();
@@ -1639,11 +1637,10 @@ abstract class VTActiveResource extends CModel
     		else {
     			$findall = $clientvtiger->doQuery($q);
     		}
-    		Yii::app()->cache->set( $api_cache_id , $findall, 3600 );
+    		Yii::app()->cache->set( $api_cache_id , $findall, $this->defaultCacheTimeout, new vtDbCacheDependency("select modifiedtime from $module order by modifiedtime desc limit 1") );
     	}
         $this->setCount(count($findall));
         $findall=$this->dereferenceIds($findall);
-    	Yii::log('findallFromSearch: '.count($findall),CLogger::LEVEL_INFO);
     	return $this->populateRecords($findall,false);
     }
  
@@ -1694,7 +1691,7 @@ abstract class VTActiveResource extends CModel
     				if($tm!=='') {
     					if ((Yii::app()->vtyiicpngScope=='CPortal' and in_array($respvalues[$tm]['module'],Yii::app()->notSupportedModules[Yii::app()->vtyiicpngScope]))
     					 or (Yii::app()->vtyiicpngScope=='vtigerCRM' and !in_array($respvalues[$tm]['module'],Yii::app()->notSupportedModules[Yii::app()->vtyiicpngScope]))) {
-    						$recinfo[$i][$fld]=CHtml::link(CHtml::encode($respvalues[$tm]['reference']),'#vtentity/'.$respvalues[$tm]['module']."/view/$tm");
+    						$recinfo[$i][$fld]=CHtml::link($respvalues[$tm]['reference'],'#vtentity/'.$respvalues[$tm]['module']."/view/$tm");
     					} else {
     						$recinfo[$i][$fld]=$respvalues[$tm]['reference'];
     					}
@@ -1702,7 +1699,7 @@ abstract class VTActiveResource extends CModel
     			}
     			if($module == 'Documents') {
     				$idatt=$recinfo[$i]['id'];
-    				if(!empty($all_attachments) && in_array($idatt,array_keys($all_attachments))) {
+    				if(is_array($all_attachments) && in_array($idatt,array_keys($all_attachments))) {
     					if (!empty($all_attachments[$idatt]['filetype'])) {
     						$value='<a href=\'javascript: filedownload.download("'.yii::app()->baseUrl.'/index.php/vtentity/'.$this->getModule().'/download/'.$idatt.'?fn='.CHtml::encode($all_attachments[$idatt]['filename']).'&ft='.CHtml::encode($all_attachments[$idatt]['filetype']).'","")\'>'.CHtml::encode($all_attachments[$idatt]['filename'])."</a>";
     					} else {
@@ -1759,6 +1756,22 @@ abstract class VTActiveResource extends CModel
     		$recordInfo = $clientvtiger->doRetrieve($record);
     	}
     	$recordInfo=$this->dereferenceIds($recordInfo);
+    	return $this->populateRecord($recordInfo);
+    }
+
+    /**
+     * Finds a single active resource with the specified id without dereferencing IDs
+     * @param mixed $id The id.
+     * @return VTActiveResource the resource found. Null if none is found.
+     */
+    public function findById_Raw($record)
+    {
+    	$module = $this->getModule();    	
+    	$clientvtiger=$this->getClientVtiger();
+    	if(!$clientvtiger) Yii::log('login failed',CLogger::LEVEL_ERROR);
+    	else {
+    		$recordInfo = $clientvtiger->doRetrieve($record);
+    	}
     	return $this->populateRecord($recordInfo);
     }
 
@@ -2384,7 +2397,7 @@ abstract class VTActiveResource extends CModel
 				$Fields=$Fieldsdata['fields'];
 				$this->_fieldinfo=$Fields;
 				$this->translateAttributeLabels();
-				Yii::app()->cache->set( $api_cache_id , $this->_fieldinfo, 3600 );
+				Yii::app()->cache->set( $api_cache_id , $this->_fieldinfo, $this->defaultCacheTimeout );
 			}
 		} else {
 			$this->_fieldinfo=$Fields;
@@ -2405,10 +2418,7 @@ abstract class VTActiveResource extends CModel
 			else {
 				$ListViewFields = $clientvtiger->doGetFilterFields($module);
 			}
-
-			// Store the data into the cache and allow it to be
-			// valid for 1 hour (3600 seconds)
-			Yii::app()->cache->set( $api_cache_id , $ListViewFields, 3600 );
+			Yii::app()->cache->set( $api_cache_id , $ListViewFields, $this->defaultCacheTimeout );
 		}
 
 		return $ListViewFields;
@@ -2428,21 +2438,31 @@ abstract class VTActiveResource extends CModel
 	}
 
 	public function getComplexAttributeValues($arrayofids){
-                $module = $this->getModule();
-		$api_cache_id='getComplexAttributeValues'.implode(',',$arrayofids);
-		$complexattributevalue = Yii::app()->cache->get( $api_cache_id  );
-
-		// If the results were false, then we have no valid data,
-		// so load it
-		if($complexattributevalue===false){
+		$rdo = array();
+		$toget = array();
+		foreach ($arrayofids as $val) {
+			$complexattributevalue = Yii::app()->cache->get('getComplexAttributeValues'.$val);
+			if ($complexattributevalue===false) {
+				$toget[] = $val;
+			} else{
+				$rdo[$val] = $complexattributevalue;
+			}
+		}
+		if(count($toget)>0) {
                         $clientvtiger=$this->getClientVtiger();
 			if(!$clientvtiger) Yii::log('login failed',CLogger::LEVEL_ERROR);
 			else {
 				$complexattributevalue = $clientvtiger->doInvoke('getReferenceValue',array('id'=>serialize($arrayofids)));
 			}
-			Yii::app()->cache->set( $api_cache_id , $complexattributevalue, 3600 );
+			$cpxarr = unserialize($complexattributevalue);
+			if (is_array($cpxarr)) {
+				foreach ($cpxarr as $wsid=>$cpxval) {
+					Yii::app()->cache->set( 'getComplexAttributeValues'.$wsid , $cpxval, $this->defaultCacheTimeout );
+					$rdo[$wsid] = $cpxval;
 		}
-		return $complexattributevalue;
+			}
+		}
+		return serialize($rdo);
     }
         public function getComplexAttributeValue($fieldvalue){                   
                     $tr=unserialize($this->getComplexAttributeValues(array($fieldvalue)));
@@ -2452,7 +2472,6 @@ abstract class VTActiveResource extends CModel
         public function getDocumentAttachment($ids,$getfile=true){
 		$api_cache_id='getDocumentAttachment'.$ids;
 		$documentAttachment = Yii::app()->cache->get( $api_cache_id  );
-
 		// If the results were false, then we have no valid data,
 		// so load it
 		if($documentAttachment===false){
@@ -2461,8 +2480,9 @@ abstract class VTActiveResource extends CModel
 			else {
 				$documentAttachment = $clientvtiger->doInvoke('retrievedocattachment',array('id'=>$ids,'returnfile'=>$getfile));
 			}
-			Yii::app()->cache->set( $api_cache_id , $documentAttachment, 3600 );
+			Yii::app()->cache->set( $api_cache_id , $documentAttachment, $this->defaultCacheTimeout );
 		} 
+
 		return $documentAttachment;
         }
 
@@ -2493,7 +2513,7 @@ abstract class VTActiveResource extends CModel
 				$usersinsamegroup['19x'.$key]=$usersinsamegroup[$key];
 				unset($usersinsamegroup[$key]);
 			}
-			Yii::app()->cache->set( $api_cache_id , $usersinsamegroup, 3600 );
+			Yii::app()->cache->set( $api_cache_id , $usersinsamegroup, $this->defaultCacheTimeout );
 		}
 		return $usersinsamegroup;
 	}
@@ -2528,7 +2548,7 @@ abstract class VTActiveResource extends CModel
 		else {
 			if (empty($language)) $language = Yii::app()->getLanguage();
 			$tr = $clientvtiger->doTranslate($strs, $language, $module);
-                        Yii::app()->cache->set( $api_cache_id , $tr, 3600 );
+                        Yii::app()->cache->set( $api_cache_id , $tr, $this->defaultCacheTimeout );
 		}
                 }                
 		return $tr;
@@ -2704,7 +2724,7 @@ abstract class VTActiveResource extends CModel
     			}
 
     		}
-    		Yii::app()->cache->set( $api_cache_id , $PickListValues, 3600 );
+    		Yii::app()->cache->set( $api_cache_id , $PickListValues, $this->defaultCacheTimeout );
     	}
     	return $PickListValues;
     }

@@ -1,7 +1,12 @@
 <?php
 /*
+ * vtiger CRM vtyiiCPng - web based vtiger CRM Customer Portal
+ * Copyright 2012 JPL TSolucio, S.L.   --   This file is a part of vtiger CRM vtyiiCPng.
+ * Licensed under the GNU General Public License (the "License");
+ * This file is a modified version of it's equivalent in the Chive Project
+ *
  * Chive - web based MySQL database management
- * Copyright (C) 2010 Fusonic GmbH
+ * Copyright (C) 2010 Fusonic GmbH  
  *
  * This file is part of Chive.
  *

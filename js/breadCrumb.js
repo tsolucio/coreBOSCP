@@ -32,7 +32,7 @@ var breadCrumb = {
 		ul.children('a.dynamicCrumb').remove();
 		
 		// Check if data is array
-		if(!$.isArray(data))
+		if(!$.isArray(data) || data.length==0)
 		{
 			return;
 		}

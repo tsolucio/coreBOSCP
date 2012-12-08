@@ -38,11 +38,12 @@ class FaqController extends VtentityController
                 $model=$this->_model;
                 $model->unsetAttributes();
                 $model->setScenario('search');
-		if(isset($_GET[$this->modelName])) {                  
+		if(isset($_GET[$this->modelName])) {
 			$model->setAttributes($_GET[$this->modelName]);
-			$_SESSION[$this->modelName]=$_GET[$this->modelName];
-		} elseif (isset($_SESSION[$this->modelName])) {                  
-			$model->setAttributes($_SESSION[$this->modelName]);
+			actionCleansearch($model->getModule());
+			Yii::app()->session[$model->getModule().'_searchvals']=$_GET[$this->modelName];
+		} elseif (isset(Yii::app()->session[$model->getModule().'_searchvals'])) {                  
+			$model->setAttributes(Yii::app()->session[$model->getModule().'_searchvals']);
 		}                                   
 
 		$this->setCRUDpermissions($model->getModule());
