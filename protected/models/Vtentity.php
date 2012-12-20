@@ -255,7 +255,7 @@ class Vtentity extends CActiveRecord
 		if (!empty($this->_attributes))
 			$fields=$this->_attributes;
 		else
-			$fields=$this->getFieldsInfo();
+			$fields=$this->getFieldsInfo(true);
 		foreach ($fields as $field) {
 			if (!is_array($field)) continue;
                        $key=$field['name'];

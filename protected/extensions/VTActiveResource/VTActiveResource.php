@@ -879,7 +879,7 @@ abstract class VTActiveResource extends CModel
     public function getAttributes($names=true)
     {
     	$attributes=$this->_attributes;
-    
+
     	foreach($this->getMetaData()->properties as $name=>$type)
     	{
     		if(property_exists($this,$name))
@@ -2373,14 +2373,14 @@ abstract class VTActiveResource extends CModel
 		return $this->findAll($this->getCriteria(),$cols);
     }
        
-	public function getFieldsInfo()
+	public function getFieldsInfo($sortthem=false)
 	{
 		if (empty($this->_fieldinfo) or count($this->_fieldinfo)==0)
-			$this->setFieldsInfo();
+			$this->setFieldsInfo($sortthem);
 		return $this->_fieldinfo;
 	}
 
-	public function setFieldsInfo()
+	public function setFieldsInfo($sortthem=false)
 	{		
 		$module=$this->getModule();
 
@@ -2396,12 +2396,40 @@ abstract class VTActiveResource extends CModel
 			} else {
 				$Fieldsdata = $clientvtiger->doDescribe($module);
 				$Fields=$Fieldsdata['fields'];
+				if ($sortthem)
+					usort($Fields,"VTActiveResource::sortFieldsData");
 				$this->_fieldinfo=$Fields;
 				$this->translateAttributeLabels();
 				Yii::app()->cache->set( $api_cache_id , $this->_fieldinfo, $this->defaultCacheTimeout );
 			}
 		} else {
 			$this->_fieldinfo=$Fields;
+		}
+	}
+
+	static public function sortFieldsData($field1,$field2) {
+		if(!isset($field1['block'])) {
+			if (!isset($field2['block'])) {
+				return 0;
+			} else {
+				return 1;
+			}
+		} else {
+			if (!isset($field2['block'])) {
+				return -1;
+			} else {
+				if ($field1['block']['blocksequence']>$field2['block']['blocksequence']) {
+					return 1;
+				} elseif ($field1['block']['blocksequence']<$field2['block']['blocksequence']) {
+					return -1;
+				} elseif ($field1['sequence']>$field2['sequence']) {
+					return 1;
+				} elseif ($field1['sequence']<$field2['sequence']) {
+					return -1;
+				} else {
+					return 0;
+				}
+			}
 		}
 	}
 

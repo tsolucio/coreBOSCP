@@ -45,7 +45,7 @@ class VtentityController extends Controller
 	{
 		$modelclass=$this->modelName;
 		$model=$modelclass::model();
-                $this->_model=$model;
+		$this->_model=$model;
 		$this->entityLookupField=$model->getLookupField();
 		$this->entityidField=$model->primaryKey();
 		$this->entity=$model->getModule();

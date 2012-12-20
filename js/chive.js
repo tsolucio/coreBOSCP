@@ -112,6 +112,7 @@ var chive = {
 				if (xhr.statusText!='abort') {  // si hemos abortado la llamada ajax no mostrar error
 				Notification.add('ajaxerror', lang.get('core', 'ajaxRequestFailed'), lang.get('core', 'ajaxRequestFailedText'), xhr.responseText);
 				$('#loading').css({'background-image': 'url(images/loading5.gif)'}).fadeOut();
+				}
 			});
 
 	},
