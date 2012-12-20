@@ -130,7 +130,7 @@ class vtyiicpngActiveForm extends CActiveForm
 				if ($action=='edit' or !empty($model->$fieldname)) {
 					$frmvalue=$model->getComplexAttributeValue($model->$fieldname);
 					if (is_array($frmvalue) and !empty($frmvalue['reference'])) {
-						$frmvalue=$frmvalue['reference'];
+						$frmvalue=html_entity_decode($frmvalue['reference'],ENT_QUOTES,'UTF-8');
 					} else {
 						$frmvalue=Yii::t('core', 'search');
 					}
@@ -139,8 +139,8 @@ class vtyiicpngActiveForm extends CActiveForm
 				}
 				$widget.=$this->widget('zii.widgets.jui.CJuiAutoComplete', array(
 					'model'=>$model,
-					'name'=>$cname.$fieldname."_display",                                       
-					'value'=>$frmvalue,                                  
+					'name'=>$cname.$fieldname."_display",
+					'value'=>$frmvalue,
 					'source'=>'js:function(request, response){ // el truco es reescribir source
 						     $.getJSON("'.Yii::app()->createUrl($model->modelLinkName).'"+"/"+$("#'.$cname.$fieldname."_type".'").val()+"/AutoCompleteLookup",
 						     {

@@ -1644,7 +1644,7 @@ abstract class VTActiveResource extends CModel
     	return $this->populateRecords($findall,false);
     }
  
-    public function dereferenceIds($recinfo) {
+    public function dereferenceIds($recinfo,$htmlreference=true) {
     	if (!$this->doDereference) return $recinfo;
     	$all_attachments=array();
     	$simplerdo=false;
@@ -1689,11 +1689,12 @@ abstract class VTActiveResource extends CModel
     			foreach($tobelookfields as $fld){
     				$tm=$recinfo[$i][$fld];
     				if($tm!=='') {
-    					if ((Yii::app()->vtyiicpngScope=='CPortal' and in_array($respvalues[$tm]['module'],Yii::app()->notSupportedModules[Yii::app()->vtyiicpngScope]))
-    					 or (Yii::app()->vtyiicpngScope=='vtigerCRM' and !in_array($respvalues[$tm]['module'],Yii::app()->notSupportedModules[Yii::app()->vtyiicpngScope]))) {
+    					if (((Yii::app()->vtyiicpngScope=='CPortal' and in_array($respvalues[$tm]['module'],Yii::app()->notSupportedModules[Yii::app()->vtyiicpngScope]))
+    					 or (Yii::app()->vtyiicpngScope=='vtigerCRM' and !in_array($respvalues[$tm]['module'],Yii::app()->notSupportedModules[Yii::app()->vtyiicpngScope])))
+    					 and $htmlreference) {
     						$recinfo[$i][$fld]=CHtml::link($respvalues[$tm]['reference'],'#vtentity/'.$respvalues[$tm]['module']."/view/$tm");
     					} else {
-    						$recinfo[$i][$fld]=$respvalues[$tm]['reference'];
+    						$recinfo[$i][$fld]=html_entity_decode($respvalues[$tm]['reference'],ENT_QUOTES,'UTF-8');
     					}
     				}
     			}

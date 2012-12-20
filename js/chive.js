@@ -109,6 +109,7 @@ var chive = {
 				$('#loading').css({'background-image': 'url(images/loading5.gif)'}).fadeOut();
 			})
 			.ajaxError(function(error, xhr) {
+				if (xhr.statusText!='abort') {  // si hemos abortado la llamada ajax no mostrar error
 				Notification.add('ajaxerror', lang.get('core', 'ajaxRequestFailed'), lang.get('core', 'ajaxRequestFailedText'), xhr.responseText);
 				$('#loading').css({'background-image': 'url(images/loading5.gif)'}).fadeOut();
 			});
