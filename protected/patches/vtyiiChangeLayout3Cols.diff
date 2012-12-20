@@ -11,7 +11,7 @@ Index: protected/views/vtentity/_view.php
 +		'itemCssClass'=>array('col1','col2','col3'),
  		'cssFile'=>BASEURL.'/themes/'.Yii::app()->getTheme()->getName().'/css/list.css',
  	));
- 	echo CHTML::hiddenField('entityidValue',$data->__get($this->entityidField), array('id'=>'entityidValue'));
+ 	echo CHtml::hiddenField('entityidValue',$data->__get($this->entityidField), array('id'=>'entityidValue'));
 Index: themes/standard/css/list.css
 ===================================================================
 --- themes/standard/css/list.css	(revisión: 289)

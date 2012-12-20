@@ -6,11 +6,11 @@
 		'attributes'=>$data->getDetailViewFields(),
 		'cssFile'=>BASEURL.'/themes/'.Yii::app()->getTheme()->getName().'/css/list.css',
 	));
-	echo CHTML::hiddenField('entityidValue',$data->__get($this->entityidField), array('id'=>'entityidValue'));
+	echo CHtml::hiddenField('entityidValue',$data->__get($this->entityidField), array('id'=>'entityidValue'));
 	$pnum = (empty($_GET[$this->modelName.'_page']) ? 1 : $_GET[$this->modelName.'_page']);
-	echo CHTML::hiddenField('dvcpage',$pnum-1, array('id'=>'dvcpage'));
-	echo CHTML::hiddenField('idfieldtxt',$data->getLookupFieldValue($this->entityLookupField,$data->getAttributes()), array('id'=>'idfieldtxt'));
-	echo CHTML::hiddenField('idfieldval',$data->__get($this->entityidField), array('id'=>'idfieldval'));
+	echo CHtml::hiddenField('dvcpage',$pnum-1, array('id'=>'dvcpage'));
+	echo CHtml::hiddenField('idfieldtxt',$data->getLookupFieldValue($this->entityLookupField,$data->getAttributes()), array('id'=>'idfieldtxt'));
+	echo CHtml::hiddenField('idfieldval',$data->__get($this->entityidField), array('id'=>'idfieldval'));
 	$relPrjdocs = $data->GetRelatedRecords('Documents');
 	$relPrjticket = $data->GetRelatedRecords('HelpDesk');
 	$relPrjmstone = $data->GetRelatedRecords('ProjectMilestone');

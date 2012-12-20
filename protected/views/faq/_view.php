@@ -102,11 +102,11 @@ if (count($relComments)>0) {
 }
 echo '</div>'; // close div comments
 
-echo CHTML::hiddenField('entityidValue',$data->__get($this->entityidField), array('id'=>'entityidValue'));
+echo CHtml::hiddenField('entityidValue',$data->__get($this->entityidField), array('id'=>'entityidValue'));
 $pnum = (empty($_GET[$this->modelName.'_page']) ? 1 : $_GET[$this->modelName.'_page']);
-echo CHTML::hiddenField('dvcpage',$pnum-1, array('id'=>'dvcpage'));
-echo CHTML::hiddenField('idfieldtxt',$data->getLookupFieldValue($this->entityLookupField,$data->getAttributes()), array('id'=>'idfieldtxt'));
-echo CHTML::hiddenField('idfieldval',$data->__get($this->entityidField), array('id'=>'idfieldval'));
+echo CHtml::hiddenField('dvcpage',$pnum-1, array('id'=>'dvcpage'));
+echo CHtml::hiddenField('idfieldtxt',$data->getLookupFieldValue($this->entityLookupField,$data->getAttributes()), array('id'=>'idfieldtxt'));
+echo CHtml::hiddenField('idfieldval',$data->__get($this->entityidField), array('id'=>'idfieldval'));
 ?>
 <div class="addfaqcomment">
 <?php $form=$this->beginWidget('CActiveForm', array(

@@ -1,11 +1,11 @@
 <div class="view">
 <div class="helpdesk">
 <?php
-echo CHTML::hiddenField('entityidValue',$data->__get($this->entityidField), array('id'=>'entityidValue'));
+echo CHtml::hiddenField('entityidValue',$data->__get($this->entityidField), array('id'=>'entityidValue'));
 $pnum = (empty($_GET[$this->modelName.'_page']) ? 1 : $_GET[$this->modelName.'_page']);
-echo CHTML::hiddenField('dvcpage',$pnum-1, array('id'=>'dvcpage'));
-echo CHTML::hiddenField('idfieldtxt',$data->getLookupFieldValue($this->entityLookupField,$data->getAttributes()), array('id'=>'idfieldtxt'));
-echo CHTML::hiddenField('idfieldval',$data->__get($this->entityidField), array('id'=>'idfieldval'));
+echo CHtml::hiddenField('dvcpage',$pnum-1, array('id'=>'dvcpage'));
+echo CHtml::hiddenField('idfieldtxt',$data->getLookupFieldValue($this->entityLookupField,$data->getAttributes()), array('id'=>'idfieldtxt'));
+echo CHtml::hiddenField('idfieldval',$data->__get($this->entityidField), array('id'=>'idfieldval'));
 ?>
 <div class="helpdesk_left">
 <div class="helpdesk_t"><?php echo $data->__get('ticket_title'); ?>&nbsp;</div>
@@ -55,8 +55,8 @@ if (count($relComments)>0) {
 		'action'=>array('vtentity/Documents/adddocument/'.$data->__get($this->entityidField)),
 	));
 	echo '<fieldset>';
-	echo CHTML::label(Yii::t('core','addoneattachment'), 'filename').'<br/>';
-	echo CHTML::fileField('filename','',array('id'=>'filename'));
+	echo CHtml::label(Yii::t('core','addoneattachment'), 'filename').'<br/>';
+	echo CHtml::fileField('filename','',array('id'=>'filename'));
 	?>
 	<div class="row buttons"><?php echo CHtml::submitButton(Yii::t('core', 'addattachment')); ?></div>
 	</fieldset>
