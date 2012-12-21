@@ -107,7 +107,12 @@ class vtyiicpngActiveForm extends CActiveForm
                                 else
                                 $widget.=CHtml::hiddenField($cname."[$fieldname]");
 				if (!empty($capturerefersto) and is_array($capturerefersto)) {
-					$widget.=CHtml::hiddenField($cname.$fieldname."_type",$capturerefersto[0]);
+					if (!empty($model->$fieldname)) {
+						$frmvalue = $model->getComplexAttributeValue($model->$fieldname);
+						$selmodule = $frmvalue['module'];
+					}
+					if (empty($selmodule)) $selmodule = $capturerefersto[0];
+					$widget.=CHtml::hiddenField($cname.$fieldname."_type",$selmodule);
 					if (count($capturerefersto)>1) {
 						$translation=false;
 						if(($cache=Yii::app()->cache)!==null) {
@@ -119,7 +124,7 @@ class vtyiicpngActiveForm extends CActiveForm
 						foreach ($capturerefersto as $modulename) {
 							$pl10values[$modulename]=($translation ? $modname[$modulename] : $modulename);
 						}
-						$widget.= $this->dropDownList($model,$cname.$fieldname."_select",$pl10values,array(
+						$widget.= CHtml::dropDownList($cname.$fieldname."_select",$selmodule,$pl10values,array(
 						  'onchange'=>"jQuery('#".$cname.$fieldname."_display').val('');jQuery('#".$cname.'_'.$fieldname."').val('');jQuery('#".$cname.$fieldname."_type').val(jQuery('#".$cname.'_'.$cname.$fieldname."_select').val());",
 						)).'&nbsp;';
 					}

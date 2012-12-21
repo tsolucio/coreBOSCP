@@ -331,6 +331,7 @@ abstract class VTActiveResource extends CModel
      * if the model needs to be queried with some default criteria (e.g. only active records should be returned).
      * @return array the query criteria. This will be used as the parameter to the constructor
      * of {@link CDbCriteria}.
+     * See also: Vtentity::getRelationInformation()
      */
     public function defaultScope()
     {

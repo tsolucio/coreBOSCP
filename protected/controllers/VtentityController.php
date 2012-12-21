@@ -112,16 +112,7 @@ class VtentityController extends Controller
 	public function accessRules()
 	{
 		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view','list','AutoCompleteLookup','Download','DownloadPDF','Addticket','Adddocument'),
-				'users'=>array('@'),
-			),
-			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
-				'users'=>array('@'),
-			),
-			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete'),
+			array('allow', // allow authenticated users access to all actions
 				'users'=>array('@'),
 			),
 			array('deny',  // deny all users
@@ -137,6 +128,10 @@ class VtentityController extends Controller
 	public function actionCreate()
 	{
 		$model=new $this->modelName;
+		$relInfo = $model->getRelationInformation();
+		foreach ($relInfo as $fld => $value) {
+			$model->setAttribute($fld,$value);
+		}
 		if (!$this->vtyii_canCreate($model->getModule())) {
 			$response = new AjaxResponse();
 			$response->addNotification('error', Yii::t('core', 'error'), Yii::t('core', 'errorCreateRow')."<br>".Yii::t('core', 'errorPermssion'));
@@ -156,6 +151,8 @@ class VtentityController extends Controller
 		{
 			$response = new AjaxResponse();
 			$model->unsetAttributes();
+			$relInfo = $model->getRelationInformation();
+			$_POST[$this->modelName] = array_merge($relInfo,$_POST[$this->modelName]);
 			$model->setAttributes($_POST[$this->modelName]);
                         if($model->getModule()=='Documents' && $model->getAttribute('filelocationtype')=='I')
                         {
@@ -337,7 +334,6 @@ class VtentityController extends Controller
 			// unset the parameter as it would interfere with pager and repetitive page size change
 			unset($_GET['pageSize']);
 		}
-		
                 $model=$this->_model;
                 $model->unsetAttributes();
                 $model->setScenario('search');
@@ -391,7 +387,7 @@ class VtentityController extends Controller
 			if(isset($_GET[$this->entityidField]))
 				$this->_model=$model->findbyPk($_GET[$this->entityidField]);                        
 			if($this->_model===null)
-			  throw new CHttpException(404,Yii::t('core', 'errorIdNotExist'));                        
+			  throw new CHttpException(404,Yii::t('core', 'errorIdNotExist'));
 		}                
 		if($this->_model) $this->_model->setIsNewRecord(false);                
 		$this->entityidValue=$this->_model->__get($this->entityidField);
@@ -437,6 +433,21 @@ class VtentityController extends Controller
 						'id'=>$entityRecord[$this->entityidField]);
 			}
 			echo CJSON::encode($returnVal);
+		}
+	}
+
+	public function actionExport() {
+		$module = Yii::app()->getRequest()->getParam('module');
+		if ($this->vtyii_canEdit($module)) {
+			header('Content-type: text/csv');
+			header("Content-Type: application/download");
+			header("Pragma: public");
+			header("Cache-Control: private");
+			header("Content-Disposition: attachment; filename=$module.csv");
+			header("Content-Description: sigpaccp download");
+			$model=Vtentity::model();
+			$model->setModule($module);
+			$model->exportRecords(TRUE);
 		}
 	}
 
@@ -551,7 +562,10 @@ class VtentityController extends Controller
 				"type"=>$uploadfile->getType(),
 				'content'=>$cont);
 		$model->setAttribute('filename',$model_filename);
-		$model->setAttribute('notes_title',$model_filename['name']);
+		$dtitle = Yii::app()->getRequest()->getParam('document_title');
+		if (empty($dtitle))
+			$dtitle = $model_filename['name'];
+		$model->setAttribute('notes_title',$dtitle);
 		$model->setAttribute('filename',$model_filename);
 		$model->setAttribute('filetype',$model_filename['type']);
 		$model->setAttribute('filesize',$model_filename['size']);
@@ -560,14 +574,17 @@ class VtentityController extends Controller
 		$model->setAttribute('filestatus', 1);
 		$model->setAttribute('folderid', $model->getAttachmentFolderId());
 		$model->setAttribute('assigned_user_id', Yii::app()->user->userId);
+		$crmrelid = Yii::app()->getRequest()->getParam('id');
+		$model->setAttribute('relations',explode(',', Yii::app()->user->accountId.(empty($crmrelid) ? '' : ",$crmrelid")));
 		$ticketid = Yii::app()->getRequest()->getParam('id',0);
 		if (!empty($ticketid)) {
 			$model->setAttribute('relations',$ticketid);
 		}
 		if($model->save()) {
-			$view='helpdesk';
+			$view=Yii::app()->getRequest()->getParam('adjuntoparalavista');
+			if (empty($view)) $view = 'helpdesk';
 			$response->addNotification('success', Yii::t('core', 'success'), Yii::t('core', 'successCreateRow'));
-			$relDocs = $clientvtiger->doGetRelatedRecords($ticketid, 'HelpDesk', 'Documents', '');
+			$relDocs = $clientvtiger->doGetRelatedRecords($crmrelid, $view, 'Documents', '');
 			$response->addData(null, $this->renderPartial("//$view/_getdocs",array('relDocs'=>$relDocs),true));
 		} else {
 			$response->addNotification('error', Yii::t('core', 'error'), Yii::t('core', 'errorCreateRow').'<br>'.$model->getLastError());

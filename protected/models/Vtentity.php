@@ -26,7 +26,7 @@ class Vtentity extends CActiveRecord
 	public function __construct()
 	{
 		parent::__construct();
-		$this->tablename=$this->getModule();               
+		$this->tablename=$this->getModule();
 		$this->entityidField=$this->primaryKey();
 	}
 
@@ -36,15 +36,7 @@ class Vtentity extends CActiveRecord
 	 */
 	public static function model($className=__CLASS__)
 	{
-		return parent::model($className);                
-	}
-
-	/**
-	 * @return string the associated database table name
-	 */
-	public function tableName()
-	{
-		return $this->tablename;
+		return parent::model($className);
 	}
 
 	/**
@@ -592,4 +584,122 @@ class Vtentity extends CActiveRecord
 		return 'CHtml::link(CHtml::encode($data["'.$fieldname.'"]),"#vtentity/'.$this->getModule().'/list/".$data["id"]."/dvcpage/".('.$gridOffset.'+$row-1))';
 	}
 
+	public function getRelationInformation()
+	{
+		// see also VTActiveResource::defaultScope()
+		if (Yii::app()->vtyiicpngScope=='vtigerCRM') {
+			return array();
+		} else {
+			switch ($this->getModule()) {
+				case 'Contacts':
+					$condition = array('account_id'=>Yii::app()->user->accountId);
+					break;
+				case 'Accounts':
+					$condition = array('id'=>Yii::app()->user->accountId);
+					break;
+				case 'Quotes':
+					$condition = array(
+						'account_id'=>Yii::app()->user->accountId,
+						'contact_id'=>Yii::app()->user->contactId,
+					);
+					break;
+				case 'SalesOrder':
+					$condition = array(
+						'account_id'=>Yii::app()->user->accountId,
+						'contact_id'=>Yii::app()->user->contactId
+					);
+					break;
+				case 'ServiceContracts':
+					$condition = array(
+						'sc_related_to'=>Yii::app()->user->contactId
+					);
+					break;
+				case 'Invoice':
+					$condition = array(
+						'account_id'=>Yii::app()->user->accountId,
+						'contact_id'=>Yii::app()->user->contactId
+					);
+					break;
+				case 'HelpDesk':
+					$condition = array(
+						'parent_id'=>Yii::app()->user->contactId
+					);
+					break;
+				case 'Assets':
+					$condition = array('account'=>Yii::app()->user->accountId);
+					break;
+				case 'Project':
+					$condition = array('linktoaccountscontacts'=>Yii::app()->user->contactId);
+					break;
+				case 'Products':
+					$condition = array('relations'=>Yii::app()->user->contactId);
+					break;
+				case 'Services':
+					$condition = array('relations'=>Yii::app()->user->contactId);
+					break;
+				case 'Documents':
+					$condition = array('relations'=>array(Yii::app()->user->contactId,Yii::app()->user->accountId));
+					break;
+				default:
+					$condition = array();
+			}
+			return $condition;
+		}
+	}
+
+	public function exportRecords($printit=TRUE) {
+		$this->unsetAttributes();
+		$this->setScenario('search');
+		if(isset($_GET[$this->modelName])) {
+			$this->setAttributes($_GET[$this->modelName]);
+		} elseif (isset(Yii::app()->session[$this->getModule().'_searchvals'])) {
+			$this->setAttributes(Yii::app()->session[$this->getModule().'_searchvals']);
+		}
+		if(isset(Yii::app()->session['doctype'])){
+			$this->doctype(Yii::app()->session['doctype']);
+		}
+		$this->search();
+		if (!empty($this->_attributes))
+			$fields=$this->_attributes;
+		else
+			$fields=$this->getFieldsInfo();
+		$header = '';
+		$fieldnames = array();
+		foreach ($fields as $field) {
+			if (!is_array($field)) continue;
+			$key=$field['name'];
+			if($key!=='id') {
+				$header.=$field['label'].',';
+				$fieldnames[]=$key;
+			}
+		}
+		if (!$printit) ob_start();
+		$header = trim($header,',');
+		echo "$header\n";
+		$criteria=new CDbCriteria;
+		$cnt = $this->count($criteria);
+		$criteria=new CDbCriteria;
+		$criteria->order = 'createdtime';
+		$criteria->limit = 100;
+		for ($numrec=0;$numrec<=$cnt;$numrec+=100) {
+			$criteria->offset = $numrec;
+			$recs = $this->query($criteria,true);
+			for ($nr=0;$nr<count($recs);$nr++) {
+				$row = '';
+				$recs[$nr]=$this->dereferenceIds($recs[$nr],false);
+				$attrs = $recs[$nr]->getAttributes(true);
+				foreach ($fieldnames as $fld) {
+					$row.='"'.$attrs[$fld].'",';
+				}
+				echo trim($row,',')."\n";
+			}
+		}
+		if (!$printit) {
+			$ret = ob_get_clean();
+			ob_end_clean();
+		} else {
+			$ret = '';
+		}
+		return $ret;
+	}
 }
