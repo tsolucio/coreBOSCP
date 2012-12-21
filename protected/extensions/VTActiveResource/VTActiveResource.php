@@ -1658,6 +1658,7 @@ abstract class VTActiveResource extends CModel
     	$tobelookfields=array();
     	$ids=array();
     	foreach($recinfo as $rec){
+		if (!is_array($rec)) continue;
     		foreach($rec as $key=>$val){
     			if($key=='id')
     			{
@@ -2098,7 +2099,8 @@ abstract class VTActiveResource extends CModel
     	$resources=array();
     	$i=0;
     	//if($this->getContainer())                    $data=$this->extractDataFromResponse($data);
-    	foreach($data as $attributes)
+    	if (is_array($data))
+	foreach($data as $attributes)
     	{
     		if(($resource=$this->populateRecord($attributes,$callAfterFind))!==null)
     		{
