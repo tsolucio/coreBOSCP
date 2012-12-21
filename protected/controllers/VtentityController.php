@@ -154,6 +154,10 @@ class VtentityController extends Controller
 			$relInfo = $model->getRelationInformation();
 			$_POST[$this->modelName] = array_merge($relInfo,$_POST[$this->modelName]);
 			$model->setAttributes($_POST[$this->modelName]);
+			$auid = $model->getAttribute('assigned_user_id');
+			if (empty($auid)) {  // assigned_user_id is special, so we make sure it has a value
+				$model->setAttribute('assigned_user_id',Yii::app()->user->userId);
+			}
                         if($model->getModule()=='Documents' && $model->getAttribute('filelocationtype')=='I')
                         {
                         $uploadfile=CUploadedFile::getInstance($model,'filename');

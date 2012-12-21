@@ -125,7 +125,7 @@ class vtyiicpngActiveForm extends CActiveForm
 							$pl10values[$modulename]=($translation ? $modname[$modulename] : $modulename);
 						}
 						$widget.= CHtml::dropDownList($cname.$fieldname."_select",$selmodule,$pl10values,array(
-						  'onchange'=>"jQuery('#".$cname.$fieldname."_display').val('');jQuery('#".$cname.'_'.$fieldname."').val('');jQuery('#".$cname.$fieldname."_type').val(jQuery('#".$cname.'_'.$cname.$fieldname."_select').val());",
+						  'onchange'=>"jQuery('#".$cname.$fieldname."_display').val('');jQuery('#".$cname.'_'.$fieldname."').val('');jQuery('#".$cname.$fieldname."_type').val(jQuery('#".$cname.$fieldname."_select').val());",
 						)).'&nbsp;';
 					}
 				} else { // this has to be an error, but we will setup the type field to avoid JS error

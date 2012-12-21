@@ -2530,19 +2530,19 @@ abstract class VTActiveResource extends CModel
 		$api_cache_id='getUsersInSameGroup';
 		$usersinsamegroup = Yii::app()->cache->get( $api_cache_id  );
 
-		// If the results were false, then we have no valid data,
-		// so load it
+		// If the results were false, then we have no valid data, so load it
 		if($usersinsamegroup===false){
-                        $clientvtiger=$this->getClientVtiger();
+			$clientvtiger=$this->getClientVtiger();
 			if(!$clientvtiger) Yii::log('login failed',CLogger::LEVEL_ERROR);
 			else {
-				$id='1';
-				$usersinsamegroup = $clientvtiger->doInvoke('getUsersInSameGroup',array('id'=>$id));
+				list($id,$usr) = explode('x', Yii::app()->user->userId);
+				$usersinsamegroup = $clientvtiger->doInvoke('getUsersInSameGroup',array('id'=>$usr));
+				$usersinsamegroup[$usr] = Yii::app()->user->username;
 			}
-			$usersinsamegroup['1']='admin';
+			$moduleid = $clientvtiger->doInvoke('vtyiicpng_getWSEntityId',array('entityName'=>'Users'));
 			foreach($usersinsamegroup as $key=>$value)
 			{
-				$usersinsamegroup['19x'.$key]=$usersinsamegroup[$key];
+				$usersinsamegroup[$moduleid.$key]=trim($usersinsamegroup[$key]);
 				unset($usersinsamegroup[$key]);
 			}
 			Yii::app()->cache->set( $api_cache_id , $usersinsamegroup, $this->defaultCacheTimeout );
