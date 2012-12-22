@@ -1674,8 +1674,8 @@ abstract class VTActiveResource extends CModel
     				if(is_numeric($void) && is_numeric($field)){
     					if(!in_array($val, $tobelook) && $val!=='') {
     						array_push($tobelook,$val);
-    						if(!in_array($key,$tobelookfields))  array_push($tobelookfields,$key);
     					}
+    					if(!in_array($key,$tobelookfields)) array_push($tobelookfields,$key);
     				}
     	
     			}
@@ -2505,7 +2505,7 @@ abstract class VTActiveResource extends CModel
 		$api_cache_id='getDocumentAttachment'.$ids;
 		$documentAttachment = Yii::app()->cache->get( $api_cache_id  );
 		// If the results were false, then we have no valid data, so load it
-		if($documentAttachment===false){
+		if($documentAttachment===false or $getfile){
 			$clientvtiger=$this->getClientVtiger();
 			if(!$clientvtiger) Yii::log('login failed',CLogger::LEVEL_ERROR);
 			else {
