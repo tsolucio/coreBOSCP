@@ -2292,7 +2292,11 @@ abstract class VTActiveResource extends CModel
 			if(!$clientvtiger) Yii::log('login failed',CLogger::LEVEL_ERROR);
 			else {
 				$moduledata = $clientvtiger->doDescribe($module);
+				if ($module=='HelpDesk') {
+				$labelFields='ticket_no';
+				} else {
 				$labelFields=$moduledata["labelFields"];
+				}
 				$moduleAccessInformation = Yii::app()->cache->get('moduleAccessInformation');
 				if($moduleAccessInformation===false){
 					$moduleAccessInformation=array();
