@@ -456,8 +456,11 @@ class VtentityController extends Controller
 	}
 
 	public function actionDownload() {
-		$id=Yii::app()->getRequest()->getParam('id');
+		$id=Yii::app()->getRequest()->getParam('id',0);
 		$saveasfile = "protected/runtime/cache/_$id";
+		if(file_exists($saveasfile) and filesize($saveasfile)==0) {
+			@unlink($saveasfile);
+		}
 		if(!file_exists($saveasfile)) {
 			$model=Vtentity::model();
 			$attachmentsdata=$model->getDocumentAttachment($id,true);
@@ -483,7 +486,7 @@ class VtentityController extends Controller
 			Yii::log('login failed');
 			$recordInfo=0;
 		} else {
-			$recordInfo = $clientvtiger->doInvoke('getpdfdata',array('id'=>$_GET['id']));
+			$recordInfo = $clientvtiger->doInvoke('getpdfdata',array('id'=>Yii::app()->getRequest()->getParam('id',0)));
 		}
 		if(empty($recordInfo) || !$recordInfo) {
 			return null;
