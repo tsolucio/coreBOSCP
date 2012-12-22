@@ -456,7 +456,7 @@ class VtentityController extends Controller
 	}
 
 	public function actionDownload() {
-		$id=$_GET['id'];
+		$id=Yii::app()->getRequest()->getParam('id');
 		$saveasfile = "protected/runtime/cache/_$id";
 		if(!file_exists($saveasfile)) {
 			$model=Vtentity::model();
@@ -464,11 +464,13 @@ class VtentityController extends Controller
 			$model->writeAttachment2Cache($id,$attachmentsdata[$id]['attachment']);
 		}
 		if(file_exists($saveasfile)) {
-			header("Content-type: ".$_GET['ft']);
+			$ft=Yii::app()->getRequest()->getParam('ft');
+			$fn=Yii::app()->getRequest()->getParam('fn');
+			header("Content-type: $ft");
 			header("Content-Type: application/download");
 			header("Pragma: public");
 			header("Cache-Control: private");
-			header("Content-Disposition: attachment; filename=".$_GET['fn']);
+			header("Content-Disposition: attachment; filename=$fn");
 			header("Content-Description: vtyiicpng download");
 			readfile($saveasfile);
 		}

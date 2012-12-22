@@ -2504,10 +2504,9 @@ abstract class VTActiveResource extends CModel
         public function getDocumentAttachment($ids,$getfile=true){
 		$api_cache_id='getDocumentAttachment'.$ids;
 		$documentAttachment = Yii::app()->cache->get( $api_cache_id  );
-		// If the results were false, then we have no valid data,
-		// so load it
+		// If the results were false, then we have no valid data, so load it
 		if($documentAttachment===false){
-                        $clientvtiger=$this->getClientVtiger();
+			$clientvtiger=$this->getClientVtiger();
 			if(!$clientvtiger) Yii::log('login failed',CLogger::LEVEL_ERROR);
 			else {
 				$documentAttachment = $clientvtiger->doInvoke('retrievedocattachment',array('id'=>$ids,'returnfile'=>$getfile));
