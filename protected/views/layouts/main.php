@@ -33,7 +33,6 @@ $scriptFiles = array(
 	'js/jquery/jquery.form.js',
 	'js/jquery/jquery.jeditable.js',
 	'js/jquery/jquery.layout.js',
-	'js/jquery/jquery.listFilter.js',
 	'js/jquery/jquery.purr.js',
 	'js/jquery/jquery.selectboxes.js',
 	'js/jquery/jquery.hotkey.js',
@@ -59,9 +58,7 @@ echo '<link rel="stylesheet" href="' . BASEURL .'/js/tipsy/css/tipsy.css" type="
 <?php Yii::app()->clientScript->registerScript('userSettings', Yii::app()->user->settings->getJsObject(), CClientScript::POS_HEAD); ?>
 <script type="text/javascript">
 $(document).ready(function() {
-	sideBar.loadMenu(function() {
-		$('#schemaList').reloadListFilter($('#schemaSearch'));
-	});
+	sideBar.loadMenu();
 });
 </script>
 </head>
@@ -98,8 +95,6 @@ $(document).ready(function() {
 	<img class="loading" src="<?php echo BASEURL; ?>/images/loading.gif" alt="<?php echo Yii::t('core', 'loading'); ?>..." />
 </div>
 <div class="sidebarContent schemaList">
-	<input type="text" id="schemaSearch" class="search text" />
-
 	<ul id="schemaList" class="list icon">
 		<li class="nowrap template">
 			    <?php echo Html::ajaxLink('vtentity/#moduleName#/index', array('class' => 'icon')); ?>
@@ -128,9 +123,7 @@ $(document).ready(function() {
 			</a>
 		</li>
 	</ul>
-
 </div>
-
 </div>
 </div>
 <div class="ui-layout-center" id="content"><?php echo $content; ?></div>

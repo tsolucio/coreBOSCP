@@ -116,7 +116,6 @@ $(document).ready(function()
 		}
 	});
 	
-
 	// ACCORDION - inside the West pane
 	sideBar.accordion({
 		animated: "slide",
@@ -130,18 +129,6 @@ $(document).ready(function()
 	// Trigger resize event for sidebar accordion - doesn't work in webkit-based browsers
 	sideBar.accordion('resize');
 	
-
-	// Setup list filters
-
-	$('#schemaList').setupListFilter($('#schemaSearch'));
-	$('#bookmarkList').setupListFilter($('#bookmarkSearch'));
-
-	
-	/*
-	 * Ajax functions
-	 */ 
-	
-
 	/*
 	 * Change jQuery UI dialog defaults
 	 */
@@ -150,28 +137,11 @@ $(document).ready(function()
 	$.ui.dialog.prototype.options.modal = true;
 	$.ui.dialog.prototype.options.resizable = false;
 
-	
 	/*
 	 * Misc
 	 */
 	chive.init();
 	
-})
-.keydown(function(e) 
-{
-	if(e.keyCode >= 48 
-		&& e.keyCode <= 90
-		&& !e.altKey && !e.ctrlKey && !e.shiftKey 
-		&& (e.target == null || (e.target.tagName != 'INPUT' && e.target.tagName != 'TEXTAREA' && e.target.tagName != 'SELECT')))
-	{
-		var element = $('#schemaSearch:visible');
-		if(element.length == 1)
-		{
-			element = element.get(0);
-			element.value = '';
-			element.focus();
-		}
-	}
 });
 
 String.prototype.trim = function() {

@@ -2,7 +2,6 @@ Chive Code Dependencies
 --------------------------------------
 
 js/jquery/jquery.editableTable.js
-js/jquery/jquery.listFilter.js
 js/views/site/login.js
 js/ajaxresponse.js
 js/bookmark.js

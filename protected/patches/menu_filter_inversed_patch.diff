@@ -1,0 +1,80 @@
+These are the changes applied to eliminate the filter box in left menu. So it is a reversed patch of what is needed to add this functionality.
+Patch starts after the next line of slashes
+------------------------------------
+Index: protected/ChiveDeps.txt
+===================================================================
+--- protected/ChiveDeps.txt	(revisión: 391)
++++ protected/ChiveDeps.txt	(copia de trabajo)
+@@ -2,7 +2,6 @@
+ --------------------------------------
+ 
+ js/jquery/jquery.editableTable.js
+-js/jquery/jquery.listFilter.js
+ js/views/site/login.js
+ js/ajaxresponse.js
+ js/bookmark.js
+Index: protected/views/layouts/main.php
+===================================================================
+--- protected/views/layouts/main.php	(revisión: 391)
++++ protected/views/layouts/main.php	(copia de trabajo)
+@@ -33,7 +33,6 @@
+ 	'js/jquery/jquery.form.js',
+ 	'js/jquery/jquery.jeditable.js',
+ 	'js/jquery/jquery.layout.js',
+-	'js/jquery/jquery.listFilter.js',
+ 	'js/jquery/jquery.purr.js',
+ 	'js/jquery/jquery.selectboxes.js',
+ 	'js/jquery/jquery.hotkey.js',
+@@ -59,9 +58,7 @@
+ <?php Yii::app()->clientScript->registerScript('userSettings', Yii::app()->user->settings->getJsObject(), CClientScript::POS_HEAD); ?>
+ <script type="text/javascript">
+ $(document).ready(function() {
+-	sideBar.loadMenu(function() {
+-		$('#schemaList').reloadListFilter($('#schemaSearch'));
+-	});
++	sideBar.loadMenu();
+ });
+ </script>
+ </head>
+@@ -98,8 +95,6 @@
+ 	<img class="loading" src="<?php echo BASEURL; ?>/images/loading.gif" alt="<?php echo Yii::t('core', 'loading'); ?>..." />
+ </div>
+ <div class="sidebarContent schemaList">
+-	<input type="text" id="schemaSearch" class="search text" />
+-
+ 	<ul id="schemaList" class="list icon">
+ 		<li class="nowrap template">
+ 			    <?php echo Html::ajaxLink('vtentity/#moduleName#/index', array('class' => 'icon')); ?>
+Index: js/main.js
+===================================================================
+--- js/main.js	(revisión: 376)
++++ js/main.js	(copia de trabajo)
+@@ -130,19 +129,7 @@
+ 	// Trigger resize event for sidebar accordion - doesn't work in webkit-based browsers
+ 	sideBar.accordion('resize');
+ 	
+-
+-	// Setup list filters
+-
+-	$('#schemaList').setupListFilter($('#schemaSearch'));
+-	$('#bookmarkList').setupListFilter($('#bookmarkSearch'));
+-
+-	
+ 	/*
+ 	 * Change jQuery UI dialog defaults
+ 	 */
+ 	$.ui.dialog.prototype.options.width = 400;
+Index: js/sideBar.js
+===================================================================
+--- js/sideBar.js	(revisión: 376)
++++ js/sideBar.js	(copia de trabajo)
+@@ -66,9 +66,6 @@
+ 				callback();
+ 			}
+ 			
+-			// Reload list filter
+-			contentUl.reloadListFilter();
+-			
+ 			// Hide loading icon
+ 			loadingIcon.hide();
+ 		});
