@@ -1,7 +1,7 @@
 <?php
 /**
  * vtigerCRM vtyiiCPng - web based vtiger CRM Customer Portal
- * Copyright 2012 JPL TSolucio, S.L.  --  This file is a part of SIGPAC vtyiiCPng.
+ * Copyright 2012 JPL TSolucio, S.L.  --  This file is a part of vtyiiCPng.
  * You can copy, adapt and distribute the work under the "Attribution-NonCommercial-ShareAlike"
  * Vizsage Public License (the "License"). You may not use this file except in compliance with the
  * License. Roughly speaking, non-commercial users may share and modify this code, but must give credit

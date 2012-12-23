@@ -45,8 +45,6 @@ $scriptFiles = array(
 	'js/sideBar.js',
 	'js/bookmark.js',
 	'js/notification.js',
-	'js/views/global/export.js',
-	'js/views/global/import.js',
 	'js/tipsy/jquery.tipsy.js',
    	'assets/lang_js/' . Yii::app()->getLanguage() . '.js',
 	'js/advancesearch.js',

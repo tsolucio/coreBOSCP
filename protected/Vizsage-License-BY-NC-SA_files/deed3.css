@@ -1,0 +1,198 @@
+/* CC Deed CSS! */
+
+
+/*
+ * Text Styling
+ */
+ 
+body {
+	background-color: #2d2d2d;
+	font: 12px/16px arial, verdana, sans-serif;
+	text-align: center;
+	color: #ccc;
+}
+
+h3 { font-size: 1.45em; }
+
+a 		{ color: #fffc09 }
+
+blockquote {
+	padding:  8px;
+	background-color:  #eee;
+	margin:  15px 0;
+	clear: both;
+}
+
+h3 {
+	padding-top: 10px;
+	margin-top:  1.75em;
+	margin-bottom:  0.7em;
+}
+
+/*
+ * Layout Elements
+ */
+
+
+
+#deed {
+	background:  	0 0 no-repeat #424242;
+	width: 			768px;
+	padding: 		10px 0;
+	color: 			#333;
+	margin: 		20px auto;
+	text-align: 	center;
+}
+
+/* Top header with Title and Logo */
+#deed-head {
+	width: 			750px;
+	margin: 		0 auto;
+}
+#deed-head h1 { color: #CCCCCC; }
+#vpl-logo {
+	width: 			750px;
+	height: 		180px;
+	margin: 		0 auto;
+}
+
+/* Intro to license */
+#deed-license {
+	width: auto;
+	text-align:center;
+	margin-top: 10px;
+	font-weight: bold;
+	color: #fff;
+	margin-bottom: 30px;
+	padding: 3px;
+}
+#deed-license h2 {
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+/* Explanation of License */
+#deed-main {
+	background-color: #fff;
+	/* "!important" box-model hack for IE */
+			width: 750px !important;
+	/*width: 780px;*/
+			
+	padding: 		20px 0;
+	margin: 		0 auto;
+	text-align: 	left;
+	border-bottom: 	1px solid #505050;
+}
+#deed-main-content { margin: 0 15px; }
+#deed-main img {
+	float: right;
+	border: 1px solid #888;
+	margin-bottom:  5px;
+}
+
+
+#deed-rights {
+	padding: 0 10px;
+	margin-bottom: 20px;
+}
+
+#deed-conditions {
+	padding: 0 10px;
+	margin-bottom: 33px;
+}
+
+#deed-conditions ul { margin-top: 22px; }
+
+#deed-conditions div.fineprint {
+	padding: 15px;
+	border: 1px solid #ddd;
+	color: #111;
+	font-size: 0.92em;
+}
+
+#deed-newer {
+	border: 1px solid #e0adad;
+	background-color: #f0f0f0;
+	padding: 15px;
+	margin-top: 25px;
+}
+
+#deed-newer a, #deed-main a {
+	color: #111;
+	text-decoration:underline;
+	font-weight: bold;
+}
+
+/* Footer */
+.footer {
+	width: 			750px;
+	padding: 		10px 0;
+	padding-bottom: 20px;
+	margin: 		0 auto;
+	color: 			#fff;
+	text-align: 	left;
+	border-top: 	1px solid #555;
+}
+.footer p {
+	margin: 0 20px 5px 20px;
+	padding: 0;
+}
+
+#deed-howto {
+	width:			80%;
+	padding:  		4px;
+	margin:  		10px auto;
+	clear: 			both;
+	
+	background-color:  #646464;
+	border: 		solid thin #555;
+}
+#deed-howto pre {
+	margin: 0;
+	padding: 0;
+}
+
+/* Displaimer */
+#disclaimer { float: right; }
+
+
+/*
+ * License section
+ */
+
+
+li 			{ margin-bottom: 8px; }
+li strong 	{ color: #222; }
+li a		{ color: #0000ff; }
+li.license	{
+	list-style: 	none;
+	padding-bottom: 25px;
+	padding-left: 	70px;
+	padding-top: 	10px;
+	width: 			420px;
+	min-height: 	55px;
+}
+li.license p 		{ margin: 1px;	padding: 0; 
+	border: none thin blue;}
+li.license-hidden 	{ list-style: none; }
+li.share 	{ background: url("token-share.png") 0 0 no-repeat; }
+li.remix 	{ background: url("token-remix.png") 0 0 no-repeat; }
+li.by 		{ background: url("token-BY.png")    0 0 no-repeat; }
+li.nc 		{ background: url("token-NC.png")    0 0 no-repeat; }
+li.sa 		{ background: url("token-SA.png")    0 0 no-repeat; }
+li.nd 		{ background: url("token-ND.png")    0 0 no-repeat; }
+
+/*li.free { background: url("") 0 0 no-repeat; }
+li.devnations { background: url("/images/deed/devnations.png") 0 0 no-repeat; }
+li.no-endorse { background: url("/images/deed/no-endorse.png") 0 0 no-repeat; }
+li.sampling, li.samplingplus { background: url("/images/deed/sampling.png") 0 0 no-repeat; }
+li.more { background: url("/images/deed/more.png") 0 0 no-repeat; }*/
+
+#referrer-metadata {
+	padding: 20px;
+	border-style: dotted;
+}
+#referrer-metadata a {
+	color: #0000FF;
+	text-decoration: none;
+}
