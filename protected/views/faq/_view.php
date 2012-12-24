@@ -100,7 +100,7 @@ if (count($relDocs)>0) {
 			<td>'.CHtml::link($faqd['title'],"index.php#vtentity/Documents/view/".$faqd['id']).'</td>
 			<td>'.$faqd['notecontent'].'</td>
 			<td>'.$dlwidget['value'].'</td>
-			<td align="right">'.round($faqd['filesize']/1024,($faqd['filesize']<1024 ? 2 : 0)).'Kb</td>
+			<td align="right">'.Formatter::fileSize($faqd['filesize']).'</td>
 			<td align="right">'.$faqd['filedownloadcount'].'</td>
 			<td align="right">'.$faqd['modifiedtime'].'</td>
 			</tr>';

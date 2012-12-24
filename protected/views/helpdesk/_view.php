@@ -79,7 +79,20 @@ if (count($relComments)>0) {
 	<?php $this->endWidget(); ?>
 	</div>
 </div>
-<?php }  // is closed ?>
+<?php }  // is closed
+$moduleNames = Yii::app()->cache->get('yiicpng.sidebar.availablemodules');
+if (is_array($moduleNames) and isset($moduleNames['Timecontrol'])) {
+	$relTCs = $data->GetRelatedRecords('Timecontrol');
+	$relTCs = $data->dereferenceIds($relTCs);
+	if (count($relTCs)>0) {
+		$this->renderPartial('//helpdesk/_gettcs',array(
+			'relTCs'=>$relTCs,
+			'TCName'=>$moduleNames['Timecontrol']['name'],
+			'hdid'=>$data->__get($this->entityidField)
+		));
+	}
+}
+?>
 </div>
 <div class="helpdesk_right">
 <table class="list">

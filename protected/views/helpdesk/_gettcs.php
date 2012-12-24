@@ -14,52 +14,47 @@
  *************************************************************************************************
  *  Author       : JPL TSolucio, S. L.
  *************************************************************************************************/?>
+<div class="helpdesk_comments" id="helpdesk_tcs">
 <table class="list">
 	<colgroup>
 		<col style="width: 15%;"></col>
-		<col style="width: 34%;"></col>
+		<col style="width: 26%;"></col>
 		<col style="width: 18%;"></col>
-		<col style="width: 10%;"></col>
+		<col style="width: 18%;"></col>
 		<col style="width: 8%;"></col>
 		<col style="width: 15%;"></col>
 	</colgroup>
 	<thead>
 		<tr>
-			<th colspan="6"><?php echo Yii::t('core','attachments'); ?></th>
+			<th colspan="6"><?php
+			 echo $TCName;
+			 echo Html::ajaxLink('vtentity/Timecontrol/create?preload[relatedto]='.$hdid, array('class' => 'icon','style'=>'float:right;'));
+			 echo Html::icon('add');
+			 echo '<span>'.Yii::t('core','insert').'</span></a>';?></th>
 		</tr>
 		<tr>
+			<th><?php echo Yii::t('core','tcnumber'); ?></th>
 			<th><?php echo Yii::t('core','reference'); ?></th>
-			<th><?php echo Yii::t('core','description'); ?></th>
-			<th><?php echo Yii::t('core','name'); ?></th>
-			<th><?php echo Yii::t('core','size'); ?></th>
-			<th><?php echo Yii::t('core','downloads'); ?></th>
-			<th><?php echo Yii::t('core','modifiedtime'); ?></th>
+			<th><?php echo Yii::t('core','start'); ?></th>
+			<th><?php echo Yii::t('core','end'); ?></th>
+			<th align="center"><?php echo Yii::t('core','total'); ?></th>
+			<th><?php echo Yii::t('core','product'); ?></th>
 		</tr>
 	</thead>
 	<tbody>
 	<?php 
-		$docs = Vtentity::model();
-		$ids='';
-		foreach ($relDocs as $helpdeskd) { $ids.=$helpdeskd['id'].','; }
-		$all_attachments=$docs->getDocumentAttachment(trim($ids,','),false);
 		$i=0;
-		foreach ($relDocs as $helpdeskd) {
-			$idatt=$helpdeskd['id'];
-			if (!empty($all_attachments[$idatt]['filetype'])) {
-				$value='<a href=\'javascript: filedownload.download("'.yii::app()->baseUrl.'/index.php/vtentity/Documents/download/'.$idatt.'?fn='.CHtml::encode($all_attachments[$idatt]['filename']).'&ft='.CHtml::encode($all_attachments[$idatt]['filetype']).'","")\'>'.CHtml::encode($all_attachments[$idatt]['filename'])."</a>";
-			} else {
-				$fname = (empty($all_attachments[$idatt]['filename']) ? yii::t('core', 'none') : $all_attachments[$idatt]['filename']);
-				$value=CHtml::encode($fname);
-			}
+		foreach ($relTCs as $helpdesktc) {
 			echo '<tr class="'.($i % 2 == 0 ? 'even' : 'odd').'">
-			<td><b>'.CHtml::link($helpdeskd['title'],"index.php#vtentity/Documents/view/$idatt").'</b></td>
-			<td>'.$helpdeskd['notecontent'].'</td>
-			<td>'.$value.'</td>
-			<td align="right">'.Formatter::fileSize($helpdeskd['filesize']).'</td>
-			<td align="right">'.$helpdeskd['filedownloadcount'].'</td>
-			<td align="right">'.$helpdeskd['modifiedtime'].'</td>
+			<td><b>'.CHtml::link($helpdesktc['timecontrolnr'],'index.php#vtentity/Timecontrol/view/'.$helpdesktc['id']).'</b></td>
+			<td>'.CHtml::link($helpdesktc['title'],'index.php#vtentity/Timecontrol/view/'.$helpdesktc['id']).'</td>
+			<td>'.$helpdesktc['date_start'].' '.substr($helpdesktc['time_start'],0,5).'</td>
+			<td>'.$helpdesktc['date_end'].' '.substr($helpdesktc['time_end'],0,5).'</td>
+			<td align="right">'.$helpdesktc['totaltime'].'</td>
+			<td>'.$helpdesktc['product_id'].'</td>
 			</tr>';
 			$i++;
 		} ?>
 	</tbody>
 </table>
+</div>

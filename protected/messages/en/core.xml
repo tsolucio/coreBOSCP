@@ -179,4 +179,7 @@
 	<entry id="or">or</entry>
 	<entry id="addcondition">Add condition</entry>
 	<entry id="noMenuOptions">No options available.</entry>
+	<entry id="tcnumber">Timcontrol Nº</entry>
+	<entry id="start">Start</entry>
+	<entry id="end">End</entry>
 </category>

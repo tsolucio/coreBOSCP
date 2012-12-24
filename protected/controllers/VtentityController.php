@@ -131,6 +131,12 @@ class VtentityController extends Controller
 		foreach ($relInfo as $fld => $value) {
 			$model->setAttribute($fld,$value);
 		}
+		$preload = Yii::app()->getRequest()->getParam('preload');
+		if (is_array($preload)) {
+			foreach ($preload as $fld => $value) {
+				$model->setAttribute($fld,$value);
+			}
+		}
 		if (!$this->vtyii_canCreate($model->getModule())) {
 			$response = new AjaxResponse();
 			$response->addNotification('error', Yii::t('core', 'error'), Yii::t('core', 'errorCreateRow')."<br>".Yii::t('core', 'errorPermssion'));
@@ -141,7 +147,7 @@ class VtentityController extends Controller
 		$this->actionCleansearch($model->getModule());
 		$fields=$model->getWritableFieldsArray();
 		$uitypes=$model->getUItype();
-                $model->setIsNewRecord(true);
+		$model->setIsNewRecord(true);
 		// Uncomment the following line if AJAX validation is needed
 		//$this->performAjaxValidation($model);
 
@@ -428,7 +434,7 @@ class VtentityController extends Controller
 			$criteria->params = array(":sterm"=>"%$name%");
 			$criteria->limit = $limit;
 			$model->setCriteria($criteria);
-			$entityArray = $model->getData($this->entityLookupField);
+			$entityArray = $model->getData($this->entityLookupField.',id');
 			$returnVal = array();
 			foreach($entityArray as $entityRecord)
 			{
@@ -584,10 +590,6 @@ class VtentityController extends Controller
 		$model->setAttribute('assigned_user_id', Yii::app()->user->userId);
 		$crmrelid = Yii::app()->getRequest()->getParam('id');
 		$model->setAttribute('relations',explode(',', Yii::app()->user->accountId.(empty($crmrelid) ? '' : ",$crmrelid")));
-		$ticketid = Yii::app()->getRequest()->getParam('id',0);
-		if (!empty($ticketid)) {
-			$model->setAttribute('relations',$ticketid);
-		}
 		if($model->save()) {
 			$view=Yii::app()->getRequest()->getParam('adjuntoparalavista');
 			if (empty($view)) $view = 'helpdesk';
