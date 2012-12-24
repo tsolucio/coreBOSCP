@@ -744,9 +744,8 @@ abstract class VTActiveResource extends CModel
         );
     }
 
-    private function loginREST()
+    static public function loginREST()
     {
-        Yii::import('application.components.vtwsclib.Vtiger.WSClient.php');
         $url = Yii::app()->site;
         $client = new WSClient($url);
         $login = $client->doLogin(Yii::app()->loginuser, Yii::app()->accesskey);
@@ -2820,21 +2819,19 @@ abstract class VTActiveResource extends CModel
 				foreach($listModules AS $moduleName) {
 					if ((Yii::app()->vtyiicpngScope=='CPortal' and in_array(current($flatlm),Yii::app()->notSupportedModules[Yii::app()->vtyiicpngScope]))
 					 or (Yii::app()->vtyiicpngScope=='vtigerCRM' and !in_array(current($flatlm),Yii::app()->notSupportedModules[Yii::app()->vtyiicpngScope])))
-						$valid[] = array('module'=>current($flatlm),'name'=>$moduleName);
+						$valid[current($flatlm)] = array('module'=>current($flatlm),'name'=>$moduleName);
 					next(($flatlm));
 				}
-				if(($cache=Yii::app()->cache)!==null)
-					$cache->set('yiicpng.sidebar.listmodules',$listModules);  // cache until next execution
-                                        $cache->set('yiicpng.sidebar.availablemodules',$valid);
+				// cache until next execution
+				Yii::app()->cache->set('yiicpng.sidebar.listmodules',$listModules);
+				Yii::app()->cache->set('yiicpng.sidebar.availablemodules',$valid);
 			} else {
 				$valid=array(array('module'=>'notranslate','name'=>Yii::t('core','errNoTranslateFunction')));
 			}
     		}
     	}
     	if (is_array($valid)) {
-	        foreach($valid as $moduleValid){
-	            if($moduleValid['module']==$module) return true;
-	        }
+			if(isset($valid[$module])) return true;
     	}
     	return false;
     }

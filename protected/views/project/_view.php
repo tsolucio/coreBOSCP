@@ -33,11 +33,9 @@
 	$relPrjtask = $data->GetRelatedRecords('ProjectTask');
 	$moduleNames = Yii::app()->cache->get('yiicpng.sidebar.availablemodules');
 	if (is_array($moduleNames)) {
-		foreach ($moduleNames as $mn) {
-			if ($mn['module']=='ProjectTask') $mnpt = $mn['name'];
-			if ($mn['module']=='ProjectMilestone') $mnpm = $mn['name'];
-			if ($mn['module']=='HelpDesk') $mnpk = $mn['name'];
-		}
+		if (isset($moduleNames['ProjectTask'])) $mnpt = $moduleNames['ProjectTask']['name'];
+		if (isset($moduleNames['ProjectMilestone'])) $mnpm = $moduleNames['ProjectMilestone']['name'];
+		if (isset($moduleNames['HelpDesk'])) $mnpk = $moduleNames['HelpDesk']['name'];
 	}
 ?>
 </div>

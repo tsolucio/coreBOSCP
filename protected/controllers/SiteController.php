@@ -307,24 +307,24 @@ class SiteController extends Controller
 	}
 
 	/**
-	 * Lists all modules.
+	 * Create list of available modules and puts it in cache, then it uses that list to 
+	 * create a menu for sideBar usage. The menu is based on the array configuration that 
+	 * can be found in protected/config/menu.php
 	 */
 	public function actionList()
 	{
-		// Create list for sideBar usage
 		// Omit these modules because they are not yet supported
 		$notSupported=Yii::app()->notSupportedModules[Yii::app()->vtyiicpngScope];
-                $api_cache_id='yiicpng.sidebar.availablemodules';
-                $schemata = Yii::app()->cache->get( $api_cache_id  );
-               
-                // If the results were false, then we have no valid data, so load it
-                if($schemata===false){
-                $schemata = array();
-		$model=Vtentity::model();
-		$clientvtiger = $model->getClientVtiger();
-		if(!$clientvtiger)
+		$api_cache_id='yiicpng.sidebar.availablemodules';
+		$schemata = Yii::app()->cache->get( $api_cache_id  );
+
+		// If the results were false, then we have no valid data, so load it
+		if($schemata===false){
+		  $schemata = array();
+		  $clientvtiger = Vtentity::loginREST();
+		  if(!$clientvtiger)
 			Yii::log('login failed',CLogger::LEVEL_ERROR);
-		else {
+		  else {
 			// get available modules from vtiger CRM
 			$listModules = $clientvtiger->doListTypes();
 			// flatten array
@@ -338,17 +338,39 @@ class SiteController extends Controller
 				foreach($listModules AS $moduleName) {
 					if ((Yii::app()->vtyiicpngScope=='vtigerCRM' and !in_array(current($flatlm), $notSupported))
 					 or (Yii::app()->vtyiicpngScope=='CPortal' and in_array(current($flatlm), $notSupported)))
-						$schemata[] = array('module'=>current($flatlm),'name'=>$moduleName);
+						$schemata[current($flatlm)] = array('module'=>current($flatlm),'name'=>$moduleName);
 					next(($flatlm));
 				}
-				if(($cache=Yii::app()->cache)!==null)
-					$cache->set('yiicpng.sidebar.listmodules',$listModules);  // cache until next execution
-                                        $cache->set('yiicpng.sidebar.availablemodules',$schemata);
+				// cache until next execution
+				Yii::app()->cache->set('yiicpng.sidebar.listmodules',$listModules);
+				Yii::app()->cache->set('yiicpng.sidebar.availablemodules',$schemata);
 			} else {
 				$schemata=array(array('module'=>'notranslate','name'=>Yii::t('core','errNoTranslateFunction')));
 			}
-		}}            
-		Yii::app()->endJson(CJSON::encode($schemata));
+		}}
+		// now that we have the list of available modules we create the menu
+		include 'protected/config/menu.php';
+		$sidebarMenu = array();
+		$alreadyinsidebarMenu = array();
+		foreach ($vtyiicpngMenu as $mnuop) {
+			if (is_array($mnuop))
+				$sidebarMenu[] = $mnuop;
+			else {
+				if(isset($schemata[$mnuop])) {
+					$sidebarMenu[] = array('name'=>$schemata[$mnuop]['name'],'link'=>"vtentity/$mnuop/index",'icon'=>'browse');
+					$alreadyinsidebarMenu[]=$mnuop;
+				}
+				if($mnuop=='#vtigermodules#') {
+					foreach ($schemata as $modname => $modarray) {
+						if (!in_array($modname, $alreadyinsidebarMenu)) {
+							$sidebarMenu[] = array('name'=>$modarray['name'],'link'=>"vtentity/$modname/index",'icon'=>'browse');
+							$alreadyinsidebarMenu[]=$modname;
+						}
+					}
+				}
+			}
+		}
+		Yii::app()->endJson(CJSON::encode($sidebarMenu));
 	}
 
 }

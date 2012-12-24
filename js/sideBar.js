@@ -1,4 +1,9 @@
 /*
+ * vtiger CRM vtyiiCPng - web based vtiger CRM Customer Portal
+ * Copyright 2012 JPL TSolucio, S.L.   --   This file is a part of vtiger CRM vtyiiCPng.
+ * Licensed under the GNU General Public License (the "License");
+ * This file is a modified version of it's equivalent in the Chive Project
+ *
  * Chive - web based MySQL database management
  * Copyright (C) 2010 Fusonic GmbH
  *
@@ -36,12 +41,12 @@ var sideBar = {
 		// Do AJAX request
 		$.post(baseUrl + '/site/list', {}, function(data) {
 			
-			var template = contentUl.children('li.template');
+			var template = $('#menutemplate');
 			var templateHtml = template.html();
 			var html = '';
-			
+
 			// Remove all existing nodes
-			contentUl.empty().append(template);
+			contentUl.empty();
 			
 			if(data.length > 0)
 			{
@@ -49,7 +54,9 @@ var sideBar = {
 				for(var i = 0; i < data.length; i++)
 				{
 					html += '<li class="nowrap">' + templateHtml
-						.replace(/#moduleName#/g, data[i]['module']).replace(/#schemaName#/g, data[i]['name']) + '</li>';
+						.replace(/{linkName}/g, data[i]['link'])
+						.replace(/{iconName}/g, data[i]['icon'])
+						.replace(/{menuName}/g, data[i]['name']) + '</li>';
 				}
 				
 				contentUl.append(html);

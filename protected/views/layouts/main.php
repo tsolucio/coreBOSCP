@@ -95,33 +95,16 @@ $(document).ready(function() {
 	<img class="loading" src="<?php echo BASEURL; ?>/images/loading.gif" alt="<?php echo Yii::t('core', 'loading'); ?>..." />
 </div>
 <div class="sidebarContent schemaList">
+	<script type="text/x-vtyiicpng-template" id="menutemplate">
+		<?php echo Html::ajaxLink('{linkName}', array('class' => 'icon')); ?>
+		<?php echo Html::icon('{iconName}'); ?>
+		<span>{menuName}</span>
+		</a>
+	</script>
+	<div class="noEntries">
+		<?php echo Yii::t('core', 'noMenuOptions'); ?>
+	</div>
 	<ul id="schemaList" class="list icon">
-		<li class="nowrap template">
-			    <?php echo Html::ajaxLink('vtentity/#moduleName#/index', array('class' => 'icon')); ?>
-				<?php echo Html::icon('browse'); ?>
-				<span>#schemaName#</span>
-			</a>
-		</li>
-	</ul>
-	<ul id="statusList" class="list icon">
-		<li class="nowrap">
-			<?php echo Html::ajaxLink('site/changepassword', array('class' => 'icon')); ?>
-				<?php echo Html::icon('privileges'); ?>
-				<span><?php echo Yii::t('core', 'Change Password'); ?></span>
-			</a>
-		</li>
-		<li class="nowrap">
-			<?php echo Html::ajaxLink('information/about', array('class' => 'icon')); ?>
-				<?php echo Html::icon('info'); ?>
-				<span><?php echo Yii::t('core', 'about'); ?></span>
-			</a>
-		</li>
-		<li class="nowrap">
-			<a class="icon" href="<?php echo Yii::app()->urlManager->baseUrl; ?>/site/logout">
-				<?php echo Html::icon('logout', 16); ?>
-				<span><?php echo Yii::t('core', 'logout'); ?></span>
-			</a>
-		</li>
 	</ul>
 </div>
 </div>
