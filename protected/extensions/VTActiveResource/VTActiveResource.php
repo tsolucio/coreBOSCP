@@ -2328,13 +2328,15 @@ abstract class VTActiveResource extends CModel
     public function getNumericalFields($module)
     {
             $fields=$this->getFieldsInfo();
-            $arr=array();
+            $arrint=$arrdbl=array();
             foreach($fields as $field) {
             	if (!is_array($field) or empty($field['type'])) continue;
-               if($field['type']['name']=='integer' ) array_push($arr,$field['name']);
+               if($field['type']['name']=='integer') array_push($arrint,$field['name']);
+               if($field['type']['name']=='double' or $field['type']['name']=='float') array_push($arrdbl,$field['name']);
             }
-            $res=implode(',',$arr);
-            return $res;
+            $resint=implode(',',$arrint);
+            $resdbl=implode(',',$arrdbl);
+            return array('entero'=>$resint,'doble'=>$resdbl);
     }
 
     public function getEmailFields($module)
@@ -2483,7 +2485,7 @@ abstract class VTActiveResource extends CModel
 			}
 		}
 		if(count($toget)>0) {
-                        $clientvtiger=$this->getClientVtiger();
+			$clientvtiger=$this->getClientVtiger();
 			if(!$clientvtiger) Yii::log('login failed',CLogger::LEVEL_ERROR);
 			else {
 				$complexattributevalue = $clientvtiger->doInvoke('getReferenceValue',array('id'=>serialize($arrayofids)));
@@ -2493,7 +2495,7 @@ abstract class VTActiveResource extends CModel
 				foreach ($cpxarr as $wsid=>$cpxval) {
 					Yii::app()->cache->set( 'getComplexAttributeValues'.$wsid , $cpxval, $this->defaultCacheTimeout );
 					$rdo[$wsid] = $cpxval;
-		}
+				}
 			}
 		}
 		return serialize($rdo);

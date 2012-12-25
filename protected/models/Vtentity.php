@@ -76,7 +76,9 @@ class Vtentity extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that will receive user inputs.
 		$module = $this->getModule();
 		$mandatory=$this->getMandatoryFields($module);
-		$numerical=$this->getNumericalFields($module);
+		$intdbl = $this->getNumericalFields($module);
+		$integral = $intdbl['entero'];
+		$numerical = $intdbl['doble'];
 		$email=$this->getEmailFields($module);
                 $writable=$this->getWritableFieldsArray();
                 $attributes=array();
@@ -87,7 +89,8 @@ class Vtentity extends CActiveRecord
                 $safeFields=implode(',',$attributes);
 		return array(
 				array($mandatory, 'required'),
-				array($numerical, 'numerical', 'integerOnly'=>true),
+				array($integral, 'numerical', 'integerOnly'=>true),
+				array($numerical, 'numerical'),
 				array($email, 'email'),
                                 array($safeFields,'safe'),
 		);
