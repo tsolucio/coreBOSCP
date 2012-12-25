@@ -37,10 +37,13 @@
 			$uitype=intval($uitypes[$fieldname]);
 			if(isset($field['type']['refersTo']) && !empty($field['type']['refersTo'])) $refersTo=$field['type']['refersTo'];
 			else $refersTo='';
-                        $action=$model->getIsNewRecord()?'create':'edit';
+			$moreinfo='';
+			if(isset($field['type']['name']) && !empty($field['type']['name']) && $field['type']['name']=='date')
+				$moreinfo = array('dateformat'=>$field['type']['format']);
+			$action=$model->getIsNewRecord()?'create':'edit';
 			echo '<div class="row">';
 			echo $form->labelEx($model,$fieldname,array('label'=>$fieldlabel));
-			echo $form->getVtigerEditField($uitype,$model,$fieldname,array('maxlength'=>100),$refersTo,$action);
+			echo $form->getVtigerEditField($uitype,$model,$fieldname,array('maxlength'=>100),$refersTo,$action,$moreinfo);
 			echo $form->error($model,$fieldname);
 			echo '</div>';
 		}

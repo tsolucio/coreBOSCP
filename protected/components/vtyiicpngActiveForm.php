@@ -25,7 +25,7 @@ class vtyiicpngActiveForm extends CActiveForm
 	 * @param string $fieldname
 	 * @param array $htmlopts
 	 */
-	public function getVtigerEditField($uitype,$model,$fieldname,$htmlopts=array(),$capturerefersto,$action)
+	public function getVtigerEditField($uitype,$model,$fieldname,$htmlopts=array(),$capturerefersto,$action,$moreinfo='')
 	{
 		$widget='';
 		switch ($uitype) {
@@ -52,8 +52,12 @@ class vtyiicpngActiveForm extends CActiveForm
 				break;
 			case 5:
 			case 23:
-				// FIXME  get date format from portal user config or setup contact's preferences?
-				$dateformat='yy-mm-dd';
+				if (is_array($moreinfo) and isset($moreinfo) and !empty($moreinfo['dateformat'])) {
+					$dateformat=$moreinfo['dateformat'];  // we use the portal user's date format from vtiger crm
+					$dateformat=str_replace('yyyy', 'yy', $dateformat); // convert to yii format
+				} else {
+					$dateformat='yy-mm-dd';
+				}
 				$htmlopts['size']=10;
 				$htmlopts['maxlength']=10;
 				if (empty($htmlopts['id'])) {
@@ -68,8 +72,12 @@ class vtyiicpngActiveForm extends CActiveForm
 				break;
 			case 6:
 			case 70:
-				// FIXME  get date format from portal user config or setup contact's preferences?
-				$dateformat='Y-m-d';
+				if (is_array($moreinfo) and isset($moreinfo) and !empty($moreinfo['dateformat'])) {
+					$dateformat=$moreinfo['dateformat'];  // we use the portal user's date format from vtiger crm
+					$dateformat=str_replace('yyyy', 'yy', $dateformat); // convert to yii format
+				} else {
+					$dateformat='yy-mm-dd';
+				}
 				$htmlopts['size']=19;
 				$htmlopts['maxlength']=19;
 				if (empty($htmlopts['id'])) {

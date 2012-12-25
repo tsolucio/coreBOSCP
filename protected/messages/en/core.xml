@@ -67,6 +67,7 @@
 	<entry id="rows">Rows</entry>
 	<entry id="rowsPerInsert">Rows per &lt;code class="literal"&gt;[INSERT|REPLACE]&lt;/code&gt;</entry>
 	<entry id="search">Search</entry>
+	<entry id="searching">Search</entry>
 	<entry id="settings">Settings</entry>
 	<entry id="show">Display</entry>
 	<entry id="showDetails">Show details</entry>
@@ -136,10 +137,12 @@
 	<entry id="successDeleteRow">Success deleting entity</entry>
 	<entry id="successUpdateRow">Success updating entity</entry>
 	<entry id="successCreateRow">Success creating entity</entry>
+	<entry id="successCreateComment">Success creating entity</entry>
 	<entry id="error">Error</entry>
 	<entry id="errorDeleteRow">Error deleting entity</entry>
 	<entry id="errorUpdateRow">Error updating entity</entry>
 	<entry id="errorCreateRow">Error creating entity</entry>
+	<entry id="errorCreateComment">Error creating comment</entry>
 	<entry id="errorIdNotExist">The requested entity does not exist.</entry>
 	<entry id="seeRelatedEntity">Related entities</entry>
 	<entry id="errNoTranslateFunction">No Translate Function</entry>

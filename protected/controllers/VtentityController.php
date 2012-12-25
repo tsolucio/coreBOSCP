@@ -534,9 +534,9 @@ class VtentityController extends Controller
 					$recordInfo = $clientvtiger->doInvoke('addTicketFaqComment',array('id'=>$_GET['id'],'values'=>CJSON::encode($values)));
 				}
 				if($clientvtiger->hasError($recordInfo)) {
-					$response->addNotification('error', Yii::t('core', 'error'), Yii::t('core', 'errorCreateRow')."<br>".$clientvtiger->lastError());
+					$response->addNotification('error', Yii::t('core', 'error'), Yii::t('core', 'errorCreateComment')."<br>".$clientvtiger->lastError());
 				} else {
-					$response->addNotification('success', Yii::t('core', 'success'), Yii::t('core', 'successCreateRow'));
+					$response->addNotification('success', Yii::t('core', 'success'), Yii::t('core', 'successCreateComment'));
 					$relComments = $clientvtiger->doGetRelatedRecords($_GET['id'], $module, 'ModComments', '');
 					$response->addData(null, $this->renderPartial("//$view/_comments",array('relComments'=>$relComments),true));
 				}

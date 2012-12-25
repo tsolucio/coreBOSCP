@@ -2291,7 +2291,9 @@ abstract class VTActiveResource extends CModel
 			else {
 				$moduledata = $clientvtiger->doDescribe($module);
 				if ($module=='HelpDesk') {
-				$labelFields='ticket_no';
+					$labelFields='ticket_no';
+				} elseif ($module=='Documents') {
+					$labelFields='notes_title';
 				} else {
 				$labelFields=$moduledata["labelFields"];
 				}
@@ -2312,44 +2314,87 @@ abstract class VTActiveResource extends CModel
 		return $labelFields;
 	}
 
-    public function getMandatoryFields($module)
+    public function getMandatoryFields()
     {
-            $fields=$this->getFieldsInfo();
-            $arr=array();
-            foreach($fields as $field)
-            {
-            	if (!is_array($field) or empty($field['type'])) continue;
-               if($field['mandatory']=='true') array_push($arr,$field['name']);
-            }
-            $res=implode(',',$arr);
-            return $res;
+		$fields=$this->getFieldsInfo();
+		$arr=array();
+		foreach($fields as $field) {
+			if (!is_array($field) or empty($field['type'])) continue;
+			if($field['mandatory'] and $field['editable']) array_push($arr,$field['name']);
+		}
+		$res=implode(',',$arr);
+		return $res;
     }
 
-    public function getNumericalFields($module)
+    public function getNumericalFields()
     {
             $fields=$this->getFieldsInfo();
             $arrint=$arrdbl=array();
             foreach($fields as $field) {
             	if (!is_array($field) or empty($field['type'])) continue;
-               if($field['type']['name']=='integer') array_push($arrint,$field['name']);
-               if($field['type']['name']=='double' or $field['type']['name']=='float') array_push($arrdbl,$field['name']);
+               if($field['type']['name']=='integer' and $field['editable']) array_push($arrint,$field['name']);
+               if(($field['type']['name']=='double' or $field['type']['name']=='float') and $field['editable']) array_push($arrdbl,$field['name']);
             }
             $resint=implode(',',$arrint);
             $resdbl=implode(',',$arrdbl);
-            return array('entero'=>$resint,'doble'=>$resdbl);
+            return array('entero'=>$resint,'real'=>$resdbl);
+	}
+
+	public function getFieldsGroupedByType()
+	{
+		$fields=$this->getFieldsInfo();
+		$arrint=$arrdbl=$arrurl=$arrdate=$arreml=$arrman=array();
+		$fmt = 'yyyy-mm-dd';
+		foreach($fields as $field) {
+			if (!is_array($field) or empty($field['type'])) continue;
+			if($field['type']['name']=='integer' and $field['editable']) { array_push($arrint,$field['name']); continue; }
+			if(($field['type']['name']=='double' or $field['type']['name']=='float') and $field['editable']) { array_push($arrdbl,$field['name']); continue; }
+			if($field['type']['name']=='date' and $field['editable']) {
+				array_push($arrdate,$field['name']);
+				$fmt = $field['type']['format'];
+				continue;
+			}
+			if($field['mandatory'] and $field['editable']) { array_push($arrman,$field['name']); continue; }
+			if($field['type']['name']=='email' and $field['editable']) { array_push($arreml,$field['name']); continue; }
+			if($field['type']['name']=='url' and $field['editable']) { array_push($arrurl,$field['name']); continue; }
+		}
+		return array(
+		'entero'=>implode(',',$arrint),
+		'real'=>implode(',',$arrdbl),
+		'url'=>implode(',',$arrurl),
+		'fecha'=>array('fields'=>implode(',',$arrdate),'format'=>$fmt),
+		'email'=>implode(',',$arreml),
+		'obligatorio'=>implode(',',$arrman),
+		);
+	}
+
+    public function getDateFields()
+    {
+    	$fields=$this->getFieldsInfo();
+    	$arr=array();
+    	$fmt = 'yyyy-mm-dd';
+    	foreach($fields as $field)
+    	{
+    		if (!is_array($field) or empty($field['type'])) continue;
+    		if($field['type']['name']=='date' and $field['editable']) {
+    			array_push($arr,$field['name']);
+    			$fmt = $field['type']['format'];
+    		}
+    	}
+    	$res=implode(',',$arr);
+    	return array('fields'=>$res,'format'=>$fmt);
     }
 
-    public function getEmailFields($module)
+    public function getEmailFields()
     {
-            $fields=$this->getFieldsInfo();
-            $arr=array();
-            foreach($fields as $field)
-            {
-            	if (!is_array($field) or empty($field['type'])) continue;
-               if($field['type']['name']=='email') array_push($arr,$field['name']);
-            }
-            $res=implode(',',$arr);
-            return $res;
+		$fields=$this->getFieldsInfo();
+		$arr=array();
+		foreach($fields as $field) {
+			if (!is_array($field) or empty($field['type'])) continue;
+			if($field['type']['name']=='email' and $field['editable']) array_push($arr,$field['name']);
+		}
+		$res=implode(',',$arr);
+		return $res;
     }
 
     /**

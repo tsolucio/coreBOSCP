@@ -27,22 +27,22 @@ echo CHtml::hiddenField('idfieldval',$data->__get($this->entityidField), array('
 <div class="helpdesk_t"><?php echo $data->__get('ticket_title'); ?>&nbsp;</div>
 <div class="helpdesk_q"><?php echo $data->__get('description'); ?>&nbsp;</div>
 <div class="helpdesk_a"><?php echo $data->__get('solution'); ?>&nbsp;</div>
-<div class="helpdesk_docs" id="helpdesk_docs">
-<?php
-$relDocs = $data->GetRelatedRecords('Documents');
-if (count($relDocs)>0) {
-	$this->renderPartial('//helpdesk/_getdocs',array(
-		'relDocs'=>$relDocs,
-	));
-}
-?>
-</div>
 <div class="helpdesk_comments" id="helpdesk_comments">
 <?php
 $relComments = $data->GetRelatedRecords('ModComments');
 if (count($relComments)>0) {
 	$this->renderPartial('//helpdesk/_comments',array(
 		'relComments'=>$relComments,
+	));
+}
+?>
+</div>
+<div class="helpdesk_docs" id="helpdesk_docs">
+<?php
+$relDocs = $data->GetRelatedRecords('Documents');
+if (count($relDocs)>0) {
+	$this->renderPartial('//helpdesk/_getdocs',array(
+		'relDocs'=>$relDocs,
 	));
 }
 ?>

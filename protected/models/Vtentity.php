@@ -74,26 +74,29 @@ class Vtentity extends CActiveRecord
 	public function rules()
 	{
 		// NOTE: you should only define rules for those attributes that will receive user inputs.
-		$module = $this->getModule();
-		$mandatory=$this->getMandatoryFields($module);
-		$intdbl = $this->getNumericalFields($module);
-		$integral = $intdbl['entero'];
-		$numerical = $intdbl['doble'];
-		$email=$this->getEmailFields($module);
-                $writable=$this->getWritableFieldsArray();
-                $attributes=array();
-                foreach($writable as $write){
-                    if (!is_array($write)) continue;
-                    array_push($attributes,$write['name']);
-                }
-                $safeFields=implode(',',$attributes);
-		return array(
-				array($mandatory, 'required'),
-				array($integral, 'numerical', 'integerOnly'=>true),
-				array($numerical, 'numerical'),
-				array($email, 'email'),
-                                array($safeFields,'safe'),
-		);
+		$fldinfo = $this->getFieldsGroupedByType();
+		$mandatory=$fldinfo['obligatorio'];
+		$integral = $fldinfo['entero'];
+		$numerical = $fldinfo['real'];
+		$email = $fldinfo['email'];
+		$dateinfo = $fldinfo['fecha'];
+		$url = $fldinfo['url'];
+		$writable=$this->getWritableFieldsArray();
+		$attributes=array();
+		foreach($writable as $write) {
+			if (!is_array($write)) continue;
+			array_push($attributes,$write['name']);
+		}
+		$safeFields=implode(',',$attributes);
+		$return = array();
+		if (!empty($mandatory)) $return[] = array($mandatory, 'required');
+		if (!empty($integral)) $return[] = array($integral, 'numerical', 'integerOnly'=>true);
+		if (!empty($numerical)) $return[] = array($numerical, 'numerical');
+		if (!empty($dateinfo['fields'])) $return[] = array($dateinfo['fields'], 'date', 'format'=>$dateinfo['format']);
+		if (!empty($email)) $return[] = array($email, 'email');
+		if (!empty($url)) $return[] = array($url, 'url');
+		if (!empty($safeFields)) $return[] = array($safeFields,'safe');
+		return $return;
 	}
 
 	/**
@@ -118,7 +121,7 @@ class Vtentity extends CActiveRecord
             $labels=array();
             foreach($fields as $field)
             {
-                if (!is_array($field)) continue;
+				if (!is_array($field)) continue;
 					$labels[$field['name']] = $field['label'];
             }
             return $labels;
@@ -260,6 +263,9 @@ class Vtentity extends CActiveRecord
 				$sequence=$field['sequence'];
 				$block=$field['block']['blockname'];
 				$blocksequence=$field['block']['blocksequence'];
+				unset($htmloptionsAllFields['dateformat']);
+				if(isset($field['type']['name']) && !empty($field['type']['name']) && $field['type']['name']=='date')
+					$htmloptionsAllFields['dateformat'] = $field['type']['format'];
 				$dvfields[$key]=$this->getVtigerViewField($uitype,$key,$value,$label,$sequence,$block,$blocksequence,$htmloptionsAllFields);
 			}
 		}
@@ -283,6 +289,9 @@ class Vtentity extends CActiveRecord
 				$sequence=$field['sequence'];
 				$block=$field['block']['blockname'];
 				$blocksequence=$field['block']['blocksequence'];
+				unset($htmloptionsAllFields['dateformat']);
+				if(isset($field['type']['name']) && !empty($field['type']['name']) && $field['type']['name']=='date')
+					$htmloptionsAllFields['dateformat'] = $field['type']['format'];
 				$dvfields[$key]=$this->getVtigerViewField($uitype,$key,$value,$label,$sequence,$block,$blocksequence,$htmloptionsAllFields);
 			}
 		}
@@ -350,7 +359,12 @@ class Vtentity extends CActiveRecord
 				);
 				break;
 			case 5:
-				$dateformat='Y-m-d';
+				if (!isset($htmlopts['dateformat']) or empty($htmlopts['dateformat']))
+					$htmlopts['dateformat'] = 'Y-m-d';
+				$dateformat=str_replace('yyyy', 'Y', $htmlopts['dateformat']);
+				$dateformat=str_replace('mm', 'm', $dateformat);
+				$dateformat=str_replace('dd', 'd', $dateformat);
+				unset($htmlopts['dateformat']);
 				$widget=array(
 						'sequence'=>$sequence,
 						'label'=>$label,
@@ -362,8 +376,13 @@ class Vtentity extends CActiveRecord
 			case 23:
 			case 6:
 			case 70:
-				// FIXME  get date format from portal user config or setup contact's preferences?
-				$dateformat='Y-m-d h:i:s';
+				if (!isset($htmlopts['dateformat']) or empty($htmlopts['dateformat']))
+					$htmlopts['dateformat'] = 'Y-m-d';
+				$dateformat=str_replace('yyyy', 'Y', $htmlopts['dateformat']);
+				$dateformat=str_replace('mm', 'm', $dateformat);
+				$dateformat=str_replace('dd', 'd', $dateformat);
+				$dateformat.=' h:i:s';
+				unset($htmlopts['dateformat']);
 				$widget=array(
 						'sequence'=>$sequence,
 						'label'=>$label,

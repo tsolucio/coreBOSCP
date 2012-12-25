@@ -67,6 +67,7 @@
   <entry id="rows">Filas</entry>
   <entry id="rowsPerInsert">Filas por &lt;code class="literal"&gt;[INSERT|REPLACE]&lt;/code&gt;</entry>
   <entry id="search">Buscar</entry>
+  <entry id="searching">Búsqueda</entry>
   <entry id="settings">Preferencias</entry>
   <entry id="show">Mostrar</entry>
   <entry id="showDetails">Mostrar detalles</entry>
@@ -125,7 +126,7 @@
   <entry id="errConnection">No se ha podido establecer una conexión con la aplicación principal.</entry>
   <entry id="errPermission">No tienes permisos suficientes para ejecutar esta operación.</entry>
   <entry id="save">Guardar</entry>
-  <entry id="create">Crear</entry>  
+  <entry id="create">Crear</entry>
   <entry id="yourAccessInfo">Información de Acceso</entry>
   <entry id="lastAccessInfo">Ultimo acceso</entry>
   <entry id="startAccessDate">Fecha Inicio Soporte</entry>
@@ -136,10 +137,12 @@
   <entry id="successDeleteRow">Se ha eliminado la entidad</entry>
   <entry id="successUpdateRow">Se ha actualizado la entidad</entry>
   <entry id="successCreateRow">Se ha creado la entidad</entry>
+  <entry id="successCreateComment">Se ha creado el comentario</entry>
   <entry id="error">Error</entry>  
   <entry id="errorDeleteRow">Error eliminando entidad</entry>
   <entry id="errorUpdateRow">Error actualizando entidad</entry>
   <entry id="errorCreateRow">Error creando entidad</entry>
+  <entry id="errorCreateComment">Error creando comentario</entry>
   <entry id="errorIdNotExist">La entidad requerida no existe.</entry>
   <entry id="seeRelatedEntity">Ver Entidades</entry>
   <entry id="errNoTranslateFunction">Faltan Funciones Traducción</entry>
