@@ -139,7 +139,7 @@ var chive = {
 			.replace(/\?(.+)#/, '')
 			.replace('#', '/')					// Replace # with /
 			.replace(/([^:])\/+/g, '$1/');		// Remove multiple slashes
-		chive.ajaxloading(0,0);
+		chive.ajaxloading();
 		// Load page into content area
 		$.post(url, globalPost, function(response) {
 			if(!AjaxResponse.handle(response))
@@ -155,15 +155,15 @@ var chive = {
 				init();
 			}
 			var globalPost = {};
-			chive.ajaxloaded(0,0);
+			chive.ajaxloaded();
 		});
 	},
 	
-	ajaxloading: function(id, data)
+	ajaxloading: function()
 	{	
 		$('#loading').css({'background-image': 'url(images/loading4.gif)'}).fadeIn();
 	},
-	ajaxloaded: function(id, data)
+	ajaxloaded: function()
 	{	
 		$('#loading').css({'background-image': 'url(images/loading5.gif)'}).fadeOut();
 	},

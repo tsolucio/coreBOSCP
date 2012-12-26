@@ -51,7 +51,7 @@ function _viewSetBreadcrumb() {
 	breadCrumb.add({ icon: 'view', href: 'javascript:chive.goto(\'<?php echo $this->modelLinkName;?>/<?php echo $this->entity;?>/list/'+jQuery('#idfieldval').val()+'/dvcpage/'+jQuery('#dvcpage').val()+'\')', text: jQuery('#idfieldtxt').val()});
 	breadCrumb.show();
 	sideBar.activate(0);
-	chive.ajaxloaded;
+	chive.ajaxloaded();
 }
 _viewSetBreadcrumb(); // executed only once on first load, then called by CListView  afterAjaxUpdate
 </script>

@@ -153,7 +153,7 @@ function _viewExecuteJS() {
 			AjaxResponse.handle(response);
 		}
 	});
-	chive.ajaxloaded;
+	chive.ajaxloaded();
 }
 _viewExecuteJS(); // executed only once on first load, then called by CListView  afterAjaxUpdate
 </script>
