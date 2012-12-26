@@ -62,7 +62,6 @@
 		</tr>
 		<tr><td colspan=2>Which means it is a joint venture project of the companies:</td></tr>
 		<tr><td colspan=2>OpenCubed. JPL TSolucio, S.L. and StudioSynthesis, S.R.L.</td></tr>
-		<tr><td colspan=2>vtiger Systems India Pvt Ltd</td></tr>
 	</tbody>
 </table>
 
@@ -162,7 +161,7 @@
 				</a>
 			</td>
 			<td>Tipsy is a jQuery plugin for creating a Facebook-like tooltips effect based on an anchor tag's title attribute.</td>
-			<td>??</td>
+			<td>MIT</td>
 		</tr>
 		<tr class="even">
 			<td>

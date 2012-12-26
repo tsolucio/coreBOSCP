@@ -24,30 +24,30 @@
  */
 
 var sideBar = {
-	
+
 	activate: function(index)
 	{
 		$('#sideBar').accordion('activate', index);
 	},
-	
+
 	loadMenu: function(callback)
 	{
 		var loadingIcon = $('div.sidebarHeader.schemaList img.loading');
 		var contentUl = $('#sideBar #schemaList');
-		
+
 		// Setup loading icon
 		loadingIcon.show();
-		
+
 		// Do AJAX request
 		$.post(baseUrl + '/site/list', {}, function(data) {
-			
+
 			var template = $('#menutemplate');
 			var templateHtml = template.html();
 			var html = '';
 
 			// Remove all existing nodes
 			contentUl.empty();
-			
+
 			if(data.length > 0)
 			{
 				// Append all nodes
@@ -58,7 +58,7 @@ var sideBar = {
 						.replace(/{iconName}/g, data[i]['icon'])
 						.replace(/{menuName}/g, data[i]['name']) + '</li>';
 				}
-				
+
 				contentUl.append(html);
 				$('#sideBar #schemaList').parent().children('div.noEntries').hide();
 			}
@@ -66,13 +66,13 @@ var sideBar = {
 			{
 				$('#sideBar #schemaList').parent().children('div.noEntries').show();
 			}
-			
+
 			// Callback
 			if($.isFunction(callback))
 			{
 				callback();
 			}
-			
+
 			// Hide loading icon
 			loadingIcon.hide();
 		});
