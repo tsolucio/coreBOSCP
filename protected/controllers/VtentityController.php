@@ -216,17 +216,17 @@ class VtentityController extends Controller
 			$response = new AjaxResponse();
 			$model->unsetAttributes();
 			$model->setAttributes($_POST[$this->modelName]);
-                        if($model->getModule()=='Documents' && $model->getAttribute('filelocationtype')=='I')
-                        {
-                        $uploadfile=CUploadedFile::getInstance($model,'filename');
-                        $tmp_file=$uploadfile->getTempName();
-                        $cont=base64_encode(file_get_contents($tmp_file));
-                        $model->filename=array(
-                        		"name"=>$uploadfile->getName(),
-                        		"size"=>$uploadfile->getSize(),
-                        		"type"=>$uploadfile->getType(),
-                        		'content'=>$cont);//array("attachment_name"=>"ta.pdf",'attachment'=>"ta.pdf");
-                        }
+			$filename = $model->getAttribute('filename');
+			if($model->getModule()=='Documents' && $model->getAttribute('filelocationtype')=='I' && !empty($filename)) {
+				$uploadfile=CUploadedFile::getInstance($model,'filename');
+				$tmp_file=$uploadfile->getTempName();
+				$cont=base64_encode(file_get_contents($tmp_file));
+				$model->filename=array(
+							'name'=>$uploadfile->getName(),
+							'size'=>$uploadfile->getSize(),
+							'type'=>$uploadfile->getType(),
+							'content'=>$cont);
+			}
 			if($model->save()) {
 				$response->addNotification('success', Yii::t('core', 'success'), Yii::t('core', 'successUpdateRow'));
 				if (empty($_POST['dvcpage']) or $_POST['dvcpage']<1)

@@ -62,13 +62,21 @@
 <?php $this->endWidget(); ?>
 <script type="text/javascript">
 	$('#<?php echo $this->modelName ?>-form').ajaxForm({      
-		dataType: 'json',  
+		dataType: 'json',
+		beforeSerialize: removeEmptyFileInput,
 		success: function(response) {
 			if (response.data != undefined && response.data != '') 
 				$('#content').html(response.data);
 			AjaxResponse.handle(response);
 		}
 	});
+	function removeEmptyFileInput(formData, options) { 
+		if ($('#Vtentity_filename').val()=='' && $('#Vtentity_filename_E__').val()=='') {
+			$('#Vtentity_filename').remove();
+			$('#Vtentity_filename_E__').remove();
+		}
+	    return true; 
+	} 
 </script>
 
 </div><!-- form -->
