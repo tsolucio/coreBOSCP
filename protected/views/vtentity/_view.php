@@ -27,6 +27,19 @@
 	echo CHtml::hiddenField('dvcpage',$pnum-1, array('id'=>'dvcpage'));
 	echo CHtml::hiddenField('idfieldtxt',$data->getLookupFieldValue($this->entityLookupField,$data->getAttributes()), array('id'=>'idfieldtxt'));
 	echo CHtml::hiddenField('idfieldval',$data->__get($this->entityidField), array('id'=>'idfieldval'));
+	if (in_array($data->getModule(), array('Invoice','Quotes','SalesOrder','PurchaseOrder'))) {
+		$relProducts = $data->GetRelatedRecords('Products');
+		if (count($relProducts)>0) {
+			for ($pdoline = 0;$pdoline < count($relProducts);$pdoline++) {
+				$relProducts[$pdoline][] = $relProducts[$pdoline]['id'];
+				$relProducts[$pdoline]['productid'] = $relProducts[$pdoline]['id'];
+				$pdolineno++;
+			}
+			$this->renderPartial('//vtentity/_showproducts',array(
+					'relProducts'=>$data->dereferenceIds($relProducts),
+			));
+		}
+	}
 ?>
 </div>
 <script type="text/javascript">
