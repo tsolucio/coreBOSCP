@@ -376,7 +376,11 @@ class VtentityController extends Controller
 		$model=$this->loadModel();
 		$this->setCRUDpermissions($model->getModule());
 		$this->viewButtonSearch=false;
-		
+		$this->viewButtonDownloadPDF=true;
+		if ($model->getModule()=='Documents') {
+			if ($model->getAttribute('filelocationtype') == 'E')
+				$this->viewButtonDownloadPDF=false;
+		}
 		$this->render('//vtentity/view',array(
 			'model'=>$model,
 		));
@@ -474,6 +478,10 @@ class VtentityController extends Controller
 		if(file_exists($saveasfile)) {
 			$ft=Yii::app()->getRequest()->getParam('ft');
 			$fn=Yii::app()->getRequest()->getParam('fn');
+			if (empty($ft) and is_array($attachmentsdata[$id])) {
+				$ft = $attachmentsdata[$id]['filetype'];
+				$fn = empty($attachmentsdata[$id]['filename']) ? 'unknown' : $attachmentsdata[$id]['filename'];
+			}
 			header("Content-type: $ft");
 			header("Content-Type: application/download");
 			header("Pragma: public");
@@ -486,6 +494,10 @@ class VtentityController extends Controller
 
 	public function actionDownloadPDF() {
 		$model=Vtentity::model();
+		if ($model->getModule()=='Documents') {
+			$this->actionDownload();
+			return 0;
+		}
 		$clientvtiger=$model->getClientVtiger();
 		if(!$clientvtiger) {
 			Yii::log('login failed');

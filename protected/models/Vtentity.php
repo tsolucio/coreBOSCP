@@ -443,16 +443,17 @@ class Vtentity extends CActiveRecord
 				'blocksequence'=>$blocksequence,
 				);
 				break;
-
-                        case 27:
-                               $widget=array(
+			case 27:
+				$widget=array(
 				'sequence'=>$sequence,
 				'label'=>$label,
-				'value'=>($fieldvalue=='I'?yii::t('core', 'Internal'):yii::t('core', 'External')),
+				'value'=>($fieldvalue=='I'?yii::t('core', 'Internal'):yii::t('core', 'External')).
+						'<span id="doc_dld_type" style="display:none" dld_type="'.$fieldvalue.'"></span>',
+				'type'=>'raw',
 				'block'=>$block,
 				'blocksequence'=>$blocksequence,
 				);
-                               break;
+				break;
  			case 28:
 //			case 29:
 //			case 61:

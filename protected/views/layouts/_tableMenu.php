@@ -61,13 +61,16 @@
 				'visible' => $this->viewButtonSearch,
 			),
 			array(
-				'label' => Yii::t('core','downloadpdf'),
-				'icon' => ICONPATH . '/16/pdf_icon_16.gif',
+				'label' => Yii::t('core','download'),
+				'icon' => 'arrow_turn_090',
 				'link' => array(
 					'url' => 'javascript:void(0)',
-					'htmlOptions' => array('class'=>'icon', 'onclick'=>'javascript: filedownload.download(\''.yii::app()->baseUrl.'/index.php/vtentity/'.$this->entity."/downloadpdf/'+$('#entityidValue').val(),'');return false;"),
+					'htmlOptions' => array(
+						'class'=>'icon',
+						'id' => 'download-button',
+						'onclick'=>'javascript: filedownload.download(\''.yii::app()->baseUrl.'/index.php/vtentity/'.$this->entity."/downloadpdf/'+$('#entityidValue').val(),'');return false;"),
 				),
-				'visible' => $this->viewButtonDownloadPDF && in_array($this->entity,array('Invoice','Quotes','SalesOrder','PurchaseOrder')),
+				'visible' => $this->viewButtonDownloadPDF && in_array($this->entity,array('Invoice','Quotes','SalesOrder','PurchaseOrder','Documents')),
 			),
 			array(
 				'label' => Yii::t('core','export'),
