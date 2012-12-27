@@ -67,6 +67,7 @@
 	<entry id="rows">Rows</entry>
 	<entry id="rowsPerInsert">Rows per &lt;code class="literal"&gt;[INSERT|REPLACE]&lt;/code&gt;</entry>
 	<entry id="search">Search</entry>
+	<entry id="nosearchresults">No Search Results</entry>
 	<entry id="searching">Search</entry>
 	<entry id="settings">Settings</entry>
 	<entry id="show">Display</entry>

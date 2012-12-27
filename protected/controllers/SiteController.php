@@ -96,9 +96,9 @@ class SiteController extends Controller
 		} else {
 			$sent=$model->sendRecoverPassword($username);
 			if($sent) {
-					echo 'success';
+				echo 'success';
 			} else {
-					echo 'fail';
+				echo 'fail';
 			}
 		}
 	}
@@ -277,8 +277,16 @@ class SiteController extends Controller
 		$m=Yii::app()->getRequest()->getParam('module');
 		if (empty($m)) $_GET['module']=$module;
 		$lastSchemaName = '';
+		$schemata = Yii::app()->cache->get('yiicpng.sidebar.availablemodules');
+		if (!empty($schemata)) {
+			$searchonlyin = array();
+			foreach ($schemata as $key => $value) {
+				$searchonlyin[] = $key;
+			}
+			$searchonlyin = implode(',',$searchonlyin);
+		}
 		$model=new Vtentity();
-		$res=$model->findAllSearch($query);
+		$res=$model->findAllSearch($query,$searchonlyin);
 		foreach($res AS $table)
 		{
 			$number=count($table);
@@ -289,8 +297,9 @@ class SiteController extends Controller
 			 
 			if($module != $lastSchemaName)
 			{
+				$mname = (empty($schemata[$module]['name']) ? $module : $schemata[$module]['name']);
 				$items[] = CJSON::encode(array(
-						'text' => '<span class="icon schema">' . Html::icon('database') . '<span>' . StringUtil::cutText($module, 30) . '</span></span>',
+						'text' => '<span class="icon schema">' . Html::icon('database') . '<span>' . StringUtil::cutText($mname, 30) . '</span></span>',
 						'target' => Yii::app()->createUrl('#vtentity/' . $module) . '/index',
 						'plain' => $module,
 				));
@@ -301,6 +310,13 @@ class SiteController extends Controller
 					'text' => '<span class="icon table">' . Html::icon('table') . '<span>' . StringUtil::cutText($name, 30) . '</span></span>',
 					'target' => Yii::app()->createUrl("#vtentity/$module/view/" . $id),
 					'plain' => $name
+			));
+		}
+		if (count($items)==0) {
+			$items[] = CJSON::encode(array(
+					'text' => '<span class="icon schema">' . Html::icon('database') . '<span>' . Yii::t('core', 'nosearchresults') . '</span></span>',
+					'target' => 'javascript:void(0);',
+					'plain' => Yii::t('core', 'nosearchresults')
 			));
 		}
 		Yii::app()->end(implode("\n", $items));

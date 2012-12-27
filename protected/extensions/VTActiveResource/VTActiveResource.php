@@ -371,6 +371,9 @@ abstract class VTActiveResource extends CModel
     			case 'Services':
     				$condition = array('condition'=>"related.Contacts='".Yii::app()->user->contactId."'");
     				break;
+    			case 'Faq':
+    				$condition = array('condition'=>"faqstatus='Published'");
+    				break;
     			case 'Documents':
     				// the way the related enhancement is done I know I can filter on crm2, but that is REALLY dependent and basically wrong
     				$condition = array('condition'=>"related.Contacts='".Yii::app()->user->contactId."' or crm2.crmid = '".Yii::app()->user->accountId."'");
@@ -1718,15 +1721,20 @@ abstract class VTActiveResource extends CModel
     	return $recinfo;
     }
 
-    public function findAllSearch($query)
+    public function findAllSearch($query,$search_onlyin)
     {
     	$module=$this->getModule();
     	$clientvtiger=$this->getClientVtiger();
     	if(!$clientvtiger) Yii::log('login failed',CLogger::LEVEL_ERROR);
     	else {
-    		$findall =unserialize($clientvtiger->doInvoke('getSearchResults',array('query'=>$query)));            
+    		$findall =unserialize($clientvtiger->doInvoke('getSearchResults',
+    				array('query'=>$query,'search_onlyin'=>$search_onlyin,
+    						'restrictionids'=>json_encode(array(
+    							'userId'=>Yii::app()->user->userId,
+    							'accountId'=>Yii::app()->user->accountId,
+    							'contactId'=>Yii::app()->user->contactId
+    								)))));
     	}
-    	Yii::log('findall: '.count($findall),CLogger::LEVEL_INFO);
     	return $findall;
     }
 

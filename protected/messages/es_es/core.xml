@@ -67,6 +67,7 @@
   <entry id="rows">Filas</entry>
   <entry id="rowsPerInsert">Filas por &lt;code class="literal"&gt;[INSERT|REPLACE]&lt;/code&gt;</entry>
   <entry id="search">Buscar</entry>
+  <entry id="nosearchresults">No se han encontrado resultados</entry>
   <entry id="searching">Búsqueda</entry>
   <entry id="settings">Preferencias</entry>
   <entry id="show">Mostrar</entry>
