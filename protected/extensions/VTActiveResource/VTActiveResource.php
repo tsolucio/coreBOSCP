@@ -2309,12 +2309,21 @@ abstract class VTActiveResource extends CModel
 				if($moduleAccessInformation===false){
 					$moduleAccessInformation=array();
 				}
-				$moduleAccessInformation[$module]=array(
+				if (Yii::app()->vtyiicpngScope=='CPortal' and $module=='Accounts') {  // cuentas es especial así que lo ponemos a mano
+					$moduleAccessInformation[$module]=array(
+							'createable' => false,
+							'updateable' => true,
+							'deleteable' => false,
+							'retrieveable' => true,
+					);
+				} else {
+					$moduleAccessInformation[$module]=array(
 						'createable' => $moduledata['createable'],
 						'updateable' => $moduledata['updateable'],
 						'deleteable' => $moduledata['deleteable'],
 						'retrieveable' => $moduledata['retrieveable'],
 						);
+				}
 				Yii::app()->cache->set( 'moduleAccessInformation' , $moduleAccessInformation);
 			}
 			Yii::app()->cache->set( $api_cache_id , $labelFields);

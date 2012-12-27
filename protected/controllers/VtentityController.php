@@ -59,7 +59,11 @@ class VtentityController extends Controller
 		//$this->viewButtonCreate = $moduleAccessInformation[$module]['createable'];
 		// at this moment vtiger CRM has these two concepts together so, although REST has them
 		// separate, create always comes true so we ignore it and map it to the edit permissions
-		$this->viewButtonCreate = $this->viewButtonEdit;
+		if (Yii::app()->vtyiicpngScope=='CPortal' and $module=='Accounts') {  // cuentas es especial así que lo ponemos a mano
+			$this->viewButtonCreate = false;
+		} else {
+			$this->viewButtonCreate = $this->viewButtonEdit;
+		}
 		$this->viewButtonSearch = $moduleAccessInformation[$module]['retrieveable'];
 	}
 
@@ -68,7 +72,11 @@ class VtentityController extends Controller
 		//return $moduleAccessInformation[$module]['createable'];
 		// at this moment vtiger CRM has these two concepts together so, although REST has them
 		// separate, create always comes true so we ignore it and map it to the edit permissions
-		return $moduleAccessInformation[$module]['updateable'];
+		if (Yii::app()->vtyiicpngScope=='CPortal' and $module=='Accounts') {  // cuentas es especial así que lo ponemos a mano
+			return false;
+		} else {
+			return $moduleAccessInformation[$module]['updateable'];
+		}
 	}
 
 	public function vtyii_canEdit($module) {
