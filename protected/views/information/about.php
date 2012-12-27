@@ -1,6 +1,6 @@
 <!-- 
  *************************************************************************************************
- * vtigerCRM vtyiiCPng - web based vtiger CRM Customer Portal
+ * Evolutivo vtyiiCPng - web based vtiger CRM Customer Portal
  * Copyright 2012 JPL TSolucio, S.L.  --  This file is a part of vtyiiCPNG.
  * You can copy, adapt and distribute the work under the "Attribution-NonCommercial-ShareAlike"
  * Vizsage Public License (the "License"). You may not use this file except in compliance with the
@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and limitations under the
  * License terms of Creative Commons Attribution-NonCommercial-ShareAlike 3.0 (the License).
  *************************************************************************************************
- *  Author       : JPL TSolucio, S. L.
+ *  Author: JPL TSolucio, S. L.
 -->
 
 <table class="list" style="width: 50%; float: left;">
@@ -29,16 +29,16 @@
 	<tbody>
 		<tr>
 			<td style="padding-left: 15px;">
-				<a href="http://www.vtiger.com">
-					<img src="images/logo-big.png" alt="vtigerCRM Logo" title="<?php echo Yii::app()->name; ?>" />
-				</a>
+				<a href="http://www.evolutivo.it">
+					<img src="images/logo-big.png" alt="evolutivo logo" title="<?php echo Yii::app()->name; ?>" />
+				</a><br/>
 				<p class="login-text"><?php echo Yii::t('core', 'customerPortal'); ?></p>
 			</td>
 			<td>
 				<b><?php echo Yii::app()->name . ' ' . Yii::app()->params->version; ?></b><br/>
 				<i>Webservice Customer Portal for vtiger CRM</i><br/><br/><br/>
-				Released under the <a href="http://www.gnu.org/copyleft/gpl.html">GPL License</a><br/>
-				<a href="http://www.vtyiicpng.com">http://www.vtyiicpng.com</a><br/><br/>
+				Released under the <a href="http://vizsage.com/license/Vizsage-License-BY-NC-SA.html">Vizsage Public License</a><br/>
+				<a href="http://www.tsolucio.com">&copy; JPL TSolucio, S.L.</a><br/><br/>
 			</td>
 		</tr>
 	</tbody>
@@ -60,8 +60,7 @@
 				<?php echo Yii::app()->name; ?> is an <b><a href="http://www.evolutivo.it">Evolutivo Initiative</a></b><br/>
 			</td>
 		</tr>
-		<tr><td colspan=2>Which means it is a joint venture project of the companies:</td></tr>
-		<tr><td colspan=2>OpenCubed. JPL TSolucio, S.L. and StudioSynthesis, S.R.L.</td></tr>
+		<tr><td colspan=2>Which means it is a joint venture project of the companies: OpenCubed. JPL TSolucio, S.L. and StudioSynthesis, S.R.L.</td></tr>
 	</tbody>
 </table>
 
@@ -84,7 +83,7 @@
 			<td>
 				<a href="http://www.chive-project.com/" class="icon">
 					<?php echo Html::icon('chive'); ?>
-					<span>Chive Project</span>
+					<span>Chive Project 0.5</span>
 				</a>
 			</td>
 			<td>Chive is a next generation MySQL database management tool. We have based the Customer Portal design and some of the under works on the great work <a href="http://www.fusonic.net">Fusonic</a> is doing on this project.<br/><b>Thanks for sharing!!!</b><br/>

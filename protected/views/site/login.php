@@ -123,7 +123,7 @@
 <!-- div id="login-image"><img src="<?php echo BASEURL; ?>/images/connect.gif"></div -->
 <div id="login">
 	<div id="login-logo">
-		<img src="<?php echo BASEURL; ?>/images/logo-big.png" alt="<?php echo Yii::app()->name; ?>" title="<?php echo Yii::app()->name; ?>" />
+		<img src="<?php echo BASEURL; ?>/images/logo-big.png" alt="<?php echo Yii::app()->name; ?>" title="<?php echo Yii::app()->name; ?>" /><br>
 		<p class="login-text"><?php echo Yii::t('core', 'customerPortal'); ?></p>
 	</div>
 

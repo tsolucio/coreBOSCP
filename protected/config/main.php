@@ -1,6 +1,6 @@
 <?php
 /**************************************************************************************************
- * vtigerCRM vtyiiCPng - web based vtiger CRM Customer Portal
+ * Evolutivo vtyiiCPng - web based vtiger CRM Customer Portal
  * Copyright 2012 JPL TSolucio, S.L.  --  This file is a part of vtyiiCPNG.
  * You can copy, adapt and distribute the work under the "Attribution-NonCommercial-ShareAlike"
  * Vizsage Public License (the "License"). You may not use this file except in compliance with the
@@ -21,12 +21,12 @@ require(dirname(__FILE__).'/PortalConfig.php');
 
 $mainConfig=array(
 	'basePath' => dirname(__FILE__) . DIRECTORY_SEPARATOR . '..',
-	'name' => 'vtigerCRM vtyiiCPng',
+	'name' => 'evoCP',
 	'theme' => 'standard',
-	'site'=>$vtyiicpng_Server_Path,
-	'loginuser'=>$vtyiicpng_Login_User,
-	'accesskey'=>$vtyiicpng_Access_Key,
-	'attachment_folder'=>$vtyiicpng_AttachmentFolderName,
+	'site'=>$evocp_Server_Path,
+	'loginuser'=>$evocp_Login_User,
+	'accesskey'=>$evocp_Access_Key,
+	'attachment_folder'=>$evocp_AttachmentFolderName,
 
 	// Activate debuging
 	'debug'=>true,
@@ -151,7 +151,7 @@ $mainConfig=array(
 	// application-level parameters
 	'params' => array(
 		'iconPack' => 'fugue',
-		'version' => '5.3',
+		'version' => '1.0',
 	),
 
 	'vtyiicpngScope' => 'CPortal',  //  CPortal | vtigerCRM

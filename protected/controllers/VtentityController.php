@@ -1,6 +1,6 @@
 <?php
 /**************************************************************************************************
- * vtigerCRM vtyiiCPng - web based vtiger CRM Customer Portal
+ * Evolutivo vtyiiCPng - web based vtiger CRM Customer Portal
  * Copyright 2012 JPL TSolucio, S.L.  --  This file is a part of vtyiiCPNG.
  * You can copy, adapt and distribute the work under the "Attribution-NonCommercial-ShareAlike"
  * Vizsage Public License (the "License"). You may not use this file except in compliance with the
@@ -487,7 +487,7 @@ class VtentityController extends Controller
 			header("Pragma: public");
 			header("Cache-Control: private");
 			header("Content-Disposition: attachment; filename=$fn");
-			header("Content-Description: vtyiicpng download");
+			header("Content-Description: evocp download");
 			readfile($saveasfile);
 		}
 	}
@@ -516,7 +516,7 @@ class VtentityController extends Controller
 			header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
 			$fn=$model->getModuleName().$recordInfo[0]['recordid'];
 			header("Content-Disposition: attachment; filename=$fn.pdf");
-			header("Content-Description: vtyiicpng download PDF");
+			header("Content-Description: evocp download PDF");
 			echo base64_decode($recordInfo[0]['pdf_data']);
 		}
 	}

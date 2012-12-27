@@ -1,6 +1,6 @@
 <?php
 /**************************************************************************************************
- * vtigerCRM vtyiiCPng - web based vtiger CRM Customer Portal
+ * Evolutivo vtyiiCPng - web based vtiger CRM Customer Portal
  * Copyright 2012 JPL TSolucio, S.L.  --  This file is a part of vtyiiCPNG.
  * You can copy, adapt and distribute the work under the "Attribution-NonCommercial-ShareAlike"
  * Vizsage Public License (the "License"). You may not use this file except in compliance with the
@@ -18,14 +18,14 @@
 
 //This is the vtiger CRM server path i.e., the url to access the vtiger CRM server in browser
 //Ex. if you access your vtiger CRM with http://mickie:90/vtiger/index.php you will use http://mickie:90/vtiger
-$vtyiicpng_Server_Path = "http://mickie:90/vtiger";
+$evocp_Server_Path = "http://mickie:90/vtiger";
 
 // The next two variables define the portal webservice user to be used to connect to the vtiger CRM server
 // This user must be created and configured in your vtiger CRM application
-$vtyiicpng_Login_User = 'admin';
-$vtyiicpng_Access_Key = 'U7f44ZhKCZ8ZTkZU';
+$evocp_Login_User = 'admin';
+$evocp_Access_Key = 'U7f44ZhKCZ8ZTkZU';
 
 // name of the folder within which you want any trouble ticket attachments to be uploaded
-$vtyiicpng_AttachmentFolderName = 'Default';
+$evocp_AttachmentFolderName = 'Default';
 
 ?>

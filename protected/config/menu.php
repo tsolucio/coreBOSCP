@@ -1,6 +1,6 @@
 <?php
 /**************************************************************************************************
- * vtigerCRM vtyiiCPng - web based vtiger CRM Customer Portal
+ * Evolutivo vtyiiCPng - web based vtiger CRM Customer Portal
  * Copyright 2012 JPL TSolucio, S.L.  --  This file is a part of vtyiiCPNG.
  * You can copy, adapt and distribute the work under the "Attribution-NonCommercial-ShareAlike"
  * Vizsage Public License (the "License"). You may not use this file except in compliance with the
@@ -33,7 +33,7 @@ Each entry can be one of three things:
 For example, the next array would show the "About us" link first, followed by HelpDes, then Invoices, all the other
 available modules, and finally a few more menu options
 
-$vtyiicpngMenu = array(
+$evocpMenu = array(
 	array('name'=>Yii::t('core', 'about'),'link'=>'information/about','icon'=>'info'),
 	'HelpDesk',
 	'Invoice',
@@ -45,7 +45,7 @@ $vtyiicpngMenu = array(
 The exact order given will be respected.
 
 **/
-$vtyiicpngMenu = array(
+$evocpMenu = array(
 	'#vtigermodules#',
 	array('name'=>Yii::t('core', 'Change Password'),'link'=>'site/changepassword','icon'=>'privileges'),
 	array('name'=>Yii::t('core', 'about'),'link'=>'information/about','icon'=>'info'),

@@ -368,7 +368,7 @@ class SiteController extends Controller
 		include 'protected/config/menu.php';
 		$sidebarMenu = array();
 		$alreadyinsidebarMenu = array();
-		foreach ($vtyiicpngMenu as $mnuop) {
+		foreach ($evocpMenu as $mnuop) {
 			if (is_array($mnuop))
 				$sidebarMenu[] = $mnuop;
 			else {

@@ -28,7 +28,7 @@ class I18NExportCommand extends CConsoleCommand
 		}
 		
 		// Open target file to write
-		$fp = fopen("messages/_translation/vtyiiCPng.pot", "w");
+		$fp = fopen("messages/_translation/evocp.pot", "w");
 		
 		// Write headers
 		fputs($fp, 'msgid ""' . "\n");
@@ -36,7 +36,7 @@ class I18NExportCommand extends CConsoleCommand
 		fputs($fp, '"Project-Id-Version: '.$mainConfig['name'].' '.$mainConfig['params']['version'].'\n"' . "\n");
 		fputs($fp, '"PO-Revision-Date:\n"' . "\n");
 		fputs($fp, '"Last-Translator: PUT_YOUR_NAME_HERE\n"' . "\n");
-		fputs($fp, '"Language-Team: vtyiiCPng\n"' . "\n");
+		fputs($fp, '"Language-Team: evocp\n"' . "\n");
 		fputs($fp, '"MIME-Version: 1.0\n"' . "\n");
 		fputs($fp, '"Content-Type: text/plain; charset=utf-8\n"' . "\n");
 		fputs($fp, '"Content-Transfer-Encoding: 8bit\n"' . "\n");
