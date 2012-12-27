@@ -28,9 +28,13 @@
 		<tr>
 			<th colspan="6"><?php
 			 echo $TCName;
-			 echo Html::ajaxLink('vtentity/Timecontrol/create?preload[relatedto]='.$hdid, array('class' => 'icon','style'=>'float:right;'));
-			 echo Html::icon('add');
-			 echo '<span>'.Yii::t('core','insert').'</span></a>';?></th>
+			 $moduleAccessInformation = Yii::app()->cache->get('moduleAccessInformation');
+			 if (is_array($moduleAccessInformation) and isset($moduleAccessInformation['Timecontrol']) and $moduleAccessInformation['Timecontrol']['updateable']) {
+				 echo Html::ajaxLink('vtentity/Timecontrol/create?preload[relatedto]='.$hdid, array('class' => 'button icon','style'=>'float:right;'));
+				 echo Html::icon('add');
+				 echo '<span>'.Yii::t('core','insert').'</span></a>';
+			 } ?>
+			</th>
 		</tr>
 		<tr>
 			<th><?php echo Yii::t('core','tcnumber'); ?></th>

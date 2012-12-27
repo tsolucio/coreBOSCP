@@ -58,7 +58,7 @@ if (count($relDocs)>0) {
 	)); ?>
 	<fieldset>
 	<textarea name="ItemCommentParam" rows="1" class="post-message" placeholder="<?php echo Yii::t('core','addonecomment')?>" style="height: 60px;"></textarea>
-	<div class="row buttons"><?php echo CHtml::submitButton(Yii::t('core', 'addcomment')); ?></div>
+	<div class="row buttons"><?php echo CHtml::submitButton(Yii::t('core', 'addcomment'),array('style'=>"background-image:url('images/icons/fugue/16/add.png');background-repeat:no-repeat;padding-left:19px;background-position:2px 50%;")); ?></div>
 	</fieldset>
 	<?php $this->endWidget(); ?>
 	</div>
@@ -74,7 +74,7 @@ if (count($relDocs)>0) {
 	echo CHtml::label(Yii::t('core','addoneattachment'), 'filename').'<br/>';
 	echo CHtml::fileField('filename','',array('id'=>'filename'));
 	?>
-	<div class="row buttons"><?php echo CHtml::submitButton(Yii::t('core', 'addattachment')); ?></div>
+	<div class="row buttons"><?php echo CHtml::submitButton(Yii::t('core', 'addattachment'),array('style'=>"background-image:url('images/icons/fugue/16/add.png');background-repeat:no-repeat;padding-left:19px;background-position:2px 50%;")); ?></div>
 	</fieldset>
 	<?php $this->endWidget(); ?>
 	</div>
