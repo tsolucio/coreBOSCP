@@ -52,7 +52,8 @@ class Html
 			$htmloptions['href'] = '#' . $target;
 			//$htmloptions['onclick'] = 'chive.goto("' . $target . '"); return false;';
 		}
-		
+		if (!isset($htmloptions['id'])) $htmloptions['id'] = 'vtyiicpng-'.uniqid();
+		if (!isset($htmloptions['live'])) $htmloptions['live'] = false;
 		return CHtml::tag('a', $htmloptions, $content, $close);
 	}
 

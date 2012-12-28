@@ -258,7 +258,8 @@ class vtyiicpngActiveForm extends CActiveForm
 				$widget=$this->checkBox($model,$fieldname,$htmlopts);
 				break;
 			case 'file':
-				$widget=CHtml::activeFileField($model, $fieldname, $htmlopts);
+				CHtml::resolveNameID($model,$fieldname,$htmlopts);
+				$widget = CHtml::activeInputField('file', $model, $fieldname, $htmlopts);
 				break;
 			case 53:
 				$values=$model->getUsersInSameGroup();

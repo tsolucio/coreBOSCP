@@ -197,12 +197,12 @@ class CDbCriteria extends CComponent
 		{
 			if($condition===array())
 				return $this;
-			$condition='('.implode(') '.$operator.' (',$condition).')';
+			$condition=''.implode(' '.$operator.' ',$condition).'';
 		}
 		if($this->condition==='')
 			$this->condition=$condition;
 		else
-			$this->condition='('.$this->condition.') '.$operator.' ('.$condition.')';
+			$this->condition=''.$this->condition.' '.$operator.' '.$condition.'';
 		return $this;
 	}
 

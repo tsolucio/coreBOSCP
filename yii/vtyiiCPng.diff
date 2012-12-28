@@ -1,8 +1,242 @@
+Index: yii/zii/widgets/assets/listview/jquery.yiilistview.js
+===================================================================
+--- yii/zii/widgets/assets/listview/jquery.yiilistview.js	(revisión: 409)
++++ yii/zii/widgets/assets/listview/jquery.yiilistview.js	(copia de trabajo)
+@@ -32,7 +32,7 @@
+ 			$.fn.yiiListView.settings[id] = settings;
+ 
+ 			if(settings.ajaxUpdate.length > 0) {
+-				$(document).on('click.yiiListView', settings.updateSelector,function(){
++				$(document).off('click.yiiListView', settings.updateSelector).on('click.yiiListView', settings.updateSelector,function(){
+ 					// Check to see if History.js is enabled for our Browser
+ 					if (settings.enableHistory && window.History.enabled) {
+ 						// Ajaxify this link
+Index: yii/zii/widgets/assets/gridview/jquery.yiigridview.js
+===================================================================
+--- yii/zii/widgets/assets/gridview/jquery.yiigridview.js	(revisión: 409)
++++ yii/zii/widgets/assets/gridview/jquery.yiigridview.js	(copia de trabajo)
+@@ -81,7 +81,7 @@
+ 				gridSettings[id] = settings;
+ 
+ 				if (settings.ajaxUpdate.length > 0) {
+-					$(document).on('click.yiiGridView', settings.updateSelector, function () {
++					$(document).off('click.yiiGridView', settings.updateSelector).on('click.yiiGridView', settings.updateSelector, function () {
+ 						// Check to see if History.js is enabled for our Browser
+ 						if (settings.enableHistory && window.History.enabled) {
+ 							// Ajaxify this link
+@@ -97,7 +97,7 @@
+ 					});
+ 				}
+ 
+-				$(document).on('change.yiiGridView keydown.yiiGridView', inputSelector, function (event) {
++				$(document).off('change.yiiGridView keydown.yiiGridView', inputSelector).on('change.yiiGridView keydown.yiiGridView', inputSelector, function (event) {
+ 					if (event.type === 'keydown') {
+ 						if( event.keyCode !== 13) {
+ 							return; // only react to enter key
+@@ -136,7 +136,7 @@
+ 
+ 				if (settings.selectableRows > 0) {
+ 					selectCheckedRows(this.id);
+-					$(document).on('click.yiiGridView', '#' + id + ' .' + settings.tableClass + ' > tbody > tr', function (e) {
++					$(document).off('click.yiiGridView', '#' + id + ' .' + settings.tableClass + ' > tbody > tr').on('click.yiiGridView', '#' + id + ' .' + settings.tableClass + ' > tbody > tr', function (e) {
+ 						var $currentGrid, $row, isRowSelected, $checks,
+ 							$target = $(e.target);
+ 
+@@ -161,7 +161,7 @@
+ 						}
+ 					});
+ 					if (settings.selectableRows > 1) {
+-						$(document).on('click.yiiGridView', '#' + id + ' .select-on-check-all', function () {
++						$(document).off('click.yiiGridView', '#' + id + ' .select-on-check-all').on('click.yiiGridView', '#' + id + ' .select-on-check-all', function () {
+ 							var $currentGrid = $('#' + id),
+ 								$checks = $('input.select-on-check', $currentGrid),
+ 								$checksAll = $('input.select-on-check-all', $currentGrid),
+@@ -181,7 +181,7 @@
+ 						});
+ 					}
+ 				} else {
+-					$(document).on('click.yiiGridView', '#' + id + ' .select-on-check', false);
++					$(document).off('click.yiiGridView', '#' + id + ' .select-on-check').on('click.yiiGridView', '#' + id + ' .select-on-check', false);
+ 				}
+ 			});
+ 		},
+Index: yii/yiilite.php
+===================================================================
+--- yii/yiilite.php	(revisión: 409)
++++ yii/yiilite.php	(copia de trabajo)
+@@ -5364,9 +5364,9 @@
+ 				$handler="return $confirm;";
+ 		}
+ 		if($live)
+-			$cs->registerScript('Yii.CHtml.#' . $id, "$('body').on('$event','#$id',function(){{$handler}});");
++			$cs->registerScript('Yii.CHtml.#' . $id, "$('body').off('$event').on('$event','#$id',function(){{$handler}});");
+ 		else
+-			$cs->registerScript('Yii.CHtml.#' . $id, "$('#$id').on('$event', function(){{$handler}});");
++			$cs->registerScript('Yii.CHtml.#' . $id, "$('#$id').off('$event').on('$event', function(){{$handler}});");
+ 		unset($htmlOptions['params'],$htmlOptions['submit'],$htmlOptions['ajax'],$htmlOptions['confirm'],$htmlOptions['return'],$htmlOptions['csrf']);
+ 	}
+ 	public static function resolveNameID($model,&$attribute,&$htmlOptions)
+Index: yii/web/helpers/CHtml.php
+===================================================================
+--- yii/web/helpers/CHtml.php	(revisión: 409)
++++ yii/web/helpers/CHtml.php	(copia de trabajo)
+@@ -2068,9 +2068,9 @@
+ 		}
+ 
+ 		if($live)
+-			$cs->registerScript('Yii.CHtml.#' . $id, "$('body').on('$event','#$id',function(){{$handler}});");
++			$cs->registerScript('Yii.CHtml.#' . $id, "$('body').off('$event').on('$event','#$id',function(){{$handler}});");
+ 		else
+-			$cs->registerScript('Yii.CHtml.#' . $id, "$('#$id').on('$event', function(){{$handler}});");
++			$cs->registerScript('Yii.CHtml.#' . $id, "$('#$id').off('$event').on('$event', function(){{$handler}});");
+ 		unset($htmlOptions['params'],$htmlOptions['submit'],$htmlOptions['ajax'],$htmlOptions['confirm'],$htmlOptions['return'],$htmlOptions['csrf']);
+ 	}
+ 
+Index: yii/vtyiiCPng.diff
+===================================================================
+--- yii/vtyiiCPng.diff	(revisión: 401)
++++ yii/vtyiiCPng.diff	(copia de trabajo)
+@@ -1,50 +1,94 @@
+-Index: yii/db/schema/CDbCriteria.php
++Index: yii/zii/widgets/assets/listview/jquery.yiilistview.js
+ ===================================================================
+---- yii/db/schema/CDbCriteria.php	(revisión: 236)
+-+++ yii/db/schema/CDbCriteria.php	(revisión: 242)
+-@@ -189,12 +189,12 @@
+- 		{
+- 			if($condition===array())
+- 				return $this;
+--			$condition='('.implode(') '.$operator.' (',$condition).')';
+-+			$condition=''.implode(' '.$operator.' ',$condition).'';
+- 		}
+- 		if($this->condition==='')
+- 			$this->condition=$condition;
+- 		else
+--			$this->condition='('.$this->condition.') '.$operator.' ('.$condition.')';
+-+			$this->condition=''.$this->condition.' '.$operator.' '.$condition.'';
+- 		return $this;
+- 	}
++--- yii/zii/widgets/assets/listview/jquery.yiilistview.js	(revisión: 409)
+++++ yii/zii/widgets/assets/listview/jquery.yiilistview.js	(copia de trabajo)
++@@ -32,7 +32,7 @@
++ 			$.fn.yiiListView.settings[id] = settings;
+  
+-Index: yii/web/helpers/CHtml.php
+-===================================================================
+---- yii/web/helpers/CHtml.php	(revisión: 251)
+-+++ yii/web/helpers/CHtml.php	(revisión: 261)
+-@@ -1275,9 +1275,10 @@
+- 		self::resolveNameID($model,$attribute,$htmlOptions);
+- 		// add a hidden field so that if a model only has a file field, we can
+- 		// still use isset($_POST[$modelClass]) to detect if the input is submitted
+--		$hiddenOptions=isset($htmlOptions['id']) ? array('id'=>self::ID_PREFIX.$htmlOptions['id']) : array('id'=>false);
+--		return self::hiddenField($htmlOptions['name'],'',$hiddenOptions)
+--			. self::activeInputField('file',$model,$attribute,$htmlOptions);
+-+                 
+-+		//$hiddenOptions=isset($htmlOptions['id']) ? array('id'=>self::ID_PREFIX.$htmlOptions['id']) : array('id'=>false);
+-+		return //self::hiddenField($htmlOptions['name'],'',$hiddenOptions)
+-+			 self::activeInputField('file',$model,$attribute,$htmlOptions);
+- 	}
+- 
+- 	/**
++ 			if(settings.ajaxUpdate.length > 0) {
++-				$(document).on('click.yiiListView', settings.updateSelector,function(){
+++				$(document).off('click.yiiListView', settings.updateSelector).on('click.yiiListView', settings.updateSelector,function(){
++ 					// Check to see if History.js is enabled for our Browser
++ 					if (settings.enableHistory && window.History.enabled) {
++ 						// Ajaxify this link
+ Index: yii/zii/widgets/assets/gridview/jquery.yiigridview.js
+ ===================================================================
+---- yii/zii/widgets/assets/gridview/jquery.yiigridview.js	(revisión: 302)
++--- yii/zii/widgets/assets/gridview/jquery.yiigridview.js	(revisión: 409)
+ +++ yii/zii/widgets/assets/gridview/jquery.yiigridview.js	(copia de trabajo)
+-@@ -78,7 +78,7 @@
++@@ -81,7 +81,7 @@
+  				gridSettings[id] = settings;
+  
+  				if (settings.ajaxUpdate.length > 0) {
+--					$(document).on('click', settings.updateSelector, function () {
+-+					$(document).off('click', settings.updateSelector).on('click', settings.updateSelector, function () {
+- 						$('#' + id).yiiGridView('update', {url: $(this).attr('href')});
+- 						return false;
++-					$(document).on('click.yiiGridView', settings.updateSelector, function () {
+++					$(document).off('click.yiiGridView', settings.updateSelector).on('click.yiiGridView', settings.updateSelector, function () {
++ 						// Check to see if History.js is enabled for our Browser
++ 						if (settings.enableHistory && window.History.enabled) {
++ 							// Ajaxify this link
++@@ -97,7 +97,7 @@
+  					});
++ 				}
++ 
++-				$(document).on('change.yiiGridView keydown.yiiGridView', inputSelector, function (event) {
+++				$(document).off('change.yiiGridView keydown.yiiGridView', inputSelector).on('change.yiiGridView keydown.yiiGridView', inputSelector, function (event) {
++ 					if (event.type === 'keydown') {
++ 						if( event.keyCode !== 13) {
++ 							return; // only react to enter key
++@@ -136,7 +136,7 @@
++ 
++ 				if (settings.selectableRows > 0) {
++ 					selectCheckedRows(this.id);
++-					$(document).on('click.yiiGridView', '#' + id + ' .' + settings.tableClass + ' > tbody > tr', function (e) {
+++					$(document).off('click.yiiGridView', '#' + id + ' .' + settings.tableClass + ' > tbody > tr').on('click.yiiGridView', '#' + id + ' .' + settings.tableClass + ' > tbody > tr', function (e) {
++ 						var $currentGrid, $row, isRowSelected, $checks,
++ 							$target = $(e.target);
++ 
++@@ -161,7 +161,7 @@
++ 						}
++ 					});
++ 					if (settings.selectableRows > 1) {
++-						$(document).on('click.yiiGridView', '#' + id + ' .select-on-check-all', function () {
+++						$(document).off('click.yiiGridView', '#' + id + ' .select-on-check-all').on('click.yiiGridView', '#' + id + ' .select-on-check-all', function () {
++ 							var $currentGrid = $('#' + id),
++ 								$checks = $('input.select-on-check', $currentGrid),
++ 								$checksAll = $('input.select-on-check-all', $currentGrid),
++@@ -181,7 +181,7 @@
++ 						});
++ 					}
++ 				} else {
++-					$(document).on('click.yiiGridView', '#' + id + ' .select-on-check', false);
+++					$(document).off('click.yiiGridView', '#' + id + ' .select-on-check').on('click.yiiGridView', '#' + id + ' .select-on-check', false);
++ 				}
++ 			});
++ 		},
++Index: yii/yiilite.php
++===================================================================
++--- yii/yiilite.php	(revisión: 409)
+++++ yii/yiilite.php	(copia de trabajo)
++@@ -5364,9 +5364,9 @@
++ 				$handler="return $confirm;";
++ 		}
++ 		if($live)
++-			$cs->registerScript('Yii.CHtml.#' . $id, "$('body').on('$event','#$id',function(){{$handler}});");
+++			$cs->registerScript('Yii.CHtml.#' . $id, "$('body').off('$event').on('$event','#$id',function(){{$handler}});");
++ 		else
++-			$cs->registerScript('Yii.CHtml.#' . $id, "$('#$id').on('$event', function(){{$handler}});");
+++			$cs->registerScript('Yii.CHtml.#' . $id, "$('#$id').off('$event').on('$event', function(){{$handler}});");
++ 		unset($htmlOptions['params'],$htmlOptions['submit'],$htmlOptions['ajax'],$htmlOptions['confirm'],$htmlOptions['return'],$htmlOptions['csrf']);
++ 	}
++ 	public static function resolveNameID($model,&$attribute,&$htmlOptions)
++Index: yii/web/helpers/CHtml.php
++===================================================================
++--- yii/web/helpers/CHtml.php	(revisión: 409)
+++++ yii/web/helpers/CHtml.php	(copia de trabajo)
++@@ -2068,9 +2068,9 @@
++ 		}
++ 
++ 		if($live)
++-			$cs->registerScript('Yii.CHtml.#' . $id, "$('body').on('$event','#$id',function(){{$handler}});");
+++			$cs->registerScript('Yii.CHtml.#' . $id, "$('body').off('$event').on('$event','#$id',function(){{$handler}});");
++ 		else
++-			$cs->registerScript('Yii.CHtml.#' . $id, "$('#$id').on('$event', function(){{$handler}});");
+++			$cs->registerScript('Yii.CHtml.#' . $id, "$('#$id').off('$event').on('$event', function(){{$handler}});");
++ 		unset($htmlOptions['params'],$htmlOptions['submit'],$htmlOptions['ajax'],$htmlOptions['confirm'],$htmlOptions['return'],$htmlOptions['csrf']);
++ 	}
++ 
 Index: yii/db/schema/CDbCriteria.php
 ===================================================================
---- yii/db/schema/CDbCriteria.php	(revisión: 236)
-+++ yii/db/schema/CDbCriteria.php	(revisión: 242)
-@@ -189,12 +189,12 @@
+--- yii/db/schema/CDbCriteria.php	(revisión: 409)
++++ yii/db/schema/CDbCriteria.php	(copia de trabajo)
+@@ -197,12 +197,12 @@
  		{
  			if($condition===array())
  				return $this;
@@ -17,34 +251,3 @@ Index: yii/db/schema/CDbCriteria.php
  		return $this;
  	}
  
-Index: yii/web/helpers/CHtml.php
-===================================================================
---- yii/web/helpers/CHtml.php	(revisión: 251)
-+++ yii/web/helpers/CHtml.php	(revisión: 261)
-@@ -1275,9 +1275,10 @@
- 		self::resolveNameID($model,$attribute,$htmlOptions);
- 		// add a hidden field so that if a model only has a file field, we can
- 		// still use isset($_POST[$modelClass]) to detect if the input is submitted
--		$hiddenOptions=isset($htmlOptions['id']) ? array('id'=>self::ID_PREFIX.$htmlOptions['id']) : array('id'=>false);
--		return self::hiddenField($htmlOptions['name'],'',$hiddenOptions)
--			. self::activeInputField('file',$model,$attribute,$htmlOptions);
-+                 
-+		//$hiddenOptions=isset($htmlOptions['id']) ? array('id'=>self::ID_PREFIX.$htmlOptions['id']) : array('id'=>false);
-+		return //self::hiddenField($htmlOptions['name'],'',$hiddenOptions)
-+			 self::activeInputField('file',$model,$attribute,$htmlOptions);
- 	}
- 
- 	/**
-Index: yii/zii/widgets/assets/gridview/jquery.yiigridview.js
-===================================================================
---- yii/zii/widgets/assets/gridview/jquery.yiigridview.js	(revisión: 302)
-+++ yii/zii/widgets/assets/gridview/jquery.yiigridview.js	(copia de trabajo)
-@@ -78,7 +78,7 @@
- 				gridSettings[id] = settings;
- 
- 				if (settings.ajaxUpdate.length > 0) {
--					$(document).on('click', settings.updateSelector, function () {
-+					$(document).off('click', settings.updateSelector).on('click', settings.updateSelector, function () {
- 						$('#' + id).yiiGridView('update', {url: $(this).attr('href')});
- 						return false;
- 					});

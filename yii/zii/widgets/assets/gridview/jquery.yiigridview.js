@@ -81,7 +81,7 @@
 				gridSettings[id] = settings;
 
 				if (settings.ajaxUpdate.length > 0) {
-					$(document).on('click.yiiGridView', settings.updateSelector, function () {
+					$(document).off('click.yiiGridView', settings.updateSelector).on('click.yiiGridView', settings.updateSelector, function () {
 						// Check to see if History.js is enabled for our Browser
 						if (settings.enableHistory && window.History.enabled) {
 							// Ajaxify this link
@@ -97,7 +97,7 @@
 					});
 				}
 
-				$(document).on('change.yiiGridView keydown.yiiGridView', inputSelector, function (event) {
+				$(document).off('change.yiiGridView keydown.yiiGridView', inputSelector).on('change.yiiGridView keydown.yiiGridView', inputSelector, function (event) {
 					if (event.type === 'keydown') {
 						if( event.keyCode !== 13) {
 							return; // only react to enter key
@@ -136,7 +136,7 @@
 
 				if (settings.selectableRows > 0) {
 					selectCheckedRows(this.id);
-					$(document).on('click.yiiGridView', '#' + id + ' .' + settings.tableClass + ' > tbody > tr', function (e) {
+					$(document).off('click.yiiGridView', '#' + id + ' .' + settings.tableClass + ' > tbody > tr').on('click.yiiGridView', '#' + id + ' .' + settings.tableClass + ' > tbody > tr', function (e) {
 						var $currentGrid, $row, isRowSelected, $checks,
 							$target = $(e.target);
 
@@ -161,7 +161,7 @@
 						}
 					});
 					if (settings.selectableRows > 1) {
-						$(document).on('click.yiiGridView', '#' + id + ' .select-on-check-all', function () {
+						$(document).off('click.yiiGridView', '#' + id + ' .select-on-check-all').on('click.yiiGridView', '#' + id + ' .select-on-check-all', function () {
 							var $currentGrid = $('#' + id),
 								$checks = $('input.select-on-check', $currentGrid),
 								$checksAll = $('input.select-on-check-all', $currentGrid),
@@ -181,7 +181,7 @@
 						});
 					}
 				} else {
-					$(document).on('click.yiiGridView', '#' + id + ' .select-on-check', false);
+					$(document).off('click.yiiGridView', '#' + id + ' .select-on-check').on('click.yiiGridView', '#' + id + ' .select-on-check', false);
 				}
 			});
 		},

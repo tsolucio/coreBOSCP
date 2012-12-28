@@ -32,7 +32,7 @@
 			$.fn.yiiListView.settings[id] = settings;
 
 			if(settings.ajaxUpdate.length > 0) {
-				$(document).on('click.yiiListView', settings.updateSelector,function(){
+				$(document).off('click.yiiListView', settings.updateSelector).on('click.yiiListView', settings.updateSelector,function(){
 					// Check to see if History.js is enabled for our Browser
 					if (settings.enableHistory && window.History.enabled) {
 						// Ajaxify this link

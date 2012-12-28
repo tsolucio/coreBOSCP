@@ -106,7 +106,7 @@
 			<td>
 				<a href="http://www.yiiframework.com" class="icon">
 					<?php echo Html::icon('yii'); ?>
-					<span>Yii 1.1.9</span>
+					<span>Yii 1.1.12</span>
 				</a>
 			</td>
 			<td>Yii is a high-performance component-based PHP framework best for developing large-scale Web applications.</td>
@@ -116,7 +116,7 @@
 			<td>
 				<a href="http://jquery.com" class="icon">
 					<?php echo Html::icon('jquery'); ?>
-					<span>jQuery 1.7.1</span>
+					<span>jQuery 1.7.2</span>
 				</a>
 			</td>
 			<td>jQuery is a fast and concise JavaScript Library that simplifies HTML document traversing, event handling, animating, and Ajax interactions for rapid web development.</td>
@@ -126,7 +126,7 @@
 			<td>
 				<a href="http://jqueryui.com" class="icon">
 					<?php echo Html::icon('jqueryui'); ?>
-					<span>jQuery UI 1.8.15</span>
+					<span>jQuery UI 1.8.22</span>
 				</a>
 			</td>
 			<td>jQuery UI provides abstractions for low-level interaction and animation, advanced effects and high-level, themeable widgets, built on top of the jQuery JavaScript Library, that you can use to build highly interactive web applications.</td>

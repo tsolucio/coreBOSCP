@@ -20,6 +20,8 @@ var themeUrl = '<?php echo Yii::app()->theme->baseUrl; ?>';
 
 <?php
 Yii::app()->clientScript->registerCoreScript('jquery');
+Yii::app()->clientScript->registerCoreScript('jquery.ui');
+Yii::app()->clientScript->registerCoreScript('autocomplete');
 Yii::app()->clientScript->registerCoreScript('bbq');
 Yii::app()->clientScript->registerCoreScript('yiiactiveform');
 $baseScriptUrl=Yii::app()->getAssetManager()->publish(Yii::getPathOfAlias('zii.widgets.assets'));
@@ -27,8 +29,6 @@ Yii::app()->clientScript->registerScriptFile($baseScriptUrl.'/gridview/jquery.yi
 Yii::app()->clientScript->registerScriptFile($baseScriptUrl.'/listview/jquery.yiilistview.js',CClientScript::POS_END);
 
 $scriptFiles = array(
-	'js/jquery/jquery.ui.js',
-	'js/jquery/jquery.autocomplete.js',
 	'js/jquery/jquery.blockUI.js',
 	'js/jquery/jquery.form.js',
 	'js/jquery/jquery.jeditable.js',

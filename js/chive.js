@@ -61,7 +61,7 @@ var chive = {
 				if(li.length > 0)
 				{
 					//location.href = li.children('a').attr('href');
-					li.children('a').click();
+					li.children('a').first().click();
 				}
 			}
 		});

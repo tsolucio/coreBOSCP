@@ -502,7 +502,8 @@ class Vtentity extends CActiveRecord
 				);
 				break;
 			case 'file':
-				//$widget=CHtml::activeFileField($model, $fieldname, $htmlopts);
+				//CHtml::resolveNameID($model,$fieldname,$htmlopts);
+				//$widget = CHtml::activeInputField('file', $model, $fieldname, $htmlopts);
 				break;
 			default:
 				$widget=array(
