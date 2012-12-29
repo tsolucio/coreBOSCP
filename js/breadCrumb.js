@@ -21,7 +21,7 @@
 var breadCrumb = {
 	
 	breadcrumbTrail: new Array(),
-	breadcrumbTrailSize: 5,
+	breadcrumbTrailSize: 6,
 	textMaxLength: 15,
 
 	set: function(data)

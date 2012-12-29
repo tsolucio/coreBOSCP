@@ -171,6 +171,9 @@ class VtentityController extends Controller
 			if (empty($auid)) {  // assigned_user_id is special, so we make sure it has a value
 				$model->setAttribute('assigned_user_id',Yii::app()->user->userId);
 			}
+			if($model->getModule()=='HelpDesk') {  // tickets are always from portal
+				$model->setAttribute('from_portal','1');
+			}
                         if($model->getModule()=='Documents' && $model->getAttribute('filelocationtype')=='I')
                         {
                         $uploadfile=CUploadedFile::getInstance($model,'filename');
@@ -225,6 +228,9 @@ class VtentityController extends Controller
 			$model->unsetAttributes();
 			$model->setAttributes($_POST[$this->modelName]);
 			$filename = $model->getAttribute('filename');
+			if($model->getModule()=='HelpDesk') {  // tickets are always from portal
+				$model->setAttribute('from_portal','1');
+			}
 			if($model->getModule()=='Documents' && $model->getAttribute('filelocationtype')=='I' && !empty($filename)) {
 				$uploadfile=CUploadedFile::getInstance($model,'filename');
 				$tmp_file=$uploadfile->getTempName();
