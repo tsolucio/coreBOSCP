@@ -16,7 +16,9 @@
  *************************************************************************************************/?>
 <div class="upperMenu">
 <div class="tabMenu">
-	<?php $this->widget('TabMenu', array(
+<?php
+	$srchactive = Yii::app()->session[$this->entity.'_searchvals'];
+	$this->widget('TabMenu', array(
 		'items' => array(
 			array(
 				'label' => Yii::t('core','edit'),
@@ -58,7 +60,16 @@
 					'url' => '',
 					'htmlOptions' => array('class'=>'icon','id'=>'search-button'),
 				),
-				'visible' => $this->viewButtonSearch,
+				'visible' => $this->viewButtonSearch and empty($srchactive),
+			),
+			array(
+					'label' => Yii::t('core','search'),
+					'icon' => 'searchclear',
+					'link' => array(
+							'url' => "javascript:chive.goto('".$this->modelLinkName.'/'.$this->entity.'/cleansearch?modname='.$this->entity."');",
+							'htmlOptions' => array('class'=>'icon','id'=>'searchclear-button'),
+					),
+					'visible' => $this->viewButtonSearch and !empty($srchactive),
 			),
 			array(
 				'label' => Yii::t('core','download'),
@@ -92,7 +103,7 @@
 			),
 		),
 	));
-	?>
+?>
 </div>
 <div class="upperTitle"><?php echo $this->moduleName; ?></div>
 </div>

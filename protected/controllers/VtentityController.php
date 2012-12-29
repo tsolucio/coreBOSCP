@@ -271,6 +271,11 @@ class VtentityController extends Controller
 		// Eliminate any previous search conditions
 		Yii::app()->session->remove($modname.'_searchvals');
 		Yii::app()->session->remove($modname.'_searchconds');
+		$pmn = Yii::app()->getRequest()->getParam('modname',0);
+		if (!empty($pmn)) {  // if we have parameter in REQUEST, then we have been called directly
+			unset($_GET[$this->modelName]);
+			$this->actionIndex();
+		}
 	}
 
 	/**
