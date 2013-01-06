@@ -139,6 +139,20 @@ class User extends CActiveRecord
 	return $res;
 	}
 
+	public function getUserDateFormat()
+	{
+		$res = 'yyyy-mm-dd';
+		$clientvtiger=$this->getClientVtiger();
+		if(!$clientvtiger) Yii::log('login failed');
+		else{
+			$recordInfo = $clientvtiger->doQuery("select date_format from users where id='".$this->userId."'");
+			if (is_array($recordInfo)) {
+				$res = $recordInfo[0]['date_format'];
+			}
+		}
+		return $res;
+	}
+
 	public function getAccountInfo($contactid)
 	{
 		$accid='0';

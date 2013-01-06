@@ -27,6 +27,7 @@ class UserIdentity extends CUserIdentity
         public $companyName;
         public $accountId;
         public $userId;
+        public $userDateFormat;
 
 	/**
 	 * Constructor.
@@ -73,6 +74,7 @@ class UserIdentity extends CUserIdentity
                 $this->setState('password', $this->password);
                 $this->setState('username', $this->username);
                 $this->setState('userId', $user->userId);
+                $this->setState('userDateFormat', $user->getUserDateFormat());
                 $this->setState('contactId', $contactid);
                 $accinfo=$user->getAccountInfo($contactid);
                 $this->setState('accountId', $accinfo['accountid']);

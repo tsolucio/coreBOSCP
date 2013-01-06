@@ -929,11 +929,76 @@ abstract class VTActiveResource extends CModel
      */
     public function save($runValidation=true,$attributes=null)
     {
+		// before saving we have to make sure that all date fields are in Portal User format
+		$this->formatDateFieldsForSaving($attributes);
 		if(!$runValidation || $this->validate($attributes))
 			return $this->getIsNewResource() ? $this->create($attributes) : $this->update($attributes);
 		else
 			return false;
     }
+
+	/**
+	 * Format a date attribute field to the Poral User's date format (which is the one used for saving)
+	 * This field can come in two formats:
+	 *   - ISO (yyyy-mm-dd) which means that it has been retrieved directly from vtiger CRM REST with no manipulation
+	 *   - the desired format, which means that it is comming from screen
+	 * vtiger CRM REST always sends the fields in ISO, but expects to recieve them in the user's format
+	 * Parameters:
+	 *   datevalue is the date value to format
+	 *   dateformat is the format in which the value is given
+	 */
+	public function formatDateFieldForSaving($datevalue,$dateformat) {
+		if (empty($datevalue)) return $datevalue;
+		switch ($dateformat) {
+			case 'mm-dd-yyyy':
+				list($m,$d,$y) = preg_split("/\/|-|\./", $datevalue);
+			break;
+			case 'dd-mm-yyyy':
+				list($d,$m,$y) = preg_split("/\/|-|\./", $datevalue);
+			break;
+			default: /// 'yyyy-mm-dd'
+				list($y,$m,$d) = preg_split("/\/|-|\./", $datevalue);
+			break;
+		}
+		switch (Yii::app()->user->userDateFormat) {  // save format
+			case 'mm-dd-yyyy':
+				$retval = "$m-$d-$y";
+				break;
+			case 'dd-mm-yyyy':
+				$retval = "$d-$m-$y";
+				break;
+			default: /// 'yyyy-mm-dd'
+				$retval = "$y-$m-$d";
+				break;
+		}
+		return $retval;
+	}
+
+	/**
+	 * Format all date fields in attributes and given array to Portal User's format for saving
+	 */
+	public function formatDateFieldsForSaving($attributes) {
+		$fldinfo = $this->getFieldsInfo();
+		if (is_array($fldinfo)) {
+			foreach ($fldinfo as $finfo) {
+				if ($finfo['type']['name'] == 'date') {
+					$dvalue = $this->getAttribute($finfo['name']);
+					// we have to guess the date format:
+					$first4 = substr($dvalue,0,4);
+					if (strpos($first4,'-') or strpos($first4,'/') or strpos($first4,'.')) {
+						// it isn't ISO so it has to be the Portal User's format or incorrect
+						$dformat = $finfo['type']['format'];
+					} else {
+						// it is ISO
+						$dformat = 'yyyy-mm-dd';
+					}
+					$fmtdate = $this->formatDateFieldForSaving($dvalue,$dformat);
+					$this->setAttribute($finfo['name'],$fmtdate);
+					$attributes[$finfo['name']] = $fmtdate;
+				}
+			}
+		}
+	}
 
     /**
      * Returns if the current resource is new.
@@ -2015,78 +2080,16 @@ abstract class VTActiveResource extends CModel
     		}
     		if ($attributes!==false && is_array($attributes))
     		{
-    			//$resource=new $this->module ();
-                        //$resource->setModule($module)
-                        //$resource->unsetAttributes();
-                       // $resource->setAttributes($attributes);
-//                        $resource=$this;
-//                        $this->unsetAttributes();
-                        //$client=$this->getClientVtiger();
     			$resource=$this->instantiate($attributes);                        
     			$resource->setScenario('update');
     			$resource->init();
-    			foreach($attributes as $name=>$value)
-    			{
-    				if(property_exists($resource,$name))
-    					$resource->$name=$value;
-    				//CHECK IF THERE IS SCHEMA
-    				else if(!$this->getMetaData()->schema)
-    				{
-    					//THERE IS NO SCHEMA, SO CHECK FOR EMBEDDED MODELS FIRST
-    					if(isset($this->getMetaData()->embedded[$name]))
-    					{
-    						if($this->getMetaData()->embedded[$name][0]==self::IS_ONE)
-    						{
-    							Yii::log('Populating instance of ' .get_class($this). ': Position ['.$name.'] contains an object of class ' .$this->getMetaData()->embedded[$name][1],CLogger::LEVEL_INFO);
-    							$class=$this->getMetaData()->embedded[$name][1];
-    							$object=self::model($class);
-    							$resource->_related[$name]=$object->populateRecord($value);
-    						}
-    						else if($this->getMetaData()->embedded[$name][0]==self::IS_MANY)
-    						{
-    							Yii::log('Populating instance of ' .get_class($this). ': Position ['.$name.'] contains multiple objects of class ' .$this->getMetaData()->embedded[$name][1],CLogger::LEVEL_INFO);
-    							$class=$this->getMetaData()->embedded[$name][1];
-    							$object=self::model($class);
-    							$resource->_related[$name]=$object->populateRecords($value);
-    						}
-    					}
-    					else //IF ALL EMBEDDED MODLES ARE CHECKED, ASSIGN THE REST OF THE VALUES TO THE ATTRIBUTES ARRAY BECAUSE WE ARE COMPLETELY SCHEMALESS
-    					{
-    						$resource->_attributes[$name]=$value;
-    					}
-    				}
-    				else
-    				//////WE HAVE A SCHEMA DEFINED SO ASSIGN THE ATTRIBUTES ACCORDING TO THE DEFINED PROPERTIES
-    				{
-    					if((isset($this->getMetaData()->properties[$name])))
-    						$resource->_attributes[$name]=$value;
-    					else if(isset($this->getMetaData()->embedded[$name]))
-    					{
-    						if($this->getMetaData()->embedded[$name][0]==self::IS_ONE)
-    						{
-    							Yii::log('Populating instance of ' .get_class($this). ': Position ['.$name.'] contains an object of class ' .$this->getMetaData()->embedded[$name][1],CLogger::LEVEL_INFO);
-    							$class=$this->getMetaData()->embedded[$name][1];
-    							$object=self::model($class);
-    							$resource->_related[$name]=$object->populateRecord($value);
-    						}
-    						else if($this->getMetaData()->embedded[$name][0]==self::IS_MANY)
-    						{
-    							Yii::log('Populating instance of ' .get_class($this). ': Position ['.$name.'] contains multiple objects of class ' .$this->getMetaData()->embedded[$name][1],CLogger::LEVEL_INFO);
-    							$class=$this->getMetaData()->embedded[$name][1];
-    							$object=self::model($class);
-    							$resource->_related[$name]=$object->populateRecords($value);
-    						}
-    					}
-    				}
-    
-    			}  
+    			$resource->_attributes = $attributes;
     			$resource->attachBehaviors($resource->behaviors());
     			if($callAfterFind)
     				$resource->afterFind();
     
     			return $resource;
-    		}
-    		else {
+    		} else {
     			return null;
     		}
     }
@@ -2605,11 +2608,11 @@ abstract class VTActiveResource extends CModel
 				$usersinsamegroup[$usr] = Yii::app()->user->username;
 			}
 			$moduleid = $clientvtiger->doInvoke('vtyiicpng_getWSEntityId',array('entityName'=>'Users'));
-			foreach($usersinsamegroup as $key=>$value)
-			{
-				$usersinsamegroup[$moduleid.$key]=trim($usersinsamegroup[$key]);
-				unset($usersinsamegroup[$key]);
+			$usrsingroup = array();
+			foreach($usersinsamegroup as $key=>$value) {
+				$usrsingroup[$moduleid.$key]=trim($usersinsamegroup[$key]);
 			}
+			$usersinsamegroup = $usrsingroup;
 			Yii::app()->cache->set( $api_cache_id , $usersinsamegroup, $this->defaultCacheTimeout );
 		}
 		return $usersinsamegroup;
