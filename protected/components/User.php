@@ -155,14 +155,14 @@ class User extends CActiveRecord
 
 	public function getAccountInfo($contactid)
 	{
-		$accid='0';
+		$accid='1x1'; // for vtiger CRM REST to work correctly we must assign an artificial number, we cannot use the empty string
 		$accname=yii::t('core', 'none');
 		$clientvtiger=$this->getClientVtiger();
 		if(!$clientvtiger) Yii::log('login failed');
 		else{
 			$recordInfo = $clientvtiger->doQuery("Select account_id from Contacts where id='".$contactid."'");
 			if (is_array($recordInfo)) {
-				$accid=$recordInfo[0]['account_id'];
+				$accid=(empty($recordInfo[0]['account_id']) ? $accid : $recordInfo[0]['account_id']);
 				$recordInfo = $clientvtiger->doQuery("Select accountname from Accounts where id='".$accid."'");
 				if (is_array($recordInfo)) {
 					$accname=$recordInfo[0]['accountname'];
