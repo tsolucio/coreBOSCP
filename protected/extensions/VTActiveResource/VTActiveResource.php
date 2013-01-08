@@ -339,7 +339,11 @@ abstract class VTActiveResource extends CModel
     	} else {
     		switch ($this->getModule()) {
     			case 'Contacts':
-    				$condition = array('condition'=>"account_id='".Yii::app()->user->accountId."' or id='".Yii::app()->user->contactId."'");
+    				if (Yii::app()->user->accountId=='1x1') {  // empty account
+    					$condition = array('condition'=>"id='".Yii::app()->user->contactId."'");
+    				} else {
+    					$condition = array('condition'=>"account_id='".Yii::app()->user->accountId."'");
+    				}
     				break;
     			case 'Accounts':
     				$condition = array('condition'=>"id='".Yii::app()->user->accountId."'");

@@ -145,9 +145,10 @@ class User extends CActiveRecord
 		$clientvtiger=$this->getClientVtiger();
 		if(!$clientvtiger) Yii::log('login failed');
 		else{
-			$recordInfo = $clientvtiger->doQuery("select date_format from users where id='".$this->userId."'");
+			//$recordInfo = $clientvtiger->doQuery("select date_format from users where id='".$this->userId."'");
+			$recordInfo = $clientvtiger->doInvoke('getPortalUserDateFormat',array());
 			if (is_array($recordInfo)) {
-				$res = $recordInfo[0]['date_format'];
+				$res = $recordInfo['result'];
 			}
 		}
 		return $res;
