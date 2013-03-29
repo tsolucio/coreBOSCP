@@ -756,7 +756,10 @@ abstract class VTActiveResource extends CModel
         $url = Yii::app()->site;
         $client = new WSClient($url);
         $login = $client->doLogin(Yii::app()->loginuser, Yii::app()->accesskey);
-        return $login?$client:false;
+        if (!$login) {
+        	throw new CHttpException(550,Yii::t('core', 'customerPortalNotConfigured'));
+        }
+        return $client;
     }
 
     /**
