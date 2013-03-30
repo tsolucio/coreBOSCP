@@ -242,6 +242,7 @@ class CFormatter extends CApplicationComponent
 	 */
 	public function formatNumber($value)
 	{
+		if (trim($value)=='') $value=0;
 		return number_format($value,$this->numberFormat['decimals'],$this->numberFormat['decimalSeparator'],$this->numberFormat['thousandSeparator']);
 	}
 
