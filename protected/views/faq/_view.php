@@ -95,7 +95,7 @@ if (count($relDocs)>0) {
 		$i=0;
 		foreach ($relDocs as $faqd) {
 			$data->setId($faqd['id']);
-			$dlwidget=$data->getVtigerViewField(69,'','','');
+			$dlwidget=$data->getVtigerViewField(69,'','','','','','');
 			echo '<tr class="'.($i % 2 == 0 ? 'even' : 'odd').'">
 			<td>'.CHtml::link($faqd['title'],"index.php#vtentity/Documents/view/".$faqd['id']).'</td>
 			<td>'.$faqd['notecontent'].'</td>
@@ -144,13 +144,21 @@ function _viewExecuteJS() {
 	breadCrumb.show();
 	sideBar.activate(0);
 	$('#addfaqcomment-form').ajaxForm({      
-		dataType: 'json',  
+		dataType: 'json',
+		beforeSubmit: function(arr, form, options) { 
+			chive.ajaxloading();
+		},
 		success: function(response) {
 			if (response.data != undefined && response.data != '') {
 				$('#faq_comments').html(response.data);
 				$('#ItemCommentParam').val('');
 			}
 			AjaxResponse.handle(response);
+			chive.ajaxloaded();
+		},
+		error: function(response) {
+			AjaxResponse.handle(response);
+			chive.ajaxloaded();
 		}
 	});
 	chive.ajaxloaded();

@@ -135,24 +135,39 @@ function _viewExecuteJS() {
 	breadCrumb.show();
 	sideBar.activate(0);
 	$('#addhelpdeskcomment-form').ajaxForm({      
-		dataType: 'json',  
+		dataType: 'json',
+		beforeSubmit: function(arr, form, options) { 
+			chive.ajaxloading();
+		},
 		success: function(response) {
 			if (response.data != undefined && response.data != '') {
 				$('#helpdesk_comments').html(response.data);
 				$('#ItemCommentParam').val('');
 			}
 			AjaxResponse.handle(response);
+			chive.ajaxloaded();
+		},
+		error: function(response) {
+			AjaxResponse.handle(response);
+			chive.ajaxloaded();
 		}
 	});
 	$('#addhelpdeskdoc-form').ajaxForm({
 		dataType: 'json',
+		beforeSubmit: function(arr, form, options) { 
+			chive.ajaxloading();
+		},
 		success: function(response) {
-			console.debug(response);
 			if (response.data != undefined && response.data != '') {
 				$('#helpdesk_docs').html(response.data);
 				$('#filename').val('');
 			}
 			AjaxResponse.handle(response);
+			chive.ajaxloaded();
+		},
+		error: function(response) {
+			AjaxResponse.handle(response);
+			chive.ajaxloaded();
 		}
 	});
 	chive.ajaxloaded();
