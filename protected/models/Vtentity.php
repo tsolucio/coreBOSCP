@@ -329,7 +329,7 @@ class Vtentity extends CActiveRecord
 				'sequence'=>$sequence,
 				'label'=>$label,
 				'type'=>$this->convertVtigerUIType2Yii($uitype),
-				'value'=>$fieldvalue,
+				'value'=>($this->convertVtigerUIType2Yii($uitype) == 'number' && empty($fieldvalue) ? 0 : $fieldvalue),
 				'block'=>$block,
 				'blocksequence'=>$blocksequence,
 				);
@@ -368,7 +368,8 @@ class Vtentity extends CActiveRecord
 				$widget=array(
 						'sequence'=>$sequence,
 						'label'=>$label,
-						'value'=>date($dateformat,strtotime($fieldvalue)),
+						'type'=>$this->convertVtigerUIType2Yii($uitype),
+						'value'=>(empty($fieldvalue) ? '' : date($dateformat,strtotime($fieldvalue))),
 						'block'=>$block,
 						'blocksequence'=>$blocksequence,
 				);
@@ -386,7 +387,8 @@ class Vtentity extends CActiveRecord
 				$widget=array(
 						'sequence'=>$sequence,
 						'label'=>$label,
-						'value'=>date($dateformat,strtotime($fieldvalue)),
+						'type'=>$this->convertVtigerUIType2Yii($uitype),
+						'value'=>(empty($fieldvalue) ? '' : date($dateformat,strtotime($fieldvalue))),
 						'block'=>$block,
 						'blocksequence'=>$blocksequence,
 				);
