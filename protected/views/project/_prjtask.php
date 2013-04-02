@@ -28,6 +28,7 @@
 <tbody>
 <?php
 $i=0;
+if (is_array($relPrj))
 foreach ($relPrj as $prrow) {
 	echo '<tr class="'.($i % 2 == 0 ? 'even' : 'odd').'">
 	<td>'.CHtml::link($prrow['projecttaskname'],"index.php#vtentity/ProjectTask/view/".$prrow['id']).'</td>

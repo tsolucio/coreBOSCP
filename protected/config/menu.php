@@ -30,7 +30,7 @@ Each entry can be one of three things:
 
 3.- the string '#vtigermodules#', which will be converted to all the modules available that haven't been already shown
 
-For example, the next array would show the "About us" link first, followed by HelpDes, then Invoices, all the other
+For example, the next array would show the "About us" link first, followed by HelpDesk, then Invoices, all the other
 available modules, and finally a few more menu options
 
 $evocpMenu = array(
@@ -45,10 +45,15 @@ $evocpMenu = array(
 The exact order given will be respected.
 
 **/
+if (Yii::app()->vtyiicpngScope=='CPortal') {
+	$evocpMenu = Yii::app()->notSupportedModules['CPortal'];
+	$evocpMenu[] = array('name'=>Yii::t('core', 'Change Password'),'link'=>'site/changepassword','icon'=>'privileges');
+	$evocpMenu[] = array('name'=>Yii::t('core', 'logout'),'link'=>'site/logout','icon'=>'logout');
+} else {
 $evocpMenu = array(
 	'#vtigermodules#',
 	array('name'=>Yii::t('core', 'Change Password'),'link'=>'site/changepassword','icon'=>'privileges'),
 	array('name'=>Yii::t('core', 'about'),'link'=>'information/about','icon'=>'info'),
 	array('name'=>Yii::t('core', 'logout'),'link'=>'site/logout','icon'=>'logout'),
 );
-
+}
