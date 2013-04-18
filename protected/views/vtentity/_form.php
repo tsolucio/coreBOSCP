@@ -30,7 +30,7 @@
 	echo $form->errorSummary($model);
 	foreach($fields as $field) {
 		if (!is_array($field) || empty($field['name'])) continue;  // jump values, process only fields
-		if($field['name'] !='id')
+		if($field['name'] !='id' && $field['name'] !='assigned_user_id')
 		{
 			$fieldname=$field['name'];
 			$fieldlabel=$field['label'];
