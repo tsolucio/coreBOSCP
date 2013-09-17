@@ -1757,7 +1757,7 @@ abstract class VTActiveResource extends CModel
     	if(count($ids)>0) {
     		$all_attachments=$this->getDocumentAttachment (implode(',',$ids),false);
     	}
-    	if(count($tobelook)>0){
+    	if(count($tobelook)>0 || $module == 'Documents'){
     		$respvalues=unserialize($this->getComplexAttributeValues($tobelook));
     		$nr=count($recinfo);
     		for( $i=0;$i<$nr;$i++){
