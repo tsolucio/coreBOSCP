@@ -218,7 +218,7 @@ class VtentityController extends Controller
 			return true;
 		}
 		$fields=$model->getWritableFieldsArray();
-		$uitypes=$model->getUItype();               
+		$uitypes=$model->getUItype();
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
@@ -326,7 +326,7 @@ class VtentityController extends Controller
 	{
 		$pos=array('pageSize'=>1);
 		if(isset($_GET['dvcpage'])) {
-			$pos['currentPage']=$_GET['dvcpage'];                        
+			$pos['currentPage']=$_GET['dvcpage'];
 			unset($_GET['dvcpage']);
 		}	
                 $model=$this->_model;
@@ -336,9 +336,9 @@ class VtentityController extends Controller
 			$model->setAttributes($_GET[$this->modelName]);
 			$this->actionCleansearch($model->getModule());
 			Yii::app()->session[$model->getModule().'_searchvals']=$_GET[$this->modelName];
-		} elseif (isset(Yii::app()->session[$model->getModule().'_searchvals'])) {                  
+		} elseif (isset(Yii::app()->session[$model->getModule().'_searchvals'])) {
 			$model->setAttributes(Yii::app()->session[$model->getModule().'_searchvals']);
-		}                                   
+		}
 
 		$this->setCRUDpermissions($model->getModule());
 		$this->viewButtonSearch=false;
@@ -373,15 +373,15 @@ class VtentityController extends Controller
 			Yii::app()->session[$model->getModule().'_searchvals']=$_GET[$this->modelName];
 		} elseif (isset(Yii::app()->session[$model->getModule().'_searchvals'])) {
 			$model->setAttributes(Yii::app()->session[$model->getModule().'_searchvals']);
-		}                
+		}
 
 		$this->setCRUDpermissions($model->getModule());
 		$this->viewButtonEdit=false;
 		$this->viewButtonDelete=false;
 		$model->search();
 		$this->render('//vtentity/admin',array(
-			'model'=>$model,                    
-			'fields'=>$fields,                
+			'model'=>$model,
+			'fields'=>$fields,
 			'uitypes'=>$uitypes,
 		));
 	}
@@ -417,11 +417,11 @@ class VtentityController extends Controller
 			$model=$entity::model();
 			$model->doDereference=$dereference;
 			if(isset($_GET[$this->entityidField]))
-				$this->_model=$model->findbyPk($_GET[$this->entityidField]);                        
+				$this->_model=$model->findbyPk($_GET[$this->entityidField]);
 			if($this->_model===null)
 			  throw new CHttpException(404,Yii::t('core', 'errorIdNotExist'));
-		}                
-		if($this->_model) $this->_model->setIsNewRecord(false);                
+		}
+		if($this->_model) $this->_model->setIsNewRecord(false);
 		$this->entityidValue=$this->_model->__get($this->entityidField);
 		return $this->_model;
 	}
@@ -486,13 +486,16 @@ class VtentityController extends Controller
 	public function actionDownload() {
 		$id=Yii::app()->getRequest()->getParam('id',0);
 		$saveasfile = "protected/runtime/cache/_$id";
-		if(file_exists($saveasfile) and filesize($saveasfile)==0) {
+		$api_cache_id = "_$id";
+		$doccache = Yii::app()->cache->get( $api_cache_id );
+		if((file_exists($saveasfile) and filesize($saveasfile)==0) or $doccache===false) {
 			@unlink($saveasfile);
 		}
 		if(!file_exists($saveasfile)) {
 			$model=Vtentity::model();
 			$attachmentsdata=$model->getDocumentAttachment($id,true);
 			$model->writeAttachment2Cache($id,$attachmentsdata[$id]['attachment']);
+			Yii::app()->cache->set( $api_cache_id , 1, 0, new vtDbCacheDependency("select modifiedtime from Documents where id = '$id'") );
 		}
 		if(file_exists($saveasfile)) {
 			$ft=Yii::app()->getRequest()->getParam('ft');
