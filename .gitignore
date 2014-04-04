@@ -1,0 +1,6 @@
+protected/runtime/views/*
+protected/runtime/*
+protected/runtime/cache/*
+protected/runtime/sessions/*
+protected/config/devel.php
+assets/*
