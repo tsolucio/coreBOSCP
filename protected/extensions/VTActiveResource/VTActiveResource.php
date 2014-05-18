@@ -1,23 +1,25 @@
 <?php
-/**************************************************************************************************
- * Evolutivo vtyiiCPng - web based vtiger CRM Customer Portal
- * Copyright 2012 JPL TSolucio, S.L.  --  This file is a part of vtyiiCPNG.
- * You can copy, adapt and distribute the work under the "Attribution-NonCommercial-ShareAlike"
- * Vizsage Public License (the "License"). You may not use this file except in compliance with the
- * License. Roughly speaking, non-commercial users may share and modify this code, but must give credit
- * and share improvements. However, for proper details please read the full License, available at
- * http://vizsage.com/license/Vizsage-License-BY-NC-SA.html and the handy reference for understanding
- * the full license at http://vizsage.com/license/Vizsage-Deed-BY-NC-SA.html. Unless required by
- * applicable law or agreed to in writing, any software distributed under the License is distributed
- * on an  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and limitations under the
- * License terms of Creative Commons Attribution-NonCommercial-ShareAlike 3.0 (the License).
+/*************************************************************************************************
+ * coreBOSCP - web based coreBOS Customer Portal
+ * Copyright 2011-2014 JPL TSolucio, S.L.   --   This file is a part of coreBOSCP.
+ * Licensed under the GNU General Public License (the "License") either
+ * version 3 of the License, or (at your option) any later version; you may not use this
+ * file except in compliance with the License. You can redistribute it and/or modify it
+ * under the terms of the License. JPL TSolucio, S.L. reserves all rights not expressly
+ * granted by the License. coreBOSCP distributed by JPL TSolucio S.L. is distributed in
+ * the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. Unless required by
+ * applicable law or agreed to in writing, software distributed under the License is
+ * distributed on an "AS IS" BASIS, WITHOUT ANY WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied. See the License for the specific language governing
+ * permissions and limitations under the License. You may obtain a copy of the License
+ * at <http://www.gnu.org/licenses/>
  *************************************************************************************************
  *  Author       : JPL TSolucio, S. L.
- */
+ *************************************************************************************************/
 /**
  * VTActiveResource is ment to be used similar to an ActiveRecord model in Yii. In difference to ActiveRecord
- * the persistent storage of the model isn't a database but a vtiger CRM RESTful service. The code is influenced by
+ * the persistent storage of the model isn't a database but a coreBOS RESTful service. The code is influenced by
  * the EActiveResource extension for YII, version 0.1 developed by Johannes "Haensel" Bauer (thank you)
  * found at @link http://www.yiiframework.com/extension/activeresource
  */
@@ -719,9 +721,9 @@ abstract class VTActiveResource extends CModel
      * <p>
      * <b>site</b>: Defines the baseUri of the REST service. Example.: http://iamaRESTapi/apiversion
      * <p>
-     * <b>loginuser</b>: vtiger CRM user to access the main application with
+     * <b>loginuser</b>: coreBOS user to access the main application with
      * <p>
-     * <b>accesskey</b>: vtiger CRM user's access key to use with webservice interface
+     * <b>accesskey</b>: coreBOS user's access key to use with webservice interface
      * <p>
      * <b>contenttype</b>: Defines the content type that is send via HTTP header and is used to determine how the data has to be converted from php. If you use 'application/json' then data will automatically be converted to JSON.
      * <p>
@@ -947,9 +949,9 @@ abstract class VTActiveResource extends CModel
 	/**
 	 * Format a date attribute field to the Poral User's date format (which is the one used for saving)
 	 * This field can come in two formats:
-	 *   - ISO (yyyy-mm-dd) which means that it has been retrieved directly from vtiger CRM REST with no manipulation
+	 *   - ISO (yyyy-mm-dd) which means that it has been retrieved directly from coreBOS REST with no manipulation
 	 *   - the desired format, which means that it is comming from screen
-	 * vtiger CRM REST always sends the fields in ISO, but expects to recieve them in the user's format
+	 * coreBOS REST always sends the fields in ISO, but expects to recieve them in the user's format
 	 * Parameters:
 	 *   datevalue is the date value to format
 	 *   dateformat is the format in which the value is given
@@ -1344,7 +1346,7 @@ abstract class VTActiveResource extends CModel
 
     /**
      * Updates record with the specified primary key.
-     * $condition and $params are ignored as vtiger CRM does not permit mass update through REST
+     * $condition and $params are ignored as coreBOS does not permit mass update through REST
      * Note, the attributes are not checked for safety and validation is NOT performed.
      * @param mixed $pk primary key value(s). Use array for multiple primary keys. For composite key, each key value must be an array (column name=>column value).
      * @param array $attributes list of attributes (name=>$value) to be updated
@@ -1370,7 +1372,7 @@ abstract class VTActiveResource extends CModel
     public function updateAll($attributes,$condition='',$params=array())
     {
     	Yii::trace(get_class($this).'.updateAll()','ext.VTActiveResource');
-    	// We can't do this in vtiger CRM webservice yet
+    	// We can't do this in coreBOS webservice yet
     	return false;
     }
     
@@ -1440,7 +1442,7 @@ abstract class VTActiveResource extends CModel
     public function deleteAll($condition='',$params=array())
     {
     	Yii::trace(get_class($this).'.deleteAll()','ext.VTActiveResource');
-    	// We can't do this in vtiger CRM webservice yet
+    	// We can't do this in coreBOS webservice yet
     	return false;
     }
     
@@ -1456,7 +1458,7 @@ abstract class VTActiveResource extends CModel
     public function deleteAllByAttributes($attributes,$condition='',$params=array())
     {
     	Yii::trace(get_class($this).'.deleteAllByAttributes()','ext.VTActiveResource');
-    	// We can't do this in vtiger CRM webservice yet
+    	// We can't do this in coreBOS webservice yet
     	return false;
     }
     
@@ -1520,7 +1522,7 @@ abstract class VTActiveResource extends CModel
      */
     public function saveCounters($counters)
     {
-    	// We don't use this in vtiger CRM, but it could be implemented
+    	// We don't use this in coreBOS, but it could be implemented
     	Yii::trace(get_class($this).'.saveCounters()','ext.VTActiveResource');
    		return true;
     }
@@ -1537,7 +1539,7 @@ abstract class VTActiveResource extends CModel
      */
     public function updateCounters($counters,$condition='',$params=array())
     {
-    	// We don't use this in vtiger CRM, but it could be implemented    	
+    	// We don't use this in coreBOS, but it could be implemented    	
     	Yii::trace(get_class($this).'.updateCounters()','ext.VTActiveResource');
     	return true;
     }
@@ -2044,7 +2046,7 @@ abstract class VTActiveResource extends CModel
      */
     public function with()
     {
-		// this is not supported by vtiger CRM REST
+		// this is not supported by coreBOS REST
     	return $this;
     }
 
@@ -2057,7 +2059,7 @@ abstract class VTActiveResource extends CModel
      */
     public function together()
     {
-    	// this is not supported by vtiger CRM REST
+    	// this is not supported by coreBOS REST
     	//$this->getDbCriteria()->together=true;
     	return $this;
     }
@@ -2637,7 +2639,7 @@ abstract class VTActiveResource extends CModel
 	}
 
     /**
-     * Translate array against vtiger CRM
+     * Translate array against coreBOS
      * @param integer $id primary key value(s).
      */
     public function vtGetTranslation($strs,$module='',$language='')
@@ -2719,7 +2721,7 @@ abstract class VTActiveResource extends CModel
     		foreach ($criteria->params as $clv=>$val) {
     			$cond=str_replace($clv, $this->quoteValue($val), $cond);
     		}
-    		// vtiger CRM does not support parenthesis in conditionals so we eliminate here, any that yii may have put
+    		// coreBOS does not support parenthesis in conditionals so we eliminate here, any that yii may have put
     		// except for related record queries which DO support parenthesis
     		if (stripos($cond,'related')===false)
     			$cond = str_replace(array('(',')'),'',$cond);

@@ -62,7 +62,7 @@ var breadCrumb = {
 
 		// Set window title
 		// change Chive behaviour, we put just module and App Name
-		document.title = data[data.length-1].text + ' » ' + ' evoCP';
+		document.title = data[data.length-1].text + ' » ' + ' coreBOSCP';
 	},
 
 	add: function(element)

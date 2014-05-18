@@ -97,7 +97,7 @@
 	<entry id="escapeFieldTextDelimiterWith">Escape del delimitatore di testo con</entry>
 	<entry id="fieldNamesInFirstRow">Nomi dei campi sulla prima riga</entry>
 	<entry id="customerPortal">Customer Portal</entry>
-	<entry id="welcome2CP">Welcome to vtiger CRM Customer Portal</entry>
+	<entry id="welcome2CP">Welcome to coreBOS Customer Portal</entry>
 	<entry id="thankYou4Connect">Thank you for using our service.</entry>
 	<entry id="loggedInAs">You are logged in as </entry>
 	<entry id="Change Password">Change Password</entry>
@@ -138,7 +138,7 @@
 	<entry id="errorIdNotExist">The requested entity does not exist.</entry>
 	<entry id="seeRelatedEntity">Related entities</entry>
 	<entry id="errNoTranslateFunction">No Translate Function</entry>
-	<entry id="errmissingFunctions">The vtiger CRM installation to which the Portal is connected doesn't have all the necessary functionality, it is missing certain code enhancementes to work correctly. Please contact whomever did the install to execute the missing steps.</entry>
+	<entry id="errmissingFunctions">The coreBOS installation to which the Portal is connected doesn't have all the necessary functionality, it is missing certain code enhancementes to work correctly. Please contact whomever did the install to execute the missing steps.</entry>
 	<entry id="invalidRequest">Invalid request. Please do not repeat this request again.</entry>
-	<entry id="invalidEntity">The requested module does not exist in vtiger CRM.</entry>
+	<entry id="invalidEntity">The requested module does not exist in coreBOS.</entry>
 </category>

@@ -99,7 +99,7 @@
   <entry id="escapeFieldTextDelimiterWith">Escapar delimitador de texto con</entry>
   <entry id="fieldNamesInFirstRow">Nombres de los campos en la primera fila</entry>
   <entry id="customerPortal">Portal Cliente</entry>
-  <entry id="welcome2CP">Bienvenido al Portal del Cliente vtiger CRM de Evolutivo</entry>
+  <entry id="welcome2CP">Bienvenido al Portal del Cliente de coreBOS</entry>
   <entry id="thankYou4Connect">Gracias por utilizar nuestro servicio.</entry>
   <entry id="loggedInAs">Has accedido al sistema como </entry>
   <entry id="Change Password">Cambiar Contraseña</entry>
@@ -147,9 +147,9 @@
   <entry id="errorIdNotExist">La entidad requerida no existe.</entry>
   <entry id="seeRelatedEntity">Ver Entidades</entry>
   <entry id="errNoTranslateFunction">Faltan Funciones Traducción</entry>
-  <entry id="errmissingFunctions">La instalación de vtiger CRM al que está conectado el portal no tiene la funcionalidad requerida. Falta instalar modificaciones en el mismo. Por favor, contacta con la persona que ha realizado la instalación para que ejecute los pasos que faltan.</entry>
+  <entry id="errmissingFunctions">La instalación de coreBOS al que está conectado el portal no tiene la funcionalidad requerida. Falta instalar modificaciones en el mismo. Por favor, contacta con la persona que ha realizado la instalación para que ejecute los pasos que faltan.</entry>
   <entry id="invalidRequest">Servicio inválido. Por favor, no solicites este servicio de nuevo.</entry>
-  <entry id="invalidEntity">El módulo solicitado no existe en vtiger CRM.</entry>
+  <entry id="invalidEntity">El módulo solicitado no existe en coreBOS.</entry>
   <entry id="Internal">Interno</entry>
   <entry id="External">Externo</entry>
   <entry id="product">Producto</entry>
