@@ -2572,9 +2572,9 @@ abstract class VTActiveResource extends CModel
 		}
 		return serialize($rdo);
     }
-        public function getComplexAttributeValue($fieldvalue){                   
-                    $tr=unserialize($this->getComplexAttributeValues(array($fieldvalue)));
-                    return $tr[$fieldvalue];
+        public function getComplexAttributeValue($fieldvalue) {
+			$tr=unserialize($this->getComplexAttributeValues(array($fieldvalue)));
+			return $tr[$fieldvalue];
         }
 
         public function getDocumentAttachment($ids,$getfile=true){
