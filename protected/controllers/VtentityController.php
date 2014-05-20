@@ -331,9 +331,9 @@ class VtentityController extends Controller
 			$pos['currentPage']=$_GET['dvcpage'];
 			unset($_GET['dvcpage']);
 		}	
-                $model=$this->_model;
-                $model->unsetAttributes();
-                $model->setScenario('search');
+		$model=$this->_model;
+		$model->unsetAttributes();
+		$model->setScenario('search');
 		if(isset($_GET[$this->modelName])) {
 			$model->setAttributes($_GET[$this->modelName]);
 			$this->actionCleansearch($model->getModule());

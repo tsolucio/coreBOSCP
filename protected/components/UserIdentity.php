@@ -56,7 +56,7 @@ class UserIdentity extends CUserIdentity
             if($contactid===null||$contactid==false)
             {
             	$this->errorCode=self::ERROR_USERNAME_INVALID;
-            }           
+            }
             else
             {
                 $supportDates=$user->getSupportDates($contactid);
@@ -65,11 +65,11 @@ class UserIdentity extends CUserIdentity
                 } else {
                 if($this->lastLoginTime===null)
                 {
-                $lastLogin = time();
+                	$lastLogin = time();
                 }
                 else
                 {
-                $lastLogin = strtotime($this->lastLoginTime);
+                	$lastLogin = strtotime($this->lastLoginTime);
                 }
                 //$lastLogin=User::model()->getLastLoginTime();
                 $this->setState('lastLoginTime', $lastLogin);

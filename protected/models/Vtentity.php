@@ -237,8 +237,8 @@ class Vtentity extends CActiveRecord
 			$fields=$this->getFieldsInfo();
 		foreach ($fields as $field) {
 			if (!is_array($field)) continue;
-                       $key=$field['name'];
-			if($key!=='id') {                            
+			$key=$field['name'];
+			if($key!=='id') {
 				$dvfields[$key]=$this->getAttribute($key);
 			}
 		}
@@ -257,8 +257,8 @@ class Vtentity extends CActiveRecord
 			$fields=$this->getFieldsInfo(true);
 		foreach ($fields as $field) {
 			if (!is_array($field)) continue;
-                       $key=$field['name'];
-			if($key!=='id') {                            
+			$key=$field['name'];
+			if($key!=='id') {
 				$value=$this->getAttribute($key);
 				$uitype=intval($field['uitype']);
 				$label=$field['label'];
@@ -410,7 +410,7 @@ class Vtentity extends CActiveRecord
 			case 78:
 			case 79:
 			case 80:
-			case 81:                       
+			case 81:
 			case 101:
 				$widget=array(
 				'sequence'=>$sequence,
@@ -480,9 +480,9 @@ class Vtentity extends CActiveRecord
 				'value'=>$value,
 				'block'=>$block,
 				'blocksequence'=>$blocksequence,
-				);			
+				);
 				break;
-                        case 26:
+            case 26:
 			case 52:
 			case 53:
 			case 54:
@@ -729,4 +729,33 @@ class Vtentity extends CActiveRecord
 		}
 		return $ret;
 	}
+	
+	//get documents folders
+	public function getDocumentFolders() {
+			$response = new AjaxResponse();
+			
+			$vtModule = $this->getModule();
+			$clientvtiger=$this->getClientVtiger();
+			$folders = array();
+			if(!$clientvtiger) Yii::log('login failed');
+			else {
+				$criteria = $this->getDbCriteria();
+				$this->setCriteria($criteria);
+				$entityArray = $this->getData('folderid');
+				$wsEntityId = $clientvtiger->doInvoke('vtyiicpng_getWSEntityId',array('entityName'=>'DocumentFolders'));
+				$folderids = array();
+				foreach($entityArray as $entityRecord)
+				{
+					if(!in_array($entityRecord['folderid'], $folderids))
+					{
+						$foldername = $clientvtiger->doQuery("Select foldername,description from documentfolders Where id = ".$wsEntityId.$entityRecord['folderid']);
+
+						$folders[]= array('folderid'=>$entityRecord['folderid'],'foldername'=>$foldername[0]['foldername'],'description'=>$foldername[0]['description']);
+						$folderids[] = $entityRecord['folderid'];
+						
+					}
+				}
+			}
+			return $folders;
+		}	
 }

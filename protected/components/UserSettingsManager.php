@@ -1,5 +1,4 @@
 <?php
-
 /*
  * Chive - web based MySQL database management
  * Copyright (C) 2010 Fusonic GmbH
@@ -20,10 +19,8 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 class UserSettingsManager
 {
-
 	private $configPath;
 	private $user;
 	private $defaultSettings = array();

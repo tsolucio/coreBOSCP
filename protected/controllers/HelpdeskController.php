@@ -29,23 +29,22 @@ class HelpDeskController extends VtentityController
 	/**
 	 * Lists all records in DetailView (yii List View).
 	 */
-	public function actionList()
-	{
+	public function actionList() {
 		$pos=array('pageSize'=>1);
 		if(isset($_GET['dvcpage'])) {
-			$pos['currentPage']=$_GET['dvcpage'];                        
+			$pos['currentPage']=$_GET['dvcpage'];
 			unset($_GET['dvcpage']);
-		}	
+		}
 		$model=$this->_model;
 		$model->unsetAttributes();
 		$model->setScenario('search');
 		if(isset($_GET[$this->modelName])) {
 			$model->setAttributes($_GET[$this->modelName]);
-			actionCleansearch($model->getModule());
+			$this->actionCleansearch($model->getModule());
 			Yii::app()->session[$model->getModule().'_searchvals']=$_GET[$this->modelName];
-		} elseif (isset(Yii::app()->session[$model->getModule().'_searchvals'])) {                  
+		} elseif (isset(Yii::app()->session[$model->getModule().'_searchvals'])) {
 			$model->setAttributes(Yii::app()->session[$model->getModule().'_searchvals']);
-		}                                   
+		}
 
 		$this->setCRUDpermissions($model->getModule());
 		$this->viewButtonSearch=false;

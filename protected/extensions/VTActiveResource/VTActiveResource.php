@@ -42,7 +42,7 @@ abstract class VTActiveResource extends CModel
     private $_lasterror;
     public static $db;
     
-    // vtyiicpng
+    // coreboscp properties
     private $module;
     private $clientvtiger;
     private $count;
@@ -1262,8 +1262,8 @@ abstract class VTActiveResource extends CModel
 	    	if(!$clientvtiger) Yii::log('login failed',CLogger::LEVEL_ERROR);
 	    	else {
 	    		if (empty($attributes)) $attributes=$this->getAttributesArray();
-	    		$attributes['id']='';                      
-	    		$done=$clientvtiger->doCreate($module,$attributes);                        
+	    		$attributes['id']='';
+	    		$done=$clientvtiger->doCreate($module,$attributes);
 	    		if($done) {
 	    			$newId=$done['id'];
                                 $this->__set('id',$newId);
@@ -2073,14 +2073,12 @@ abstract class VTActiveResource extends CModel
      * @return VTActiveResource the newly created active resource. The class of the object is the same as the model class.
      * Null is returned if the input data is false.
      */
-    public function populateRecord($attributes,$callAfterFind=true)
-    {
+    public function populateRecord($attributes,$callAfterFind=true) {
     		if(is_array($attributes) && array_key_exists($this->getContainer(),$attributes))
     		{
     			$attributes=$this->extractDataFromResponse($attributes);
     			Yii::log('Container field found: '.$this->getContainer().'. Repopulating!',CLogger::LEVEL_INFO);
     		}
-    
     		if(isset($attributes[$this->getContainer()]))
     		{
     			Yii::log('Container field found: '.$this->getContainer().'. Repopulating!',CLogger::LEVEL_INFO);
@@ -2089,20 +2087,34 @@ abstract class VTActiveResource extends CModel
     		}
     		if ($attributes!==false && is_array($attributes))
     		{
-    			$resource=$this->instantiate($attributes);                        
+    			$resource=$this->instantiate($attributes);
     			$resource->setScenario('update');
     			$resource->init();
     			$resource->_attributes = $attributes;
     			$resource->attachBehaviors($resource->behaviors());
     			if($callAfterFind)
     				$resource->afterFind();
-    
     			return $resource;
     		} else {
     			return null;
     		}
     }
-    
+
+    static public function getFolderNameFromFolderID($fldid) {
+    	$api_cache_id=Yii::app()->user->getState('prefix').'getFolderNameFromFolderID'.$fldid;
+    	$fname = Yii::app()->cache->get($api_cache_id);
+    	if ($fname===false) {
+	    	$clientvt = VTActiveResource::loginREST();
+	    	$command="select foldername from documentfolders where folderid='$fldid'";
+	    	$recordInfo = $clientvt->doQuery($command);
+    		if ($recordInfo) {
+    			$fname = $recordInfo[0]['foldername'];
+    			Yii::app()->cache->set($api_cache_id , $fname);
+    		}
+    	}
+    	return $fname;
+    }
+
     /**
      * Creates a list of active resources based on the input data.
      * This method is internally used by the find methods.
@@ -2519,18 +2531,17 @@ abstract class VTActiveResource extends CModel
 		$module = $this->getModule();		
 		$api_cache_id='getListViewFields'.$module;
 		$ListViewFields = Yii::app()->cache->get( $api_cache_id  );
-
 		// If the results were false, then we have no valid data, so load it
 		if($ListViewFields===false)
 		{ // No valid cached data was found, so we will generate it.
 			$clientvtiger=$this->getClientVtiger();
-                        if(!$clientvtiger) Yii::log('login failed',CLogger::LEVEL_ERROR);
+			if(!$clientvtiger)
+				Yii::log('login failed',CLogger::LEVEL_ERROR);
 			else {
 				$ListViewFields = $clientvtiger->doGetFilterFields($module);
 			}
 			Yii::app()->cache->set( $api_cache_id , $ListViewFields, $this->defaultCacheTimeout );
 		}
-
 		return $ListViewFields;
 	}
  

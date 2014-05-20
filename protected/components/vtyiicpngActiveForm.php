@@ -250,12 +250,12 @@ class vtyiicpngActiveForm extends CActiveForm
 				$widget=$this->dropDownList($model,$fieldname,$plvalues,$htmlopts);
 				if($fl_changed)  // leave it empty again
 					$model->unsetAttributes(array($fieldname));
-                                break;
-                            case 26:
-                                $values=$model->getPicklistValues($fieldname);                               
-                                if($action=='search') array_unshift($values,' ');
+				break;
+			case 26:
+				$values=$model->getPicklistValues($fieldname);
+				if($action=='search') array_unshift($values,' ');
 				$widget=$this->dropDownList($model,$fieldname,$values,$htmlopts);
-                                break;
+				break;
 			case 56:
 				$widget=$this->checkBox($model,$fieldname,$htmlopts);
 				break;

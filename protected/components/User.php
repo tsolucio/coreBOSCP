@@ -126,7 +126,7 @@ class User extends CActiveRecord
         public function getSupportDates($contactid)	
         {        
 	$clientvtiger=$this->getClientVtiger();
-        $res=array();        
+        $res=array();
         if(!$clientvtiger) Yii::log('login failed');
         else{
            $recordInfo = $clientvtiger->doQuery("Select support_start_date,support_end_date from Contacts where portal=1 and id='$contactid'");
@@ -233,14 +233,14 @@ class User extends CActiveRecord
 			'User' => Yii::t('core', 'username'),
 			'Password' => Yii::t('core', 'password'),
                         'password_repeat' => Yii::t('core', 'Repeat Password'),
-			'plainPassword' => Yii::t('core', 'password'),                       
+			'plainPassword' => Yii::t('core', 'password'),
 		);
 	}
-        public function getAttributeLabel($attribute)
-    {
-            $attributes=$this->attributeLabels();
-            return  $attributes[$attribute] ;
-    }
+
+	public function getAttributeLabel($attribute) {
+		$attributes=$this->attributeLabels();
+		return  $attributes[$attribute] ;
+	}
 
 	public function getId()
 	{

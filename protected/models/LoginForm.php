@@ -1,5 +1,4 @@
 <?php
-
 /*
  * Chive - web based MySQL database management
  * Copyright (C) 2010 Fusonic GmbH
