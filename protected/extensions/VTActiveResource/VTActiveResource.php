@@ -2465,7 +2465,7 @@ abstract class VTActiveResource extends CModel
     {
 		return $this->findAll($this->getCriteria(),$cols);
     }
-       
+
 	public function getFieldsInfo($sortthem=false)
 	{
 		if (empty($this->_fieldinfo) or count($this->_fieldinfo)==0)
@@ -2474,7 +2474,7 @@ abstract class VTActiveResource extends CModel
 	}
 
 	public function setFieldsInfo($sortthem=false)
-	{		
+	{
 		$module=$this->getModule();
 
 		$api_cache_id='getFieldsInfo'.$module;
@@ -2482,7 +2482,7 @@ abstract class VTActiveResource extends CModel
 
 		// If the results were false, then we have no valid data, so load it
 		if($Fields===false){
-                        $clientvtiger=$this->getClientVtiger();
+			$clientvtiger=$this->getClientVtiger();
 			if(!$clientvtiger) {
 				Yii::log('login failed',CLogger::LEVEL_ERROR);
 				$this->_fieldinfo=array();
