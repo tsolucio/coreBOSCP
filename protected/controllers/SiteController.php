@@ -134,6 +134,23 @@ class SiteController extends Controller
 		));
 	}
 
+	/**
+	 * This is the Payment Thank You page
+	 */
+	public function actionThankYouForPayment() {
+		$this->render('ThankYouForPayment', array(
+			'formatter' => Yii::app()->getDateFormatter()
+		));
+	}
+
+	/**
+	 * This is the Payment Error page
+	 */
+	public function actionErrorInPayment() {
+		$this->render('ErrorInPayment', array(
+			'formatter' => Yii::app()->getDateFormatter()
+		));
+	}
 	public function actionNoTranslate()
 	{
 		$this->render('index', array(

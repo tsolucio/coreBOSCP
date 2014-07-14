@@ -193,4 +193,8 @@
   <entry id="customerPortalNotConfigured">El Portal del Cliente no está correctamente configurado.&lt;br/&gt;Por favor avisa al administrador de la aplicación.</entry>
   <entry id="customerPortalPageNotFound">La página solicitada no se ha encontrado en el Portal del Cliente.&lt;br/&gt;Revisa la URL o informa al administrador de la aplicación con los pasos para reproducir el error.</entry>
   <entry id="paycyp">Pagar</entry>
+  <entry id="Payment processed correctly">Pago procesado correctamente</entry>
+  <entry id="Thank you for your payment">Muchas gracias por tu confianza</entry>
+  <entry id="There has been in error processing your payment">Se ha producido un error procesando el pago</entry>
+  <entry id="Please try again when you can">Por favor intentalo de nuevo</entry>
 </category>

@@ -193,4 +193,8 @@
 	<entry id="customerPortalNotConfigured">Customer Portal is not correctly configured.&lt;br/&gt;Please contact your application administrator.</entry>
 	<entry id="customerPortalPageNotFound">The requested page could not be found in the Customer Portal.&lt;br/&gt;Review the URL or contact your application administrator with the steps to reproduce the error.</entry>
 	<entry id="paycyp">Pay</entry>
+	<entry id="Payment processed correctly">Payment processed correctly</entry>
+	<entry id="Thank you for your payment">Thank you for your payment</entry>
+	<entry id="There has been in error processing your payment">There has been in error processing your payment</entry>
+	<entry id="Please try again when you can">Please try again when you can</entry>
 </category>
