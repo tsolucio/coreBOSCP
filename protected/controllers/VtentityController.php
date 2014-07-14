@@ -41,6 +41,7 @@ class VtentityController extends Controller
 	public $viewButtonCreate=false;
 	public $viewButtonSearch=false;
 	public $viewButtonDownloadPDF=false;
+	public $viewButtonPayCyP=false;
 
 	public function __construct($id,$module)
 	{
@@ -345,6 +346,7 @@ class VtentityController extends Controller
 		$this->setCRUDpermissions($model->getModule());
 		$this->viewButtonSearch=false;
 		$this->viewButtonDownloadPDF=true;
+		$this->viewButtonPayCyP=true;
 		$dataProvider=$model->search($pos);
 		$this->render('//vtentity/index',array(
 			'dataProvider'=>$dataProvider,
@@ -402,6 +404,7 @@ class VtentityController extends Controller
 			if ($model->getAttribute('filelocationtype') == 'E')
 				$this->viewButtonDownloadPDF=false;
 		}
+		$this->viewButtonPayCyP=true;
 		$this->render('//vtentity/view',array(
 			'model'=>$model,
 		));

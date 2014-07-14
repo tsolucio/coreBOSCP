@@ -192,4 +192,5 @@
 	<entry id="impuestos">Taxes</entry>
 	<entry id="customerPortalNotConfigured">Customer Portal is not correctly configured.&lt;br/&gt;Please contact your application administrator.</entry>
 	<entry id="customerPortalPageNotFound">The requested page could not be found in the Customer Portal.&lt;br/&gt;Review the URL or contact your application administrator with the steps to reproduce the error.</entry>
+	<entry id="paycyp">Pay</entry>
 </category>

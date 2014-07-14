@@ -55,6 +55,10 @@ class vtyiicpngButtonColumn extends CButtonColumn
 				$mod = $data->getModule();
 				$ret = $moduleAccessInformation[$mod]['retrieveable'] && in_array($mod,array('Invoice','Quotes','SalesOrder','PurchaseOrder'));
 				break;
+			case 'pay':
+				$mod = $data->getModule();
+				$ret = $moduleAccessInformation[$mod]['retrieveable'] && $mod == 'CobroPago' && $data->getAttribute('paid')==0;
+				break;
 			default:
 				$ret = true;
 				break;

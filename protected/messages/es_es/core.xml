@@ -192,4 +192,5 @@
   <entry id="impuestos">Impuestos</entry>
   <entry id="customerPortalNotConfigured">El Portal del Cliente no está correctamente configurado.&lt;br/&gt;Por favor avisa al administrador de la aplicación.</entry>
   <entry id="customerPortalPageNotFound">La página solicitada no se ha encontrado en el Portal del Cliente.&lt;br/&gt;Revisa la URL o informa al administrador de la aplicación con los pasos para reproducir el error.</entry>
+  <entry id="paycyp">Pagar</entry>
 </category>

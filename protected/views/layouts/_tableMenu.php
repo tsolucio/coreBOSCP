@@ -88,6 +88,19 @@
 				'visible' => $this->viewButtonDownloadPDF && in_array($this->entity,array('Invoice','Quotes','SalesOrder','PurchaseOrder','Documents')),
 			),
 			array(
+				'label' => Yii::t('core','paycyp'),
+				'icon' => 'pay',
+				'link' => array(
+					'url' => 'javascript:void(0)',
+					'htmlOptions' => array(
+						'class'=>'icon',
+						'id' => 'paycyp-button',
+						'onclick'=>'javascript: sendtopaygateway($("#entityidValue").val());return false;'
+					),
+				),
+				'visible' => $this->viewButtonPayCyP && $this->entity=='CobroPago' && $this->_model->getAttribute('paid')==0,
+			),
+			array(
 				'label' => Yii::t('core','export'),
 				'icon' => 'export',
 				'link' => array(
