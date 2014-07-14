@@ -165,7 +165,7 @@ $mainConfig=array(
 			),
 			'CPortal' => array(
 					'Contacts','Accounts','Quotes','Services','Invoice','HelpDesk','Faq','Timecontrol',
-					'Assets','Products','Documents','ProjectMilestone','ProjectTask','Project'
+					'Assets','Products','Documents','ProjectMilestone','ProjectTask','Project','CobroPago'
 			),
 		),
 
