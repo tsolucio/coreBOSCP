@@ -380,6 +380,9 @@ abstract class VTActiveResource extends CModel
     			case 'Faq':
     				$condition = array('condition'=>"faqstatus='Published'");
     				break;
+    			case 'CobroPago':
+    				$condition = array('condition'=>"parenta_id='".Yii::app()->user->accountId."' or parent_id='".Yii::app()->user->contactId."'");
+    				break;
     			case 'Documents':
     				// the way the related enhancement is done I know I can filter on crm2, but that is REALLY dependent and basically wrong
     				$condition = array('condition'=>"related.Contacts='".Yii::app()->user->contactId."' or crm2.crmid = '".Yii::app()->user->accountId."'");
