@@ -34,7 +34,7 @@ echo CHtml::hiddenField('idfieldval',$data->__get($this->entityidField), array('
 <div class="helpdesk_comments" id="helpdesk_comments">
 <?php
 $relComments = $data->GetRelatedRecords('ModComments');
-if (count($relComments)>0) {
+if (is_array($relComments) and count($relComments)>0) {
 	$this->renderPartial('//helpdesk/_comments',array(
 		'relComments'=>$relComments,
 	));
