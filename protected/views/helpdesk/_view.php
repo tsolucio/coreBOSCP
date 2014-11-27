@@ -44,7 +44,7 @@ if (is_array($relComments) and count($relComments)>0) {
 <div class="helpdesk_docs" id="helpdesk_docs">
 <?php
 $relDocs = $data->GetRelatedRecords('Documents');
-if (count($relDocs)>0) {
+if (is_array($relDocs) and count($relDocs)>0) {
 	$this->renderPartial('//helpdesk/_getdocs',array(
 		'relDocs'=>$relDocs,
 	));
@@ -87,8 +87,8 @@ if (count($relDocs)>0) {
 $moduleNames = Yii::app()->cache->get('yiicpng.sidebar.availablemodules');
 if (is_array($moduleNames) and isset($moduleNames['Timecontrol'])) {
 	$relTCs = $data->GetRelatedRecords('Timecontrol');
-	$relTCs = $data->dereferenceIds($relTCs);
-	if (count($relTCs)>0) {
+	if (is_array($relTCs) and count($relTCs)>0) {
+		$relTCs = $data->dereferenceIds($relTCs);
 		$this->renderPartial('//helpdesk/_gettcs',array(
 			'relTCs'=>$relTCs,
 			'TCName'=>$moduleNames['Timecontrol']['name'],
