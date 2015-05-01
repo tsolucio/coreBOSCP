@@ -142,7 +142,7 @@
 						</span>
 					</div>
 					<div class="right">
-						<?php echo CHtml::activeTextField($form,'username', array('class'=>'text', 'name' => 'username', 'value'=>'l.xhumari@studiosynthesis.biz')) ?>
+						<?php echo CHtml::activeTextField($form,'username', array('class'=>'text', 'name' => 'username', 'value'=>'')) ?>
 					</div>
 				</div>
 				<div class="item row2">
@@ -152,7 +152,7 @@
 						</span>
 					</div>
 					<div class="right">
-						<?php echo CHtml::activePasswordField($form, 'password', array('class' => 'text', 'value' => 'tst', 'name' => 'password', 'autocomplete' => "off")); ?>
+						<?php echo CHtml::activePasswordField($form, 'password', array('class' => 'text', 'value' => '', 'name' => 'password', 'autocomplete' => "off")); ?>
 					</div>
 				</div>
 			</div>
