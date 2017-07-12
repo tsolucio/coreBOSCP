@@ -179,8 +179,7 @@ var lang = {
 };
 
 var filedownload = {
-	download: function(_url, _data) 
-	{
+	download: function(_url, _data) {
 		io = document.createElement('iframe');
 		io.src = _url + (_data ? '?' + $.param(_data) : '');
 		io.style.display = 'block';
@@ -188,8 +187,7 @@ var filedownload = {
 		$('body').append(io);
 		setTimeout(function() {
 			io.remove();
-		}, 5000);
-		
+		}, 15000);
 	}
 };
 
