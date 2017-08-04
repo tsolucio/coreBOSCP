@@ -3,7 +3,7 @@
  * Message translations.
  */
 return CMap::mergeArray(
-  require(Yii::getFrameworkPath().'/messages/es/yii.php'),
+  require(Yii::getFrameworkPath().'/messages/fr/yii.php'),
   array(
   '__empty' => 'traducido',
   )
