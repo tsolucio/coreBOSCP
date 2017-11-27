@@ -21,8 +21,8 @@
 <div class="view">
 <div class="faq">
 <div class="faq_left">
-<div class="faq_q"><?php echo $data->__get('question'); ?></div>
-<div class="faq_a"><?php echo $data->__get('faq_answer'); ?></div>
+<div class="faq_q"><?php echo nl2br($data->__get('question')); ?></div>
+<div class="faq_a"><?php echo nl2br($data->__get('faq_answer')); ?></div>
 </div>
 <div class="faq_right">
 <table class="list">
