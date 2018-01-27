@@ -112,7 +112,7 @@ if (is_array($moduleNames) and isset($moduleNames['Timecontrol'])) {
 	</thead>
 	<tbody>
 <?php 
-	$dontShow=array('ticket_no','description','solution','ticket_title','update_log','modifiedby','from_portal','id');
+	$dontShow=array('ticket_no','description','solution','ticket_title','update_log','modifiedby','from_portal','id','commentadded','from_mailscanner');
 	$i=0;
 	foreach ($fields as $field) {
 		if (!is_array($field) || empty($field['name'])) continue;  // jump values, process only fields
