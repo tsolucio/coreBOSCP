@@ -120,11 +120,22 @@ if (is_array($moduleNames) and isset($moduleNames['Timecontrol'])) {
 		if (in_array($fieldname,$dontShow)) continue;  // do not show these fields
 		$fieldlabel=$field['label'];
 		$uitype=intval($uitypes[$fieldname]);
-		if(isset($field['type']['refersTo']) && !empty($field['type']['refersTo'])) $refersTo=$field['type']['refersTo'];
-		else $refersTo='';
+		if (isset($field['type']['refersTo']) && !empty($field['type']['refersTo'])) {
+			$refersTo=$field['type']['refersTo'];
+		} else {
+			$refersTo='';
+		}
+		$datavalue=$data->__get($fieldname);
+		if (isset($field['type']['picklistValues']) && !empty($field['type']['picklistValues'])) {
+			foreach ($field['type']['picklistValues'] as $idx => $plvalue) {
+				if ($plvalue['value']==$datavalue) {
+					$datavalue = $plvalue['label'];
+				}
+			}
+		}
 		echo '<tr class="'.($i % 2 == 0 ? 'even' : 'odd').'">
 		<td><b>'.$fieldlabel.'</b></td><td></td>
-		<td>'.$data->__get($fieldname).'</td>
+		<td>'.$datavalue.'</td>
 		</tr>';
 		$i++;
 	} ?>

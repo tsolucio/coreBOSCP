@@ -268,6 +268,14 @@ class Vtentity extends CActiveRecord
 				unset($htmloptionsAllFields['dateformat']);
 				if(isset($field['type']['name']) && !empty($field['type']['name']) && $field['type']['name']=='date')
 					$htmloptionsAllFields['dateformat'] = $field['type']['format'];
+				if (isset($field['type']['picklistValues']) && !empty($field['type']['picklistValues'])) {
+					foreach ($field['type']['picklistValues'] as $idx => $plvalue) {
+						if ($plvalue['value']==$value) {
+							$value = $plvalue['label'];
+							break;
+						}
+					}
+				}
 				$dvfields[$key]=$this->getVtigerViewField($uitype,$key,$value,$label,$sequence,$block,$blocksequence,$htmloptionsAllFields);
 			}
 		}

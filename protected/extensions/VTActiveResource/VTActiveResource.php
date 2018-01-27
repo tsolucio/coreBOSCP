@@ -1720,9 +1720,30 @@ abstract class VTActiveResource extends CModel
     	}
         $this->setCount(count($findall));
         $findall=$this->dereferenceIds($findall);
+        $findall=$this->translatePicklistValues($findall);
     	return $this->populateRecords($findall,false);
     }
- 
+
+	public function translatePicklistValues($recinfo) {
+		foreach ($recinfo as $idx => $rinf) {
+			foreach ($rinf as $fname => $fvalue) {
+				foreach ($this->_fieldinfo as $finfo) {
+					if ($fname==$finfo['name'] && isset($finfo['uitype']) && in_array($finfo['uitype'], array(15,16))) {
+						if (isset($finfo['type']['picklistValues']) && !empty($finfo['type']['picklistValues'])) {
+							foreach ($finfo['type']['picklistValues'] as $plvalue) {
+								if ($plvalue['value']==$fvalue) {
+									$recinfo[$idx][$fname] = $plvalue['label'];
+									break;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		return $recinfo;
+	}
+
     public function dereferenceIds($recinfo,$htmlreference=true) {
     	if (!$this->doDereference) return $recinfo;
     	$all_attachments=array();
@@ -2660,7 +2681,7 @@ abstract class VTActiveResource extends CModel
     {
 		$tr=$strs;
 		
-		$api_cache_id='getTranslation'.$module;
+		$api_cache_id='getTr'.md5(serialize($strs)).$module;
 		$tr = Yii::app()->cache->get( $api_cache_id  );
 		// If the results were false, then we have no valid data,
 		// so load it

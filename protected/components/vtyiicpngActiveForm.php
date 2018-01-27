@@ -181,8 +181,9 @@ class vtyiicpngActiveForm extends CActiveForm
                                 {
                                 $plvals=$model->getPicklistValues($fieldname);
                                 $values=array_values((is_array($plvals)?$plvals:array()));
+                                $values=$model->vtGetTranslation($values, $model->getModule());
                                 if($action=='search') array_unshift($values,' ');
-				$plvalues=count($values)>0?array_combine($values,$values):array();
+				$plvalues=count($values)>0?array_combine($plvals,$values):array();
 				$widget=$this->dropDownList($model,$fieldname,$plvalues,$htmlopts);
                                 }
                                 else{                                    
