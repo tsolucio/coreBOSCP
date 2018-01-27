@@ -61,11 +61,11 @@ class Vtentity extends CActiveRecord
 			$field=$fields[$pos];
 			$key=$field['name'];
 			$label=$field['label'];
-			if (in_array($key,explode(',',$this->getLookupField()))
-			 or (strpos($key,'title') and in_array($module,array('HelpDesk','Documents'))))
+			if (in_array($key,explode(',',$this->getLookupField())) || (strpos($key,'title') and in_array($module,array('HelpDesk','Documents')))) {
 				$fieldlabels[$key]=array('name'=>$key,'header'=>$label,'type'=>'html','value'=>$this->getViewLinkField($key));
-			else
-			$fieldlabels[$key]=array('name'=>$key,'header'=>$label,'type'=>$this->convertVtigerUIType2Yii($field['uitype']));
+			} else {
+				$fieldlabels[$key]=array('name'=>$key,'header'=>$label,'type'=>$this->convertVtigerUIType2Yii($field['uitype']));
+			}
 		}
 		return $fieldlabels;
 	}
