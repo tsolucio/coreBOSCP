@@ -36,7 +36,6 @@
 		if (count($relProducts)>0) {
 			for ($pdoline = 0;$pdoline < count($relProducts);$pdoline++) {
 				$relProducts[$pdoline][] = $relProducts[$pdoline]['id'];
-				$relProducts[$pdoline]['productid'] = $relProducts[$pdoline]['id'];
 			}
 			$this->renderPartial('//vtentity/_showproducts',array(
 					'relProducts'=>$data->dereferenceIds($relProducts),
