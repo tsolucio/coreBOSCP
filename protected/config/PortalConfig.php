@@ -30,4 +30,6 @@ $evocp_Access_Key = 'aocJtA9oF8kl1p1g';
 // name of the folder within which you want any trouble ticket attachments to be uploaded
 $evocp_AttachmentFolderName = 'Default';
 
+// If true, portal shows all the tickets related to all contacts on the Company
+$evocp_CompanyTickets = false;
 ?>

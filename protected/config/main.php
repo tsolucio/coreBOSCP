@@ -29,6 +29,7 @@ $mainConfig=array(
 	'loginuser'=>$evocp_Login_User,
 	'accesskey'=>$evocp_Access_Key,
 	'attachment_folder'=>$evocp_AttachmentFolderName,
+	'company_tickets'=>$evocp_CompanyTickets,
 
 	// Activate debuging
 	'debug'=>true,

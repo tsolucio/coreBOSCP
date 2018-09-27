@@ -363,7 +363,21 @@ abstract class VTActiveResource extends CModel
     				$condition = array('condition'=>"account_id='".Yii::app()->user->accountId."' or contact_id='".Yii::app()->user->contactId."'");
     				break;
     			case 'HelpDesk':
-    				$condition = array('condition'=>"parent_id='".Yii::app()->user->accountId."' or parent_id='".Yii::app()->user->contactId."'");
+                    //Get contacts in account
+                    if(Yii::app()->company_tickets === true){
+                        $clientvtiger=$this->getClientVtiger();
+                        $contacts_res = $clientvtiger->doQuery("Select id from Contacts where account_id='".Yii::app()->user->accountId."'");
+                        if(!empty($contacts_res)){
+                            $contacts_arr = array();
+                            foreach($contacts_res as $contact){
+                                $contacts_arr[] = $contact['id'];
+                            }
+                            $contacts = "'".implode("','",$contacts_arr)."'";
+                        }
+                        $condition = array('condition'=>"parent_id='".Yii::app()->user->accountId."' or parent_id IN (".$contacts.")");
+                    }else{
+                        $condition = array('condition'=>"parent_id='".Yii::app()->user->accountId."' or parent_id='".Yii::app()->user->contactId."'");
+                    }
     				break;
     			case 'Assets':
     				$condition = array('condition'=>"account='".Yii::app()->user->accountId."'");

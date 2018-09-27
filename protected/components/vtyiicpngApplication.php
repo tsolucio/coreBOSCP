@@ -23,6 +23,7 @@ class vtyiiCPngApplication extends CWebApplication
 	public $loginuser;
 	public $accesskey;
 	public $attachment_folder;
+	public $company_tickets;
 	public $vtyiicpngScope;
 	public $notSupportedModules;
 	public $debug;
