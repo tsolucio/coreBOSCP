@@ -359,10 +359,10 @@ abstract class VTActiveResource extends CModel
     			case 'ServiceContracts':
     				$condition = array('condition'=>"sc_related_to='".Yii::app()->user->accountId."' or sc_related_to='".Yii::app()->user->contactId."'");
     				break;
-    			case 'Invoice':
-    				$condition = array('condition'=>"account_id='".Yii::app()->user->accountId."' or contact_id='".Yii::app()->user->contactId."'");
-    				break;
-    			case 'HelpDesk':
+                case 'Invoice':
+                    $condition = array('condition'=>"account_id='".Yii::app()->user->accountId."' or contact_id='".Yii::app()->user->contactId."'");
+                    break;
+                case 'HelpDesk':
                     //Get contacts in account
                     if(Yii::app()->company_tickets === true){
                         $clientvtiger=$this->getClientVtiger();
@@ -378,34 +378,37 @@ abstract class VTActiveResource extends CModel
                     }else{
                         $condition = array('condition'=>"parent_id='".Yii::app()->user->accountId."' or parent_id='".Yii::app()->user->contactId."'");
                     }
+                    break;
+                case 'Assets':
+                    $condition = array('condition'=>"account='".Yii::app()->user->accountId."'");
+                    break;
+                case 'Project':
+                    $condition = array('condition'=>"linktoaccountscontacts='".Yii::app()->user->accountId."' or linktoaccountscontacts='".Yii::app()->user->contactId."'");
+                    break;
+                case 'Products':
+                    $condition = array('condition'=>"related.Contacts='".Yii::app()->user->contactId."'");
+                    break;
+                case 'Services':
+                    $condition = array('condition'=>"related.Contacts='".Yii::app()->user->contactId."'");
+                    break;
+                case 'Faq':
+                    $condition = array('condition'=>"faqstatus='Published'");
+                    break;
+                case 'CobroPago':
+                    $condition = array('condition'=>"parent_id='".Yii::app()->user->accountId."' or parent_id='".Yii::app()->user->contactId."'");
+                    break;
+                case 'Documents':
+                    // the way the related enhancement is done I know I can filter on crm2, but that is REALLY dependent and basically wrong
+                    $condition = array('condition'=>"related.Contacts='".Yii::app()->user->contactId."' or crm2.crmid = '".Yii::app()->user->accountId."'");
+                    break;
+    			case 'Timecontrol':
+    				$condition = array('condition'=>"relatedto='".Yii::app()->user->accountId."' or relatedto='".Yii::app()->user->contactId."'");
     				break;
-    			case 'Assets':
-    				$condition = array('condition'=>"account='".Yii::app()->user->accountId."'");
-    				break;
-    			case 'Project':
-    				$condition = array('condition'=>"linktoaccountscontacts='".Yii::app()->user->accountId."' or linktoaccountscontacts='".Yii::app()->user->contactId."'");
-    				break;
-    			case 'Products':
-    				$condition = array('condition'=>"related.Contacts='".Yii::app()->user->contactId."'");
-    				break;
-    			case 'Services':
-    				$condition = array('condition'=>"related.Contacts='".Yii::app()->user->contactId."'");
-    				break;
-    			case 'Faq':
-    				$condition = array('condition'=>"faqstatus='Published'");
-    				break;
-    			case 'CobroPago':
-    				$condition = array('condition'=>"parent_id='".Yii::app()->user->accountId."' or parent_id='".Yii::app()->user->contactId."'");
-    				break;
-    			case 'Documents':
-    				// the way the related enhancement is done I know I can filter on crm2, but that is REALLY dependent and basically wrong
-    				$condition = array('condition'=>"related.Contacts='".Yii::app()->user->contactId."' or crm2.crmid = '".Yii::app()->user->accountId."'");
-    				break;
-    			default:
-    				$condition = array();
-    		}
-    		return $condition;
-    	}
+                default:
+                    $condition = array();
+            }
+            return $condition;
+        }
     }
     
     /**
