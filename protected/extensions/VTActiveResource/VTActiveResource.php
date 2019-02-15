@@ -402,7 +402,7 @@ abstract class VTActiveResource extends CModel
                     $condition = array('condition'=>"related.Contacts='".Yii::app()->user->contactId."' or crm2.crmid = '".Yii::app()->user->accountId."'");
                     break;
     			case 'Timecontrol':
-    				$condition = array('condition'=>"relatedto='".Yii::app()->user->accountId."' or relatedto='".Yii::app()->user->contactId."'");
+    				$condition = array('condition'=>"relatedto IN('".Yii::app()->user->accountId."','".Yii::app()->user->contactId."')");
     				break;
                 default:
                     $condition = array();
