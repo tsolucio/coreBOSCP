@@ -145,6 +145,7 @@ class Vtentity extends CActiveRecord
 				if ($_GET['fdelete'.$nr]==1) continue; // this row has been deleted
 				if ($_GET['fcol'.$nr]=='' or $_GET['fop'.$nr]=='') continue; // this row is empty
 				$value = $_GET['fval'.$nr];
+				$orig_value = $value;
 				switch ($_GET['fop'.$nr]) {
 					case 'e':
 						$value = '='.$value;
@@ -182,6 +183,7 @@ class Vtentity extends CActiveRecord
 						$value = '';
 				}
 				$conds = array(
+						'original' => $orig_value,
 						'value' => $value,
 						'glue' => (empty($_GET['fglue'.($nr)]) ? '' : $_GET['fglue'.($nr)]),
 						);
@@ -202,10 +204,42 @@ class Vtentity extends CActiveRecord
 			if($attr!=" ") {
 				if (!empty($sattr[$key])) {
 					foreach ($sattr[$key] as $cond) {
-						$criteria->compare($key,$cond['value'],true,$cond['glue'],false);
+						if($key == 'assigned_user_id'){
+							$cvt = $this->getClientVtiger();
+							$allUsers = $cvt->doInvoke('getAllUsers');
+							foreach($allUsers as $id => $val){
+								$allUsers[$id] = strtolower($val);
+							}
+							$matchUsers = preg_grep("/.*".strtolower($cond['original']).".*/",$allUsers);
+							if(!empty($matchUsers)){
+								$usrids = array_keys($matchUsers);
+								$condition = "assigned_user_id IN ('".implode("','", $usrids)."')";
+							}else{
+								$condition = 'FALSE';
+							}
+							$criteria->addCondition($condition);
+						}else{
+							$criteria->compare($key,$cond['value'],true,$cond['glue'],false);
+						}
 					}
 				} else {
-					$criteria->compare($key,$attr,true);
+					if($key == 'assigned_user_id'){
+						$cvt = $this->getClientVtiger();
+						$allUsers = $cvt->doInvoke('getAllUsers');
+						foreach($allUsers as $id => $val){
+							$allUsers[$id] = strtolower($val);
+						}
+						$matchUsers = preg_grep("/.*".strtolower($attr).".*/",$allUsers);
+						if(!empty($matchUsers)){
+							$usrids = array_keys($matchUsers);
+							$condition = "assigned_user_id IN ('".implode("','", $usrids)."')";
+						}else{
+							$condition = 'FALSE';
+						}
+						$criteria->addCondition($condition);
+					}else{
+						$criteria->compare($key,$attr,true);
+					}
 				}
 			}
 		}
