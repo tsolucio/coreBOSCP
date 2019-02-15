@@ -219,7 +219,8 @@ class vtyiicpngActiveForm extends CActiveForm
                                 echo $this->fileField($model,$fieldname.'_E__',array('style'=>'display:none'));
                                 $id=$model->getId();
                                 $fl=$model->getDocumentAttachment($id);
-                                $model->setAttribute($fieldname,$fl[$id]['filename']);
+                                if(!is_null($fl) && !empty($fl))
+                                	$model->setAttribute($fieldname,$fl[$id]['filename']);
                                 echo $this->textField($model,$fieldname,$htmlopts);
                                 }
 				break;
