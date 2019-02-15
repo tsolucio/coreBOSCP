@@ -374,9 +374,9 @@ abstract class VTActiveResource extends CModel
                             }
                             $contacts = "'".implode("','",$contacts_arr)."'";
                         }
-                        $condition = array('condition'=>"parent_id='".Yii::app()->user->accountId."' or parent_id IN (".$contacts.")");
+                        $condition = array('condition'=>"parent_id IN (".$contacts.",'".Yii::app()->user->accountId."')");
                     }else{
-                        $condition = array('condition'=>"parent_id='".Yii::app()->user->accountId."' or parent_id='".Yii::app()->user->contactId."'");
+                        $condition = array('condition'=>"parent_id IN ('".Yii::app()->user->accountId."','".Yii::app()->user->contactId."')");
                     }
                     break;
                 case 'Assets':
@@ -1817,16 +1817,18 @@ abstract class VTActiveResource extends CModel
     				}
     			}
     			if($module == 'Documents') {
-    				$idatt=$recinfo[$i]['id'];
-    				if(is_array($all_attachments) && in_array($idatt,array_keys($all_attachments))) {
-    					if (!empty($all_attachments[$idatt]['filetype'])) {
-    						$value='<a href=\'javascript: filedownload.download("'.yii::app()->baseUrl.'/index.php/vtentity/'.$this->getModule().'/download/'.$idatt.'?fn='.CHtml::encode($all_attachments[$idatt]['filename']).'&ft='.CHtml::encode($all_attachments[$idatt]['filetype']).'","")\'>'.CHtml::encode($all_attachments[$idatt]['filename'])."</a>";
-    					} else {
-    						$fname = (empty($all_attachments[$idatt]['filename']) ? yii::t('core', 'none') : $all_attachments[$idatt]['filename']);
-    						$value=CHtml::encode($fname);
-    					}
-    					$recinfo[$i]['filename']=$value;
-    				}
+                    if(!empty($recinfo)){
+        				$idatt=$recinfo[$i]['id'];
+        				if(is_array($all_attachments) && in_array($idatt,array_keys($all_attachments))) {
+        					if (!empty($all_attachments[$idatt]['filetype'])) {
+        						$value='<a href=\'javascript: filedownload.download("'.yii::app()->baseUrl.'/index.php/vtentity/'.$this->getModule().'/download/'.$idatt.'?fn='.CHtml::encode($all_attachments[$idatt]['filename']).'&ft='.CHtml::encode($all_attachments[$idatt]['filetype']).'","")\'>'.CHtml::encode($all_attachments[$idatt]['filename'])."</a>";
+        					} else {
+        						$fname = (empty($all_attachments[$idatt]['filename']) ? yii::t('core', 'none') : $all_attachments[$idatt]['filename']);
+        						$value=CHtml::encode($fname);
+        					}
+        					$recinfo[$i]['filename']=$value;
+        				}
+                    }
     			}
     		}
     	}
@@ -2774,9 +2776,13 @@ abstract class VTActiveResource extends CModel
     			$cond=str_replace($clv, $this->quoteValue($val), $cond);
     		}
     		// coreBOS does not support parenthesis in conditionals so we eliminate here, any that yii may have put
-    		// except for related record queries which DO support parenthesis
-    		if (stripos($cond,'related')===false)
-    			$cond = str_replace(array('(',')'),'',$cond);
+    		// except for related record queries and IN condition which DO support parenthesis
+            if (stripos($cond,'related')===false && stripos($cond,' IN ')===false)
+                $cond = str_replace(array('(',')'),'',$cond);
+    		if (stripos($cond,'NOT LIKE')!==false){
+                $cond = str_replace('NOT LIKE','!=',$cond);
+    			$cond = str_replace('%','',$cond);
+            }
     		if (!empty($cond)) $cond=' where '.$cond;
     		$cond=$this->applyOrder($cond, trim($criteria->order,' "'));
     		$cond=$this->applyLimit($cond, $criteria->limit,$criteria->offset);
