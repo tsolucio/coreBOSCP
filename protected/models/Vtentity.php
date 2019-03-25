@@ -252,6 +252,7 @@ class Vtentity extends CActiveRecord
 		return new CActiveDataProvider(get_class($this), array(
 			'criteria'=>$criteria,
 			'pagination'=>$pagectrl,
+			'sort' => array('attributes' => array_keys($this->gridViewColumns())),
 		));
 	}
 

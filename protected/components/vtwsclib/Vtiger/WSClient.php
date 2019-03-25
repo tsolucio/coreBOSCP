@@ -32,6 +32,12 @@ class WSClient {
 	var $_lasterror  = false;
 
 	/**
+	* Compatibility for sorting on Yii's gridview
+	*/
+	static function getSchema(){
+	}
+
+	/**
 	 * Constructor.
 	 */
 	function __construct($url) { 
